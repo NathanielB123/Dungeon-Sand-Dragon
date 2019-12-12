@@ -97,27 +97,15 @@ def Overworld(Screen, Mixer, SaveData, TempData):
         if InputKeys[pygame.K_w] and not (TempData["PositionData"][SaveData["Position"]][1][0]==-1):
             TempData["Moving"][0]=True
             TempData["Moving"][1]=TempData["PositionData"][SaveData["Position"]][1][0]
-            while InputKeys[pygame.K_w]:
-                InputKeys=pygame.key.get_pressed()
-                pygame.event.get()
         elif InputKeys[pygame.K_d] and not (TempData["PositionData"][SaveData["Position"]][1][1]==-1):
             TempData["Moving"][0]=True
             TempData["Moving"][1]=TempData["PositionData"][SaveData["Position"]][1][1]
-            while InputKeys[pygame.K_d]:
-                InputKeys=pygame.key.get_pressed()
-                pygame.event.get()
         elif InputKeys[pygame.K_s] and not (TempData["PositionData"][SaveData["Position"]][1][2]==-1):
             TempData["Moving"][0]=True
             TempData["Moving"][1]=TempData["PositionData"][SaveData["Position"]][1][2]
-            while InputKeys[pygame.K_s]:
-                InputKeys=pygame.key.get_pressed()
-                pygame.event.get()
         elif InputKeys[pygame.K_a] and not (TempData["PositionData"][SaveData["Position"]][1][3]==-1):
             TempData["Moving"][0]=True
             TempData["Moving"][1]=TempData["PositionData"][SaveData["Position"]][1][3]
-            while InputKeys[pygame.K_a]:
-                InputKeys=pygame.key.get_pressed()
-                pygame.event.get()
     else:
         if TempData["Moving"][2]>=30:
             SaveData["Position"]=TempData["Moving"][1]
@@ -183,11 +171,12 @@ def Encounter(Screen, Mixer, SaveData,TempData):
         while InputKeys[pygame.K_1] or InputKeys[pygame.K_2] or InputKeys[pygame.K_3] or InputKeys[pygame.K_4]:
                 InputKeys=pygame.key.get_pressed()
                 pygame.event.get()
-    return(SaveData,TempData)
+    return SaveData,TempData
 
 def NewGame():
     SaveData={}
     SaveData["Position"]=4
+    SaveData["Party"]=[]
     TempData={}
     TempData["ActiveEncounter"]=True
     TempData["EncounterData"]={}
@@ -212,14 +201,16 @@ def NewGame():
     TempData["Moving"]=[False,0,0]
     TempData["Encounters"]=[]
     TempData["Airships"]=[]
+    ToDelete=[]
     for i in range(0,5):
         TempData["Encounters"].append([random.randint(0,len(TempData["PositionData"])-1),-1])
         while TempData["Encounters"][i][1]==-1:
             TempData["Encounters"][i][1]=random.choice(TempData["PositionData"][TempData["Encounters"][i][0]][1])
         for i2 in range(0,i):
-            if TempData["Encounters"][i2]==TempData["Encounters"][i]:
-                TempData["Encounters"].pop(i)
-    print(len(TempData["Encounters"]))
+            if TempData["Encounters"][i2][0] in TempData["Encounters"][i] and TempData["Encounters"][i2][1] in TempData["Encounters"][i]:
+                ToDelete.append(i)
+    for i in range(0,len(ToDelete)):
+        TempData["Encounters"].pop(ToDelete[i]-i)
     return SaveData,TempData
     
 def Main():
@@ -230,14 +221,15 @@ def Main():
     Mixer.PlaySound("DesertTheme1",-1)
     SaveData,TempData=NewGame()
     while True:
+        FrameTime=time.time()
         if TempData["ActiveEncounter"]:
             SaveData,TempData = Encounter(Screen, Mixer, SaveData,TempData)
         else:
             SaveData,TempData=Overworld(Screen, Mixer, SaveData,TempData)
         TempData["AnimateTick"]+=1
         Screen.Update()
-
+        if FrameTime+0.016>time.time():
+            time.sleep(0.017-(time.time()-FrameTime))
 
 Main()
 
--0
