@@ -31,24 +31,20 @@ class DisplayManager:
                                                               self.Images[Image[:-4]].get_size()[1] * self.ResRatio[1]))
 
     def place_image(self, image_id, x, y):
-        x = round(x)
-        y = round(y)
         if image_id in self.Images.keys():
             y = self.GameRes[1] - y - (self.Images[image_id].get_size()[1] / self.ResRatio[1])
-            self.Window.blit(self.Images[image_id], (x * self.ResRatio[0], y * self.ResRatio[1]))
+            self.Window.blit(self.Images[image_id], (int(x) * self.ResRatio[0], int(y) * self.ResRatio[1]))
         else:
             print(
                 "ERROR: Image " + image_id + " has not been loaded. Make sure you have placed the image in the images "
                                              "folder and spelt the file name correctly.")
 
     def place_text(self, text, x, y):
-        x = round(x)
-        y = round(y)
         x2 = x
         for Letter in text:
             if Letter in self.Images.keys():
                 y2 = self.GameRes[1] - y - (self.Images[Letter].get_size()[1] / self.ResRatio[1])
-                self.Window.blit(self.Images[Letter], (x2 * self.ResRatio[0], y2 * self.ResRatio[1]))
+                self.Window.blit(self.Images[Letter], (round(x2) * self.ResRatio[0], round(y2) * self.ResRatio[1]))
                 x2 += (self.Images[Letter].get_size()[0] / self.ResRatio[0]) + 1
             elif Letter == "\n":
                 y += -6
@@ -89,7 +85,8 @@ class SoundManager:
 
 
 class Character:
-    def __init__(self, level, strength, constitution, dexterity, intelligence, wisdom, charisma):
+    def __init__(self, name, level, strength, constitution, dexterity, intelligence, wisdom, charisma, attacks):
+        self.name=name
         self.level = level
         self.strength = strength
         self.constitution = constitution
@@ -97,16 +94,25 @@ class Character:
         self.intelligence = intelligence
         self.wisdom = wisdom
         self.charisma = charisma
-        self.mods = {"Strength": (self.strength-10)/2,
-                     "Constitution": (self.constitution-10)/2,
-                     "Dexterity": (self.dexterity-10)/2,
-                     "Intelligence": (self.intelligence-10)/2,
-                     "Wisdom": (self.wisdom-10)/2,
-                     "Charisma": (self.charisma-10)/2}
+        self.attacks=attacks
+        #Initialises variables to be set in update_stats to prevent pycharm from having a fit
+        self.mods={}; self.health_max=0; self.dodge_bonus=0; self.attack_bonus=0; self.spell_bonus=0; self.stamina_max=0
+        self.stamina_regen=0; self.mana_max=0; self.mana_regen=0; self.health_current=0; self.stamina_current=0
+        self.mana_current=0
+        self.update_stats()
+
+
+    def update_stats(self):
+        self.mods = {"Strength": (self.strength - 10) / 2,
+                     "Constitution": (self.constitution - 10) / 2,
+                     "Dexterity": (self.dexterity - 10) / 2,
+                     "Intelligence": (self.intelligence - 10) / 2,
+                     "Wisdom": (self.wisdom - 10) / 2,
+                     "Charisma": (self.charisma - 10) / 2}
         self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
-        self.dodge_bonus = self.mods["Dexterity"]+10
-        self.attack_bonus = (self.mods["Dexterity"]+2)
-        self.spell_bonus = (self.mods["Charisma"]+2)
+        self.dodge_bonus = self.mods["Dexterity"] + 10
+        self.attack_bonus = (self.mods["Dexterity"] + 2)
+        self.spell_bonus = (self.mods["Charisma"] + 2)
         self.stamina_max = self.level * 10 + self.mods["Constitution"] * 5
         self.stamina_regen = self.level + self.mods["Strength"] * 2
         self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
@@ -114,6 +120,8 @@ class Character:
         self.health_current = self.health_max
         self.stamina_current = self.stamina_max
         self.mana_current = self.mana_max
+
+
 
 
 def save(data):
@@ -160,7 +168,6 @@ def overworld(screen, mixer, save_data, temp_data):
                 temp_data["PageNumber"] =  0
             except KeyError:
                 pass
-
     else:
         if temp_data["Moving"][2] >= 30:
             save_data["Position"] = temp_data["Moving"][1]
@@ -176,14 +183,14 @@ def overworld(screen, mixer, save_data, temp_data):
                                         30 - temp_data["Moving"][2])) / 30)
     for temp_encounter in temp_data["Encounters"]:
         screen.place_image("Alert1", (temp_data["PositionData"][temp_encounter[0]][0][0] +
+                                      temp_data["PositionData"][temp_encounter[1]][0][0]) / 2 -1,
+                           (temp_data["PositionData"][temp_encounter[0]][0][1] +
+                            temp_data["PositionData"][temp_encounter[1]][0][1]) / 2 + 6 + math.sin(
+                               temp_data["AnimateTick"] / 35) * -0.9)
+        screen.place_image("Alert2", (temp_data["PositionData"][temp_encounter[0]][0][0] +
                                       temp_data["PositionData"][temp_encounter[1]][0][0]) / 2,
                            (temp_data["PositionData"][temp_encounter[0]][0][1] +
-                            temp_data["PositionData"][temp_encounter[1]][0][1]) / 2 + 5 + math.sin(
-                               temp_data["AnimateTick"] / 35) * -0.75)
-        screen.place_image("Alert2", (temp_data["PositionData"][temp_encounter[0]][0][0] +
-                                      temp_data["PositionData"][temp_encounter[1]][0][0]) / 2 + 1,
-                           (temp_data["PositionData"][temp_encounter[0]][0][1] +
-                            temp_data["PositionData"][temp_encounter[1]][0][1]) / 2 - 1)
+                            temp_data["PositionData"][temp_encounter[1]][0][1]) / 2)
     if random.randint(0, 2500) == 0:
         temp_data["Airships"].append([-20, random.randint(0, 270)])
     to_delete = []
@@ -204,6 +211,7 @@ def overworld(screen, mixer, save_data, temp_data):
 def encounter(screen, mixer, save_data, temp_data):
     if temp_data["EncounterData"]["Type"] == "Battle":
         screen.place_image("EncounterBack", 0, 0)
+
     elif temp_data["EncounterData"]["Type"] == "Dialogue":
         screen.place_image(temp_data["EncounterData"]["Background"], 0, 0)
         if not temp_data["PageNumber"] == -1:
@@ -216,7 +224,7 @@ def encounter(screen, mixer, save_data, temp_data):
             temp_data["ActiveEncounter"] = False
             return save_data, temp_data
         input_keys = pygame.key.get_pressed()
-        if input_keys[pygame.K_1] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 0:
+        if input_keys[pygame.K_1] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 1:
             if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1])>2:
                 for i in range(2,len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1])):
                     temp_data["EncounterData"][
@@ -224,7 +232,7 @@ def encounter(screen, mixer, save_data, temp_data):
                         "EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][i][1]
             temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][1]
             mixer.play_sound("ExampleSound", 0)
-        elif input_keys[pygame.K_2] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 1:
+        elif input_keys[pygame.K_2] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 2:
             if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2])>2:
                 for i in range(2,len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2])):
                     temp_data["EncounterData"][
@@ -232,15 +240,26 @@ def encounter(screen, mixer, save_data, temp_data):
                         temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][i][1]]
             temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][1]
             mixer.play_sound("ExampleSound", 0)
-        elif input_keys[pygame.K_3] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 2:
+        elif input_keys[pygame.K_3] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 3:
             if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3])>2:
                 for i in range(2,len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3])):
-                    temp_data["EncounterData"][
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]] = [
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]]
+                    if temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0] in temp_data["EncounterData"].keys():
+                        temp_data["EncounterData"][
+                            temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]] = [
+                            temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]]
+                    elif temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0] in save_data.keys():
+                        if temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]=="Inventory":
+                            if temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1] in save_data["Inventory"].keys()
+                                save_data["Inventory"][temp_data["EncounterData"]["Dialogue"][
+                                    temp_data["PageNumber"]][3][i][1]]+=temp_data["EncounterData"][
+                                    "Dialogue"][temp_data["PageNumber"]][3][i][0]
+                        else:
+                            save_data[
+                                temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]] = [
+                                temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]]
             temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][1]
             mixer.play_sound("ExampleSound", 0)
-        elif input_keys[pygame.K_4] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 3:
+        elif input_keys[pygame.K_4] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 4:
             if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4])>2:
                 for i in range(2,len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4])):
                     temp_data["EncounterData"][
@@ -253,9 +272,17 @@ def encounter(screen, mixer, save_data, temp_data):
             pygame.event.get()
     return save_data, temp_data
 
+def inventory(screen, mixer, save_data, temp_data):
+    screen.place_image("Blank",0,0)
+    return save_data, temp_data
 
 def new_game():
-    save_data = {"Position": 4, "Party": []}
+    save_data = {"Position": 4,"Party": []}
+    save_data["Party"].append(Character("LordQuaggan",1,10,10,10,10,10,10,["Physical","Melee",1]))
+    save_data["StoryProgress"]={}
+    save_data["Inventory"]={}
+    save_data["Inventory"]["HealthPotion"]=1
+    save_data["Inventory"]["Gold"]=10
     temp_data = {"ActiveEncounter": True, "EncounterData": {}}
     temp_data["EncounterData"]["Type"] = "Dialogue"
     temp_data["EncounterData"]["Background"] = "BlankWhite"
@@ -265,19 +292,61 @@ def new_game():
     temp_data["EncounterData"]["Dialogue"].append(["OK YOU CAN GO NOW", ["EXIT", -1]])
     temp_data["EncounterData"]["Dialogue"].append(["BRUH", ["FINE I'LL GET UP THEN", 1], ["STAY SLEEPING", 2]])
     temp_data["PageNumber"] = 0
+
     temp_data["EncounterContent"]={}
+    temp_data["EncounterContent"][3] = {}
+    temp_data["EncounterContent"][3]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][3]["Background"] = "Town2"
+    temp_data["EncounterContent"][3]["Dialogue"] = []
+    temp_data["EncounterContent"][3]["Dialogue"].append(
+        ["WELCOME TO THE VILLAGE OF TENAGRA", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
+         ["LEAVE", -1]])
+    temp_data["EncounterContent"][3]["Dialogue"].append(
+        ["SHOPS ARE CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0, ["Background", "Town2"]]])
+    temp_data["EncounterContent"][3]["Dialogue"].append(
+        ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
+
     temp_data["EncounterContent"][4]={}
     temp_data["EncounterContent"][4]["Type"]="Dialogue"
     temp_data["EncounterContent"][4]["Background"]="Town2"
     temp_data["EncounterContent"][4]["Dialogue"]=[]
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["WELCOME TO THE VILLAGE OF BRUH",["SHOPS",1,["Background", "Town"]],["GUILD HALL",2],["TAVERN",3],["LEAVE",-1]])
+        ["WELCOME TO THE VILLAGE OF NIBIRU",["SHOPS",1,["Background", "Town"]],["GUILD HALL",2],["TAVERN",3],["LEAVE",-1]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["SHOPS ARE CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0, ["Background", "Town2"]]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["GUILD HALL IS UNDER REPAIRS, PLEASE COME BACK LATER", ["GO BACK", 0]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
+
+    temp_data["EncounterContent"][5] = {}
+    temp_data["EncounterContent"][5]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][5]["Background"] = "WaterfallDried"  # not made yet BRUH
+    temp_data["EncounterContent"][5]["Dialogue"] = []
+    temp_data["EncounterContent"][5]["Dialogue"].append(
+        [
+            "YOU SEE A MAN CLAD IN BLUE ROBES STARING AT AN ANCIENT CLIFFSIDE, 'THERE USED TO BE A WATERFALL HERE YOU KNOW, SHAME HOW THINGS HAVE TURNED OUT'",
+            ["'IT REALLY IS'", 1], ["'I HATE WATER'", -1],
+            ["LEAVE", -1]])
+    temp_data["EncounterContent"][5]["Dialogue"].append(
+        ["'I HEARD A RUMOUR THAT A GUILD IS STARTING IN NIBIRU TO FIX THIS MESS'", ["'PERHAPS WE SHOULD JOIN'", 2],
+         ["'YEAH I ACTUALLY PREFER THE SAND'", -1]])
+    temp_data["EncounterContent"][5]["Dialogue"].append(
+            ["'YEAH, I'LL MEET YOU BACK IN NIBIRU'", ["'I'LL SEE YOU THERE'", -1]])
+
+
+    temp_data["EncounterContent"][6] = {}
+    temp_data["EncounterContent"][6]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][6]["Background"] = "Town2"
+    temp_data["EncounterContent"][6]["Dialogue"] = []
+    temp_data["EncounterContent"][6]["Dialogue"].append(
+        ["WELCOME TO THE VILLAGE OF LEDONIA", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
+         ["LEAVE", -1]])
+    temp_data["EncounterContent"][6]["Dialogue"].append(
+        ["SHOPS ARE CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0, ["Background", "Town2"]]])
+    temp_data["EncounterContent"][6]["Dialogue"].append(
+        ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
+
     temp_data["PositionData"] = []
     temp_data["PositionData"].append([[43, 125], [-1, 2, 3, -1]])  # Links are done up down left right -1 means no link
     temp_data["PositionData"].append([[122, 229], [-1, -1, 2, -1]])
