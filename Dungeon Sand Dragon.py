@@ -31,7 +31,7 @@ def new_game():
     temp_data["EncounterData"]["Dialogue"] = []
     temp_data["EncounterData"]["Dialogue"].append(
         ["A LOUD, FRANTIC KNOCK ON THE DOOR SUDDENLY WAKES YOU UP", ["GET OUT OF BED AND ANSWER IT", 2, ["Character","WaterWizard"]], ["COVER YOUR EARS WITH A PILLOW AND TRY TO GO BACK TO SLEEP", 1]])
-    temp_data["EncounterData"]["Dialogue"].append(["THE KNOCKING INCREASES, IT'S NO USE", ["GIVE IN AND GET UP", 2], ["KEEP TRYING TO GO BACK TO SLEEP", 1]])
+    temp_data["EncounterData"]["Dialogue"].append(["THE KNOCKING INCREASES, IT'S NO USE", ["GIVE IN AND GET UP", 2, ["Character","WaterWizard"]], ["KEEP TRYING TO GO BACK TO SLEEP", 1]])
     temp_data["EncounterData"]["Dialogue"].append(["YOU OPEN THE DOOR TO SEE YOUR OLD FRIEND QUIN THE WATER MAGE.\nHE HAS BEEN MISSING FOR WEEKS", ["SAY HELLO", 3],["ASK HIM WHERE ON EARTH HE HAS BEEN! THE WHOLE TOWN HAS BEEN LOOKING FOR HIM!",4]])
     temp_data["EncounterData"]["Dialogue"].append(
         ["QUIN GREETS YOU CORDIALLY AND BEGINS HIS TALE", ["CONTINUE", 5]])
@@ -76,7 +76,7 @@ def new_game():
         "'NOT HAVING TO LIVE IN A DESERT@ NOT HAVING TO WORRY EVERY DAY\nIF THE SHIPMENTS OF WATER SUPPLIES HAVE GOTTEN LOST@ BEING A HERO@'",
         ["AGREE AND JOIN", 16],["DECLARE THAT YOU ARE STILL NOT CONVINCED",18]])
     temp_data["EncounterData"]["Dialogue"].append([
-        "'OKAY, YOU HAVE PUSHED ME THIS FAR, THAT'S IT; TIME TO BREAK THE FOURTH WALL.\nLOOK, YOU STARTED THIS GAME, IF YOU DIDN'T WANT TO PLAY IT, WHY DID THE HELL YOU CLICK RUN@'",
+        "'OKAY, YOU HAVE PUSHED ME THIS FAR, THAT'S IT. TIME TO BREAK THE FOURTH WALL;\nLOOK, YOU STARTED THIS GAME, IF YOU DIDN'T WANT TO PLAY IT, WHY DID THE HELL YOU CLICK RUN@'",
         ["AGREE AND JOIN (THIS IS THE ONLY OPTION, YOU TERRIBLE FRIEND)", 16]])
     save_data, temp_data = init_encounter(save_data, temp_data)
 
@@ -171,7 +171,8 @@ def new_game():
             if save_data["Encounters"][i2] == save_data["Encounters"][i]:
                 to_delete.append(i)
     for i in range(0, len(to_delete)):
-        save_data["Encounters"].pop(to_delete[i] - i)
+        if len(save_data["Encounters"])>0:
+            save_data["Encounters"].pop(to_delete[i] - i)
     return save_data, temp_data
 
 
@@ -675,7 +676,20 @@ def encounter(screen, mixer, save_data, temp_data):
                                 "Inventory"].keys():
                                 save_data["Inventory"][temp_data["EncounterData"]["Dialogue"][
                                     temp_data["PageNumber"]][3][i][1]] += temp_data["EncounterData"][
-                                    "Dialogue"][temp_data["PageNumber"]][3][i][0]
+                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
+                        elif temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]=="Party":
+                            if  temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]=="health_current":
+                                for i2 in range(0,len(save_data["Party"])):
+                                    save_data["Party"][i2].health_current=temp_data["EncounterData"][
+                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
+                            elif  temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]=="stamina_current":
+                                for i2 in range(0,len(save_data["Party"])):
+                                    save_data["Party"][i2].stamina_current=temp_data["EncounterData"][
+                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
+                            elif  temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]=="mana_current":
+                                for i2 in range(0,len(save_data["Party"])):
+                                    save_data["Party"][i2].mana_current=temp_data["EncounterData"][
+                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
                         else:
                             save_data[
                                 temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]] = [
