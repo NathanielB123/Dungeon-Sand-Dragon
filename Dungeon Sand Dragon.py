@@ -31,7 +31,7 @@ def new_game():
         ["WAKE UP ADVENTURER!", ["AGREE AND GET OUT OF BED", 1], ["STAY SLEEPING", 2]])
     temp_data["EncounterData"]["Dialogue"].append(["OK YOU CAN GO NOW", ["EXIT", -1]])
     temp_data["EncounterData"]["Dialogue"].append(["BRUH", ["FINE I'LL GET UP THEN", 1], ["STAY SLEEPING", 2]])
-    temp_data["PageNumber"] = 0
+    save_data, temp_data = init_encounter(save_data, temp_data)
 
     temp_data["EncounterContent"] = {}
     temp_data["EncounterContent"][3] = {}
@@ -297,8 +297,7 @@ def overworld(screen, mixer, save_data, temp_data):
             mixer.play_sound("ExampleSound", 0)
             try:
                 temp_data["EncounterData"] = temp_data["EncounterContent"][save_data["Position"]]
-                temp_data["ActiveScreen"] = "Encounter"
-                temp_data["PageNumber"] = 0
+                save_data, temp_data = init_encounter(save_data,temp_data)
             except KeyError:
                 pass
         elif input_keys[pygame.K_i]:
@@ -344,6 +343,18 @@ def overworld(screen, mixer, save_data, temp_data):
             to_delete.append(AirshipNum)
     for i in to_delete:
         temp_data["Airships"].pop(i)
+    return save_data, temp_data
+
+
+def init_encounter(save_data, temp_data):
+    temp_data["ActiveScreen"] = "Encounter"
+    if temp_data["EncounterData"]["Type"]=="Battle":
+        temp_data["EncounterData"]["Turn"]=0
+        temp_data["EncounterData"]["UIPos"]=0
+        temp_data["EncounterData"]["Selection"]={"Attack": 0, "Enemy": 0}
+        temp_data["EncounterData"]["AttackAnimProg"]=0
+    elif temp_data["EncounterData"]["Type"]=="Dialogue":
+        temp_data["PageNumber"] = 0
     return save_data, temp_data
 
 
@@ -410,6 +421,59 @@ def encounter(screen, mixer, save_data, temp_data):
                                        (temp_data["EncounterData"]["EnemyParty"][i].mana_current /
                                         temp_data["EncounterData"]["EnemyParty"][i].mana_max) * 48, 5)
                 offset+=6
+        if temp_data["EncounterData"]["Turn"]<len(save_data["Party"]) and temp_data["EncounterData"]["AttackAnimProg"]==0:
+            if temp_data["EncounterData"]["UIPos"]==0:
+                for OptionNum in range(0,len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks)):
+                    screen.place_text(str(OptionNum + 1) + "; " +
+                                      save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][0].upper()+" "+
+                                      save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][1].upper()+" ("+
+                                      str(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][2])+" "+
+                                      "DMG)", 10,
+                                      30 - OptionNum * 10)
+                    input_keys=pygame.key.get_pressed()
+                    if input_keys[pygame.K_1] and len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 0:
+                        temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                        temp_data["EncounterData"]["UIPos"]+=1
+                    elif input_keys[pygame.K_2] and len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 1:
+                        temp_data["EncounterData"]["Selection"]["Attack"] = 1
+                        temp_data["EncounterData"]["UIPos"] += 1
+                    elif input_keys[pygame.K_3] and len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 2:
+                        temp_data["EncounterData"]["Selection"]["Attack"] = 2
+                        temp_data["EncounterData"]["UIPos"] += 1
+                    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3]:
+                        input_keys = pygame.key.get_pressed()
+                        pygame.event.get()
+            elif temp_data["EncounterData"]["UIPos"]==1:
+                for OptionNum in range(0,len(temp_data["EncounterData"]["EnemyParty"])):
+                    screen.place_text(str(OptionNum + 1) + "; " +
+                                      temp_data["EncounterData"]["EnemyParty"][OptionNum].name.upper()+" ("+str(
+                        temp_data["EncounterData"]["EnemyParty"][OptionNum].health_current)+" HP)", 10,
+                                      30 - OptionNum * 10)
+                input_keys = pygame.key.get_pressed()
+                if input_keys[pygame.K_1] and len(temp_data["EncounterData"]["EnemyParty"]) > 0:
+                    temp_data["EncounterData"]["Selection"]["Enemy"] = 0
+                    temp_data["EncounterData"]["UIPos"] = 0
+                    temp_data["EncounterData"]["AttackAnimProg"]=1
+                elif input_keys[pygame.K_2] and len(temp_data["EncounterData"]["EnemyParty"]) > 1:
+                    temp_data["EncounterData"]["Selection"]["Enemy"] = 1
+                    temp_data["EncounterData"]["UIPos"] = 0
+                    temp_data["EncounterData"]["AttackAnimProg"] = 1
+                elif input_keys[pygame.K_3] and len(temp_data["EncounterData"]["EnemyParty"]) > 2:
+                    temp_data["EncounterData"]["Selection"]["Enemy"] = 2
+                    temp_data["EncounterData"]["UIPos"] = 0
+                    temp_data["EncounterData"]["AttackAnimProg"] = 1
+        elif temp_data["EncounterData"]["AttackAnimProg"]==0:
+            #AI HERE
+            temp_data["EncounterData"]["AttackAnimProg"]=1
+        else:
+            if temp_data["EncounterData"]["AttackAnimProg"] < 30:
+                temp_data["EncounterData"]["AttackAnimProg"]+=1
+            else:
+                temp_data["EncounterData"]["AttackAnimProg"] = 0
+                temp_data["EncounterData"]["Turn"] += 1
+                if temp_data["EncounterData"]["Turn"] > len(
+                        save_data["Party"])+len(temp_data["EncounterData"]["EnemyParty"]):
+                    temp_data["EncounterData"]["Turn"] = 0
     elif temp_data["EncounterData"]["Type"] == "Dialogue":
         screen.place_image(temp_data["EncounterData"]["Background"], 0, 0)
         if not temp_data["EncounterData"]["Character"] == "None":
