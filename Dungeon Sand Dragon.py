@@ -16,8 +16,8 @@ pygame.init()
 
 def new_game():
     save_data = {"Position": 4, "Party": [], "Name": "LordQuaggan"}
-    save_data["Party"].append(Character(save_data["Name"], 1, 10, 10, 10, 10, 10, 10, ["Physical", "Melee", 1]))
-    save_data["Party"].append(Character("WaterWizard", 1, 10, 10, 10, 10, 10, 10, ["Magical", "Ranged", 1]))
+    save_data["Party"].append(Character(save_data["Name"], 1, 10, 10, 10, 10, 10, 10, [["Physical", "Melee", 1],["Magical","Ranged",1]]))
+    save_data["Party"].append(Character("WaterWizard", 1, 10, 10, 10, 10, 10, 10, [["Magical", "Ranged", 1]]))
     save_data["StoryProgress"] = {}
     save_data["Inventory"] = {}
     save_data["Inventory"]["HealthPotion"] = 1
@@ -95,11 +95,11 @@ def new_game():
     temp_data["EncounterContent"][1]["Type"] = "Battle"
     temp_data["EncounterContent"][1]["EnemyParty"] = []
     temp_data["EncounterContent"][1]["EnemyParty"].append(
-        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, ["Physical", "Melee", 1]))
+        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 1]]))
     temp_data["EncounterContent"][1]["EnemyParty"].append(
-        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, ["Physical", "Melee", 1]))
+        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 1]]))
     temp_data["EncounterContent"][1]["EnemyParty"].append(
-        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, ["Physical", "Melee", 1]))
+        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 1]]))
 
     temp_data["PositionData"] = []
     temp_data["PositionData"].append([[43, 125], [-1, 2, 3, -1]])  # Links are done up down left right -1 means no link
@@ -359,31 +359,57 @@ def encounter(screen, mixer, save_data, temp_data):
                 screen.place_image("64 by 48",
                                    i * 30 + 40,
                                    i * 60 + 40)
+            offset=0
             screen.place_rectangle((0,0,0),i * 30 + 40,i * 60 + 120 ,48, 5)
             screen.place_rectangle((255,0,0),i * 30 + 40,i * 60 + 120,(save_data["Party"][i].health_current/
                                                                        save_data["Party"][i].health_max)*48,5)
-            screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 114, 48, 5)
-            screen.place_rectangle((0, 255, 0), i * 30 + 40, i * 60 + 114, (save_data["Party"][i].stamina_current /
-                                                                            save_data["Party"][i].stamina_max) * 48, 5)
-            screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 108, 48, 5)
-            screen.place_rectangle((0, 0, 255), i * 30 + 40, i * 60 + 108, (save_data["Party"][i].mana_current /
-                                                                            save_data["Party"][i].mana_max) * 48, 5)
+            offset+=6
+            physical=False
+            magical=False
+            for Attack in save_data["Party"][i].attacks:
+                if "Physical" in Attack:
+                    physical=True
+                elif "Magical" in Attack:
+                    magical=True
+            if physical:
+                screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120-offset, 48, 5)
+                screen.place_rectangle((0, 255, 0), i * 30 + 40, i * 60 + 120-offset, (save_data["Party"][i].stamina_current /
+                                                                                save_data["Party"][i].stamina_max) * 48, 5)
+                offset+=6
+            if magical:
+                screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120-offset, 48, 5)
+                screen.place_rectangle((0, 0, 255), i * 30 + 40, i * 60 + 120-offset, (save_data["Party"][i].mana_current /
+                                                                                save_data["Party"][i].mana_max) * 48, 5)
+                offset+=6
         for i in range(len(temp_data["EncounterData"]["EnemyParty"]) - 1, -1, -1):
             screen.place_image(temp_data["EncounterData"]["EnemyParty"][i].name,
                                i * - 30 + 400,
-                               i * 60 + 40)
-            screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120, 48, 5)
-            screen.place_rectangle((255, 0, 0), i * -30 + 400, i * 60 + 120,
+                               i * 60 + 40,True)
+            offset = 0
+            screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120-offset, 48, 5)
+            screen.place_rectangle((255, 0, 0), i * -30 + 400, i * 60 + 120-offset,
                                    (temp_data["EncounterData"]["EnemyParty"][i].health_current/
                                     temp_data["EncounterData"]["EnemyParty"][i].health_max)*48, 5)
-            screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 114, 48, 5)
-            screen.place_rectangle((0, 255, 0), i * -30 + 400, i * 60 + 114,
-                                   (temp_data["EncounterData"]["EnemyParty"][i].stamina_current /
-                                    temp_data["EncounterData"]["EnemyParty"][i].stamina_max) * 48, 5)
-            screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 108, 48, 5)
-            screen.place_rectangle((0, 0, 255), i * -30 + 400, i * 60 + 108,
-                                   (temp_data["EncounterData"]["EnemyParty"][i].mana_current /
-                                    temp_data["EncounterData"]["EnemyParty"][i].mana_max) * 48, 5)
+            offset+=6
+            physical = False
+            magical = False
+            for Attack in temp_data["EncounterData"]["EnemyParty"][i].attacks:
+                if "Physical" in Attack:
+                    physical=True
+                elif "Magical" in Attack:
+                    magical=True
+            if physical:
+                screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120-offset, 48, 5)
+                screen.place_rectangle((0, 255, 0), i * -30 + 400, i * 60 + 120-offset,
+                                       (temp_data["EncounterData"]["EnemyParty"][i].stamina_current /
+                                        temp_data["EncounterData"]["EnemyParty"][i].stamina_max) * 48, 5)
+                offset+=6
+            if magical:
+                screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120-offset, 48, 5)
+                screen.place_rectangle((0, 0, 255), i * -30 + 400, i * 60 + 120-offset,
+                                       (temp_data["EncounterData"]["EnemyParty"][i].mana_current /
+                                        temp_data["EncounterData"]["EnemyParty"][i].mana_max) * 48, 5)
+                offset+=6
     elif temp_data["EncounterData"]["Type"] == "Dialogue":
         screen.place_image(temp_data["EncounterData"]["Background"], 0, 0)
         if not temp_data["EncounterData"]["Character"] == "None":
