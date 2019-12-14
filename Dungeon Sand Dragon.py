@@ -1,6 +1,7 @@
 import time
 import random
 import math
+import copy
 # import numpy
 # import panda
 import pygame
@@ -16,8 +17,9 @@ pygame.init()
 
 def new_game():
     save_data = {"Position": 4, "Party": [], "Name": "LordQuaggan"}
-    save_data["Party"].append(Character(save_data["Name"], 1, 10, 10, 10, 10, 10, 10, [["Physical", "Melee", 1],["Magical","Ranged",1]]))
-    save_data["Party"].append(Character("WaterWizard", 1, 10, 10, 10, 10, 10, 10, [["Magical", "Ranged", 1]]))
+    save_data["Party"].append(
+        Character(save_data["Name"], 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 2], ["Magical", "Ranged", 2]]))
+    save_data["Party"].append(Character("WaterWizard", 1, 4, 8, 4, 12, 12, 10, [["Magical", "Ranged", 3]]))
     save_data["StoryProgress"] = {}
     save_data["Inventory"] = {}
     save_data["Inventory"]["HealthPotion"] = 1
@@ -28,9 +30,54 @@ def new_game():
     temp_data["EncounterData"]["Character"] = "None"
     temp_data["EncounterData"]["Dialogue"] = []
     temp_data["EncounterData"]["Dialogue"].append(
-        ["WAKE UP ADVENTURER!", ["AGREE AND GET OUT OF BED", 1], ["STAY SLEEPING", 2]])
-    temp_data["EncounterData"]["Dialogue"].append(["OK YOU CAN GO NOW", ["EXIT", -1]])
-    temp_data["EncounterData"]["Dialogue"].append(["BRUH", ["FINE I'LL GET UP THEN", 1], ["STAY SLEEPING", 2]])
+        ["A LOUD, FRANTIC KNOCK ON THE DOOR SUDDENLY WAKES YOU UP", ["GET OUT OF BED AND ANSWER IT", 2, ["Character","WaterWizard"]], ["COVER YOUR EARS WITH A PILLOW AND TRY TO GO BACK TO SLEEP", 1]])
+    temp_data["EncounterData"]["Dialogue"].append(["THE KNOCKING INCREASES, IT'S NO USE", ["GIVE IN AND GET UP", 2], ["KEEP TRYING TO GO BACK TO SLEEP", 1]])
+    temp_data["EncounterData"]["Dialogue"].append(["YOU OPEN THE DOOR TO SEE YOUR OLD FRIEND QUIN THE WATER MAGE.\nHE HAS BEEN MISSING FOR WEEKS", ["SAY HELLO", 3],["ASK HIM WHERE ON EARTH HE HAS BEEN! THE WHOLE TOWN HAS BEEN LOOKING FOR HIM!",4]])
+    temp_data["EncounterData"]["Dialogue"].append(
+        ["QUIN GREETS YOU CORDIALLY AND BEGINS HIS TALE", ["CONTINUE", 5]])
+    temp_data["EncounterData"]["Dialogue"].append(
+        ["QUIN SHUSHES YOU AND BEGINS HIS TALE", ["CONTINUE", 5]])
+    temp_data["EncounterData"]["Dialogue"].append(
+        ["'A MONTH AGO WHEN THE GREAT FOUNTAIN BROKE AND THE FLOW OF WATER STOPPED,\nI STARTED RESEARCHING EVERYTHING ABOUT THE ANCIENT OBJECT'", ["CONTINUE", 6]])
+    temp_data["EncounterData"]["Dialogue"].append(
+        ["'AS YOU HAVE NO DOUBT REALISED BY NOW, THIS TRAGEDY IS NO SIMPLE TRIFLE.\nSPEED WAS OF THE UTMOST IMPORTANCE, PEOPLE WERE ALREADY BEGINNING TO GO THIRSTY'",
+            ["CONTINUE", 7]])
+    temp_data["EncounterData"]["Dialogue"].append([
+            "'SO, AS TIME WAS OF THE ESSENCE, I RAN TO THE GREAT LIBRARY\nAND SPENT A MONTH THERE RESEARCHING THIS PHENOMENON WHEN I FOUND THIS;'",
+            ["LOOK CLOSER AT THE OBJECT HE IS HOLDING", 8],["ASK HIM TO GET TO THE POINT ALREADY",9]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "YOU SEE A BOOK WITH THE TITLE 'AQA REVISION GUIDE TO FOUNTAIN REPAIR' BRANDED ACROSS THE FRONT",
+        ["ASK HIM TO CONTINUE WITH HIS TALE", 10], ["ASK HIM TO GET TO THE POINT ALREADY", 9]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "HE LOOKS AT YOU WITH A SLIGHTLY HURT EXPRESSION, AND THEN PROCEEDS TO GET TO THE POINT",
+        ["PHEW", 10]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'ANYWAY, IN THIS BOOK IT STATES THAT TO REPAIR THE GREAT FOUNTAIN INSIDE THE PYRAMID OF LIFE,\nONE MUST COLLECT 4 JIGSAW PIECES AND COMBINE THEM'",
+        ["'ASK HIM WHERE THESE JIGSAW PIECES ARE'", 11]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'WELL, TURNS OUT THE LOCATIONS OF THE JIGSAW PIECES WASN'T PART OF THE AQA SPEC,\nBUT LUCKILY THEY HAVE IT WRITTEN IN THIS OCR TEXTBOOK HERE'",
+        ["REPEAT YOUR QUESTION", 12]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'OKAY, OKAY. THEY ARE HERE, HERE, HERE AND HERE.' HIS FINGER JABS AT TO PAGES SEEMINGLY RANDOMLY\nALL AROUND THE EDGES OF THE DESERT",
+        ["ASK HIM WHY HE HASN'T ALREADY REPAIRED THE FOUNTAIN", 13],["ASK WHY HE CAME TO YOU",13]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'WELL...' HE LOOKS EMBARRASSED 'I WENT TO THE LOCATION AND WAS MET WITH A FEARSOME TROLL,\nWHO WAS NOT IN THE MOOD TO GIVE HIS PRECIOUS SHINY JIGSAW PIECE AWAY'",
+        ["ASK HIM IF HE EXPECTS YOU TO HELP",14]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'WELL... I SUPPOSE... WELL YES, TO BE FRANK, I WAS CONSIDERING SETTING UP A GUILD'",
+        ["SAY THAT SOUNDS LIKE A GREAT IDEA", 15],["SAY THAT SOUNDS LIKE A WASTE OF TIME, EFFORT AND MONEY",15]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'WELL, IN FACT, I ALREADY HAVE. I NAMED IT THE LEAGUE OF DOWSERS! I HAVE NO CHANCE OF PAYING OFF\nMY MAGI UNI DEBT NOW, BUT I THINK IT WAS WORTH IT, THAT IS, IF YOU WERE TO JOIN IT WOULD BE'",
+        ["SAY THAT YOU WOULD BE HAPPY TO JOIN IN ON HIS QUEST", 16], ["ASK WHAT'S IN IT FOR YOU", 17]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'HURRAY! LET'S GO COLLECT SOME JIGSAW PIECES AND SAVE THE WORLD!'",
+        ["EXIT", -1]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'NOT HAVING TO LIVE IN A DESERT@ NOT HAVING TO WORRY EVERY DAY\nIF THE SHIPMENTS OF WATER SUPPLIES HAVE GOTTEN LOST@ BEING A HERO@'",
+        ["AGREE AND JOIN", 16],["DECLARE THAT YOU ARE STILL NOT CONVINCED",18]])
+    temp_data["EncounterData"]["Dialogue"].append([
+        "'OKAY, YOU HAVE PUSHED ME THIS FAR, THAT'S IT; TIME TO BREAK THE FOURTH WALL.\nLOOK, YOU STARTED THIS GAME, IF YOU DIDN'T WANT TO PLAY IT, WHY DID THE HELL YOU CLICK RUN@'",
+        ["AGREE AND JOIN (THIS IS THE ONLY OPTION, YOU TERRIBLE FRIEND)", 16]])
     save_data, temp_data = init_encounter(save_data, temp_data)
 
     temp_data["EncounterContent"] = {}
@@ -95,11 +142,11 @@ def new_game():
     temp_data["EncounterContent"][1]["Type"] = "Battle"
     temp_data["EncounterContent"][1]["EnemyParty"] = []
     temp_data["EncounterContent"][1]["EnemyParty"].append(
-        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 1]]))
+        Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 1]]))
     temp_data["EncounterContent"][1]["EnemyParty"].append(
-        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 1]]))
+        Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 1]]))
     temp_data["EncounterContent"][1]["EnemyParty"].append(
-        Character("Goblin", 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 1]]))
+        Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 1]]))
 
     temp_data["PositionData"] = []
     temp_data["PositionData"].append([[43, 125], [-1, 2, 3, -1]])  # Links are done up down left right -1 means no link
@@ -113,18 +160,18 @@ def new_game():
     temp_data["PositionData"].append([[394, 162], [-1, -1, 7, 5]])
     temp_data["AnimateTick"] = 0
     temp_data["Moving"] = [False, 0, 0]
-    temp_data["Encounters"] = []
+    save_data["Encounters"] = []
     temp_data["Airships"] = []
     to_delete = []
     for i in range(0, 5):
-        temp_data["Encounters"].append([random.randint(0, len(temp_data["PositionData"]) - 1), -1])
-        while temp_data["Encounters"][i][1] == -1:
-            temp_data["Encounters"][i][1] = random.choice(temp_data["PositionData"][temp_data["Encounters"][i][0]][1])
+        save_data["Encounters"].append([random.randint(0, len(temp_data["PositionData"]) - 1), -1])
+        while save_data["Encounters"][i][1] == -1:
+            save_data["Encounters"][i][1] = random.choice(temp_data["PositionData"][save_data["Encounters"][i][0]][1])
         for i2 in range(0, i):
-            if temp_data["Encounters"][i2] == temp_data["Encounters"][i]:
+            if save_data["Encounters"][i2] == save_data["Encounters"][i]:
                 to_delete.append(i)
     for i in range(0, len(to_delete)):
-        temp_data["Encounters"].pop(to_delete[i] - i)
+        save_data["Encounters"].pop(to_delete[i] - i)
     return save_data, temp_data
 
 
@@ -171,17 +218,17 @@ class DisplayManager:
                 y += -6
                 x2 = x
             elif Letter == " ":
-                x2 += 6
+                x2 += 4
             else:
                 print(
                     "ERROR: Character " + Letter + " has not been loaded. Make sure the character is "
                                                    "present in the images folder.")
 
-
     def place_rectangle(self, colour, x, y, width, height):
-        y=self.GameRes[1]-y-height
-        pygame.draw.rect(self.Window,colour,(int(x)*self.ResRatio[0],int(y)*self.ResRatio[1],int(width)*self.ResRatio[0],
-                                             int(height)*self.ResRatio[1]))
+        y = self.GameRes[1] - y - height
+        pygame.draw.rect(self.Window, colour,
+                         (int(x) * self.ResRatio[0], int(y) * self.ResRatio[1], int(width) * self.ResRatio[0],
+                          int(height) * self.ResRatio[1]))
 
     def update(self):
         pygame.event.get()
@@ -238,18 +285,18 @@ class Character:
         self.update_stats()
 
     def update_stats(self):
-        self.mods = {"Strength": (self.strength - 10) / 2,
-                     "Constitution": (self.constitution - 10) / 2,
-                     "Dexterity": (self.dexterity - 10) / 2,
-                     "Intelligence": (self.intelligence - 10) / 2,
-                     "Wisdom": (self.wisdom - 10) / 2,
-                     "Charisma": (self.charisma - 10) / 2}
+        self.mods = {"Strength": (self.strength - 10) // 2,
+                     "Constitution": (self.constitution - 10) // 2,
+                     "Dexterity": (self.dexterity - 10) // 2,
+                     "Intelligence": (self.intelligence - 10) // 2,
+                     "Wisdom": (self.wisdom - 10) // 2,
+                     "Charisma": (self.charisma - 10) // 2}
         self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
         self.dodge_bonus = self.mods["Dexterity"] + 10
         self.attack_bonus = (self.mods["Dexterity"] + 2)
         self.spell_bonus = (self.mods["Charisma"] + 2)
-        self.stamina_max = self.level * 10 + self.mods["Constitution"] * 5
-        self.stamina_regen = self.level + self.mods["Strength"] * 2
+        self.stamina_max = self.level * 10 + self.mods["Strength"] * 5
+        self.stamina_regen = self.level + self.mods["Constitution"] * 2
         self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
         self.mana_regen = self.level + self.mods["Intelligence"] * 2
         self.health_current = self.health_max
@@ -296,8 +343,8 @@ def overworld(screen, mixer, save_data, temp_data):
         elif input_keys[pygame.K_SPACE]:
             mixer.play_sound("ExampleSound", 0)
             try:
-                temp_data["EncounterData"] = temp_data["EncounterContent"][save_data["Position"]]
-                save_data, temp_data = init_encounter(save_data,temp_data)
+                temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"][save_data["Position"]])
+                save_data, temp_data = init_encounter(save_data, temp_data)
             except KeyError:
                 pass
         elif input_keys[pygame.K_i]:
@@ -323,7 +370,7 @@ def overworld(screen, mixer, save_data, temp_data):
                                (temp_data["PositionData"][temp_data["Moving"][1]][0][1] * (temp_data["Moving"][2]) +
                                 temp_data["PositionData"][save_data["Position"]][0][1] * (
                                         30 - temp_data["Moving"][2])) / 30)
-    for temp_encounter in temp_data["Encounters"]:
+    for temp_encounter in save_data["Encounters"]:
         screen.place_image("Alert1", (temp_data["PositionData"][temp_encounter[0]][0][0] +
                                       temp_data["PositionData"][temp_encounter[1]][0][0]) / 2 - 1,
                            (temp_data["PositionData"][temp_encounter[0]][0][1] +
@@ -348,12 +395,12 @@ def overworld(screen, mixer, save_data, temp_data):
 
 def init_encounter(save_data, temp_data):
     temp_data["ActiveScreen"] = "Encounter"
-    if temp_data["EncounterData"]["Type"]=="Battle":
-        temp_data["EncounterData"]["Turn"]=0
-        temp_data["EncounterData"]["UIPos"]=0
-        temp_data["EncounterData"]["Selection"]={"Attack": 0, "Enemy": 0}
-        temp_data["EncounterData"]["AttackAnimProg"]=0
-    elif temp_data["EncounterData"]["Type"]=="Dialogue":
+    if temp_data["EncounterData"]["Type"] == "Battle":
+        temp_data["EncounterData"]["Turn"] = 0
+        temp_data["EncounterData"]["UIPos"] = 0
+        temp_data["EncounterData"]["Selection"] = {"Attack": 0, "Enemy": 0}
+        temp_data["EncounterData"]["AttackAnimProg"] = 0
+    elif temp_data["EncounterData"]["Type"] == "Dialogue":
         temp_data["PageNumber"] = 0
     return save_data, temp_data
 
@@ -362,118 +409,228 @@ def encounter(screen, mixer, save_data, temp_data):
     if temp_data["EncounterData"]["Type"] == "Battle":
         screen.place_image("EncounterBack", 0, 0)
         for i in range(len(save_data["Party"]) - 1, -1, -1):
-            if not save_data["Party"][i].name == save_data["Name"]:
-                screen.place_image(save_data["Party"][i].name,
-                                   i * 30 + 40,
-                                   i * 60 + 40)
+            if not (temp_data["EncounterData"]["AttackAnimProg"] > 0 and temp_data["EncounterData"]["Turn"] == i):
+                if not save_data["Party"][i].name == save_data["Name"]:
+                    screen.place_image(save_data["Party"][i].name,
+                                       i * 30 + 40,
+                                       i * 60 + 40)
+                else:
+                    screen.place_image("Spellsword",
+                                       i * 30 + 40,
+                                       i * 60 + 40)
+                offset = 0
+                screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120, 48, 5)
+                screen.place_rectangle((255, 0, 0), i * 30 + 40, i * 60 + 120, (save_data["Party"][i].health_current /
+                                                                                save_data["Party"][i].health_max) * 48,
+                                       5)
+                offset += 6
+                physical = False
+                magical = False
+                for Attack in save_data["Party"][i].attacks:
+                    if "Physical" in Attack:
+                        physical = True
+                    elif "Magical" in Attack:
+                        magical = True
+                if physical:
+                    screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120 - offset, 48, 5)
+                    screen.place_rectangle((0, 255, 0), i * 30 + 40, i * 60 + 120 - offset,
+                                           (save_data["Party"][i].stamina_current /
+                                            save_data["Party"][i].stamina_max) * 48, 5)
+                    offset += 6
+                if magical:
+                    screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120 - offset, 48, 5)
+                    screen.place_rectangle((0, 0, 255), i * 30 + 40, i * 60 + 120 - offset,
+                                           (save_data["Party"][i].mana_current /
+                                            save_data["Party"][i].mana_max) * 48, 5)
+                    offset += 6
             else:
-                screen.place_image("64 by 48",
-                                   i * 30 + 40,
-                                   i * 60 + 40)
-            offset=0
-            screen.place_rectangle((0,0,0),i * 30 + 40,i * 60 + 120 ,48, 5)
-            screen.place_rectangle((255,0,0),i * 30 + 40,i * 60 + 120,(save_data["Party"][i].health_current/
-                                                                       save_data["Party"][i].health_max)*48,5)
-            offset+=6
-            physical=False
-            magical=False
-            for Attack in save_data["Party"][i].attacks:
-                if "Physical" in Attack:
-                    physical=True
-                elif "Magical" in Attack:
-                    magical=True
-            if physical:
-                screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120-offset, 48, 5)
-                screen.place_rectangle((0, 255, 0), i * 30 + 40, i * 60 + 120-offset, (save_data["Party"][i].stamina_current /
-                                                                                save_data["Party"][i].stamina_max) * 48, 5)
-                offset+=6
-            if magical:
-                screen.place_rectangle((0, 0, 0), i * 30 + 40, i * 60 + 120-offset, 48, 5)
-                screen.place_rectangle((0, 0, 255), i * 30 + 40, i * 60 + 120-offset, (save_data["Party"][i].mana_current /
-                                                                                save_data["Party"][i].mana_max) * 48, 5)
-                offset+=6
+                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Melee":
+                    if not save_data["Party"][i].name == save_data["Name"]:
+                        screen.place_image(save_data["Party"][i].name,
+                                           ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                            ((temp_data["EncounterData"]["Selection"]["Enemy"]) * -30 + 400) *
+                                            temp_data["EncounterData"][
+                                                "AttackAnimProg"]) / 30,
+                                           ((i * 60 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                            (temp_data["EncounterData"]["Selection"]["Enemy"] * 60 + 40) *
+                                            temp_data["EncounterData"][
+                                                "AttackAnimProg"]) / 30)
+                    else:
+                        screen.place_image("Spellsword",
+                                           ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                            ((temp_data["EncounterData"]["Selection"]["Enemy"]) * -30 + 400) *
+                                            temp_data["EncounterData"][
+                                                "AttackAnimProg"]) / 30,
+                                           ((i * 60 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                            ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 60 + 40) *
+                                            temp_data["EncounterData"][
+                                                "AttackAnimProg"]) / 30)
+                else:
+                    if not save_data["Party"][i].name == save_data["Name"]:
+                        screen.place_image(save_data["Party"][i].name,
+                                           i * 30 + 40,
+                                           i * 60 + 40)
+                    else:
+                        screen.place_image("Spellsword",
+                                           i * 30 + 40,
+                                           i * 60 + 40)
+                    screen.place_image("ProjectileMagic",
+                                       ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * -30 + 400) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30,
+                                       ((i * 60 + 64) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 60 + 64) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30)
         for i in range(len(temp_data["EncounterData"]["EnemyParty"]) - 1, -1, -1):
-            screen.place_image(temp_data["EncounterData"]["EnemyParty"][i].name,
-                               i * - 30 + 400,
-                               i * 60 + 40,True)
-            offset = 0
-            screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120-offset, 48, 5)
-            screen.place_rectangle((255, 0, 0), i * -30 + 400, i * 60 + 120-offset,
-                                   (temp_data["EncounterData"]["EnemyParty"][i].health_current/
-                                    temp_data["EncounterData"]["EnemyParty"][i].health_max)*48, 5)
-            offset+=6
-            physical = False
-            magical = False
-            for Attack in temp_data["EncounterData"]["EnemyParty"][i].attacks:
-                if "Physical" in Attack:
-                    physical=True
-                elif "Magical" in Attack:
-                    magical=True
-            if physical:
-                screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120-offset, 48, 5)
-                screen.place_rectangle((0, 255, 0), i * -30 + 400, i * 60 + 120-offset,
-                                       (temp_data["EncounterData"]["EnemyParty"][i].stamina_current /
-                                        temp_data["EncounterData"]["EnemyParty"][i].stamina_max) * 48, 5)
-                offset+=6
-            if magical:
-                screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120-offset, 48, 5)
-                screen.place_rectangle((0, 0, 255), i * -30 + 400, i * 60 + 120-offset,
-                                       (temp_data["EncounterData"]["EnemyParty"][i].mana_current /
-                                        temp_data["EncounterData"]["EnemyParty"][i].mana_max) * 48, 5)
-                offset+=6
-        if temp_data["EncounterData"]["Turn"]<len(save_data["Party"]) and temp_data["EncounterData"]["AttackAnimProg"]==0:
-            if temp_data["EncounterData"]["UIPos"]==0:
-                for OptionNum in range(0,len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks)):
+            if not (temp_data["EncounterData"]["AttackAnimProg"] > 0 and temp_data["EncounterData"]["Turn"] - len(
+                    save_data["Party"]) == i):
+                screen.place_image(temp_data["EncounterData"]["EnemyParty"][i].name,
+                                   i * - 30 + 400,
+                                   i * 60 + 40, True)
+                offset = 0
+                screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120 - offset, 48, 5)
+                screen.place_rectangle((255, 0, 0), i * -30 + 400, i * 60 + 120 - offset,
+                                       (temp_data["EncounterData"]["EnemyParty"][i].health_current /
+                                        temp_data["EncounterData"]["EnemyParty"][i].health_max) * 48, 5)
+                offset += 6
+                physical = False
+                magical = False
+                for Attack in temp_data["EncounterData"]["EnemyParty"][i].attacks:
+                    if "Physical" in Attack:
+                        physical = True
+                    elif "Magical" in Attack:
+                        magical = True
+                if physical:
+                    screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120 - offset, 48, 5)
+                    screen.place_rectangle((0, 255, 0), i * -30 + 400, i * 60 + 120 - offset,
+                                           (temp_data["EncounterData"]["EnemyParty"][i].stamina_current /
+                                            temp_data["EncounterData"]["EnemyParty"][i].stamina_max) * 48, 5)
+                    offset += 6
+                if magical:
+                    screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120 - offset, 48, 5)
+                    screen.place_rectangle((0, 0, 255), i * -30 + 400, i * 60 + 120 - offset,
+                                           (temp_data["EncounterData"]["EnemyParty"][i].mana_current /
+                                            temp_data["EncounterData"]["EnemyParty"][i].mana_max) * 48, 5)
+                    offset += 6
+            else:
+                if temp_data["EncounterData"]["EnemyParty"][i].attacks[
+                    temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Melee":
+                    screen.place_image(temp_data["EncounterData"]["EnemyParty"][i].name,
+                                       ((i * -30 + 400) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 30 + 40) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30,
+                                       ((i * 60 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        (temp_data["EncounterData"]["Selection"]["Enemy"] * 60 + 40) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30,True)
+                else:
+                    screen.place_image(temp_data["EncounterData"]["EnemyParty"][i].name,
+                                       i * - 30 + 400,
+                                       i * 60 + 40, True)
+                    screen.place_image("ProjectileMagic",
+                                       ((i * -30 + 400) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 30 + 40) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30,
+                                       ((i * 60 + 64) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        (temp_data["EncounterData"]["Selection"]["Enemy"] * 60 + 64) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30, True)
+        if temp_data["EncounterData"]["Turn"] < len(save_data["Party"]) and temp_data["EncounterData"][
+            "AttackAnimProg"] == 0:
+            if temp_data["EncounterData"]["UIPos"] == 0:
+                for OptionNum in range(0, len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks)):
                     screen.place_text(str(OptionNum + 1) + "; " +
-                                      save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][0].upper()+" "+
-                                      save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][1].upper()+" ("+
-                                      str(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][2])+" "+
+                                      save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][
+                                          0].upper() + " " +
+                                      save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][
+                                          1].upper() + " (" +
+                                      str(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][
+                                              2]) + " " +
                                       "DMG)", 10,
                                       30 - OptionNum * 10)
-                    input_keys=pygame.key.get_pressed()
-                    if input_keys[pygame.K_1] and len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 0:
+                    input_keys = pygame.key.get_pressed()
+                    if input_keys[pygame.K_1] and len(
+                            save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 0:
                         temp_data["EncounterData"]["Selection"]["Attack"] = 0
-                        temp_data["EncounterData"]["UIPos"]+=1
-                    elif input_keys[pygame.K_2] and len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 1:
+                        temp_data["EncounterData"]["UIPos"] += 1
+                        mixer.play_sound("ExampleSound", 0)
+                    elif input_keys[pygame.K_2] and len(
+                            save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 1:
                         temp_data["EncounterData"]["Selection"]["Attack"] = 1
                         temp_data["EncounterData"]["UIPos"] += 1
-                    elif input_keys[pygame.K_3] and len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 2:
+                        mixer.play_sound("ExampleSound", 0)
+                    elif input_keys[pygame.K_3] and len(
+                            save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 2:
                         temp_data["EncounterData"]["Selection"]["Attack"] = 2
                         temp_data["EncounterData"]["UIPos"] += 1
+                        mixer.play_sound("ExampleSound", 0)
                     while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3]:
                         input_keys = pygame.key.get_pressed()
                         pygame.event.get()
-            elif temp_data["EncounterData"]["UIPos"]==1:
-                for OptionNum in range(0,len(temp_data["EncounterData"]["EnemyParty"])):
+            elif temp_data["EncounterData"]["UIPos"] == 1:
+                for OptionNum in range(0, len(temp_data["EncounterData"]["EnemyParty"])):
                     screen.place_text(str(OptionNum + 1) + "; " +
-                                      temp_data["EncounterData"]["EnemyParty"][OptionNum].name.upper()+" ("+str(
-                        temp_data["EncounterData"]["EnemyParty"][OptionNum].health_current)+" HP)", 10,
+                                      temp_data["EncounterData"]["EnemyParty"][OptionNum].name.upper() + " (" + str(
+                        temp_data["EncounterData"]["EnemyParty"][OptionNum].health_current) + " HP)", 10,
                                       30 - OptionNum * 10)
                 input_keys = pygame.key.get_pressed()
                 if input_keys[pygame.K_1] and len(temp_data["EncounterData"]["EnemyParty"]) > 0:
                     temp_data["EncounterData"]["Selection"]["Enemy"] = 0
                     temp_data["EncounterData"]["UIPos"] = 0
-                    temp_data["EncounterData"]["AttackAnimProg"]=1
+                    temp_data["EncounterData"]["AttackAnimProg"] = 1
+                    mixer.play_sound("ExampleSound", 0)
                 elif input_keys[pygame.K_2] and len(temp_data["EncounterData"]["EnemyParty"]) > 1:
                     temp_data["EncounterData"]["Selection"]["Enemy"] = 1
                     temp_data["EncounterData"]["UIPos"] = 0
                     temp_data["EncounterData"]["AttackAnimProg"] = 1
+                    mixer.play_sound("ExampleSound", 0)
                 elif input_keys[pygame.K_3] and len(temp_data["EncounterData"]["EnemyParty"]) > 2:
                     temp_data["EncounterData"]["Selection"]["Enemy"] = 2
                     temp_data["EncounterData"]["UIPos"] = 0
                     temp_data["EncounterData"]["AttackAnimProg"] = 1
-        elif temp_data["EncounterData"]["AttackAnimProg"]==0:
-            #AI HERE
-            temp_data["EncounterData"]["AttackAnimProg"]=1
+                    mixer.play_sound("ExampleSound", 0)
+        elif temp_data["EncounterData"]["AttackAnimProg"] == 0:
+            temp_data["EncounterData"]["Selection"]["Enemy"]=random.randrange(0,len(save_data["Party"]))
+            temp_data["EncounterData"]["Selection"]["Attack"] = random.randrange(
+                0, len(temp_data["EncounterData"]["EnemyParty"][
+                           temp_data["EncounterData"]["Turn"]-len(save_data["Party"])].attacks))
+            temp_data["EncounterData"]["AttackAnimProg"] = 1
         else:
             if temp_data["EncounterData"]["AttackAnimProg"] < 30:
-                temp_data["EncounterData"]["AttackAnimProg"]+=1
+                temp_data["EncounterData"]["AttackAnimProg"] += 1
             else:
                 temp_data["EncounterData"]["AttackAnimProg"] = 0
+                if temp_data["EncounterData"]["Turn"]<len(save_data["Party"]):
+                    temp_data["EncounterData"]["EnemyParty"][
+                        temp_data["EncounterData"]["Selection"]["Enemy"]].health_current-=\
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
+                            temp_data["EncounterData"]["Selection"]["Attack"]][2]
+                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current<=0:
+                        temp_data["EncounterData"]["EnemyParty"].pop(temp_data["EncounterData"]["Selection"]["Enemy"])
+                        if len(temp_data["EncounterData"]["EnemyParty"])<1:
+                            temp_data["ActiveScreen"]="Overworld"
+                else:
+                    save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current-=\
+                        temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Turn"]-len(
+                            save_data["Party"])].attacks[
+                            temp_data["EncounterData"]["Selection"]["Attack"]][2]
+                    if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current<=0:
+                        save_data["Party"].pop(temp_data["EncounterData"]["Selection"]["Enemy"])
+                        if len(save_data["Party"]) < 1:
+                            pygame.quit()
+                            while True:
+                                pass
                 temp_data["EncounterData"]["Turn"] += 1
                 if temp_data["EncounterData"]["Turn"] > len(
-                        save_data["Party"])+len(temp_data["EncounterData"]["EnemyParty"]):
+                        save_data["Party"]) + len(temp_data["EncounterData"]["EnemyParty"])-1:
                     temp_data["EncounterData"]["Turn"] = 0
+    #
+    #
+    # Non-battle code
     elif temp_data["EncounterData"]["Type"] == "Dialogue":
         screen.place_image(temp_data["EncounterData"]["Background"], 0, 0)
         if not temp_data["EncounterData"]["Character"] == "None":
@@ -540,9 +697,30 @@ def encounter(screen, mixer, save_data, temp_data):
 
 
 def inventory(screen, mixer, save_data, temp_data):
-    screen.place_image("Blank", 0, 0)
+    screen.place_image("BlankWhite", 0, 0)
     input_keys = pygame.key.get_pressed()
-    screen.update()
+    for i in range(0,len(save_data["Party"])):
+        offset=0
+        screen.place_text(save_data["Party"][i].name.upper()+";",40+i*100,250+offset)
+        offset+=20
+        screen.place_text(str(save_data["Party"][i].health_current)+" OUT OF "+str(save_data["Party"][i].health_max)+" HP", 40+i*100,250-offset)
+        physical = False
+        magical = False
+        for Attack in save_data["Party"][i].attacks:
+            if "Physical" in Attack:
+                physical = True
+            elif "Magical" in Attack:
+                magical = True
+        if physical:
+            offset+=10
+            screen.place_text(
+                str(save_data["Party"][i].stamina_current) + " OUT OF " + str(save_data["Party"][i].stamina_max) + " STAMINA",
+                40 + i * 100, 250 - offset)
+        if magical:
+            offset += 10
+            screen.place_text(
+                str(save_data["Party"][i].mana_current) + " OUT OF " + str(save_data["Party"][i].mana_max) + " MANA",
+                40 + i * 100, 250 - offset)
     if input_keys[pygame.K_i]:
         temp_data["ActiveScreen"] = "Overworld"
         while input_keys[pygame.K_i]:
