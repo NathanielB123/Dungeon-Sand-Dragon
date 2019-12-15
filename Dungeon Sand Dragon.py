@@ -77,7 +77,7 @@ def new_game():
         ["AGREE AND JOIN", 16],["DECLARE THAT YOU ARE STILL NOT CONVINCED",18]])
     temp_data["EncounterData"]["Dialogue"].append([
         "'OKAY, YOU HAVE PUSHED ME THIS FAR, THAT'S IT. TIME TO BREAK THE FOURTH WALL;\nLOOK, YOU STARTED THIS GAME, IF YOU DIDN'T WANT TO PLAY IT, WHY DID THE HELL YOU CLICK RUN@'",
-        ["AGREE AND JOIN (THIS IS THE ONLY OPTION, YOU TERRIBLE FRIEND)", 16]])
+        ["AGREE AND JOIN (THIS IS THE ONLY OPTION, YOU TERRIBLE PERSON)", 16]])
     save_data, temp_data = init_encounter(save_data, temp_data)
 
     temp_data["EncounterContent"] = {}
@@ -138,14 +138,15 @@ def new_game():
     temp_data["EncounterContent"][6]["Dialogue"].append(
         ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
 
-    temp_data["EncounterContent"][1] = {}
-    temp_data["EncounterContent"][1]["Type"] = "Battle"
-    temp_data["EncounterContent"][1]["EnemyParty"] = []
-    temp_data["EncounterContent"][1]["EnemyParty"].append(
+    temp_data["EncounterContent"]["RandomEncounters"]=[]
+    temp_data["EncounterContent"]["RandomEncounters"].append({})
+    temp_data["EncounterContent"]["RandomEncounters"][0]["Type"] = "Battle"
+    temp_data["EncounterContent"]["RandomEncounters"][0]["EnemyParty"] = []
+    temp_data["EncounterContent"]["RandomEncounters"][0]["EnemyParty"].append(
         Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 1]]))
-    temp_data["EncounterContent"][1]["EnemyParty"].append(
+    temp_data["EncounterContent"]["RandomEncounters"][0]["EnemyParty"].append(
         Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 1]]))
-    temp_data["EncounterContent"][1]["EnemyParty"].append(
+    temp_data["EncounterContent"]["RandomEncounters"][0]["EnemyParty"].append(
         Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 1]]))
 
     temp_data["PositionData"] = []
@@ -283,19 +284,22 @@ class Character:
         self.health_current = 0
         self.stamina_current = 0
         self.mana_current = 0
-        self.update_stats()
+        self.initiative_bonus=0
+        self.unspent_points=-5
+        self.lvl_up()
 
-    def update_stats(self):
-        self.mods = {"Strength": (self.strength - 10) // 2,
-                     "Constitution": (self.constitution - 10) // 2,
-                     "Dexterity": (self.dexterity - 10) // 2,
-                     "Intelligence": (self.intelligence - 10) // 2,
-                     "Wisdom": (self.wisdom - 10) // 2,
-                     "Charisma": (self.charisma - 10) // 2}
+    def lvl_up(self):
+        self.unspent_points+=5
+        self.mods = {"Strength": self.strength // 4,
+                     "Constitution": self.constitution // 4,
+                     "Dexterity": self.dexterity // 4,
+                     "Intelligence": self.intelligence // 4,
+                     "Wisdom": self.wisdom // 4,
+                     "Charisma": self.charisma // 4}
         self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
         self.dodge_bonus = self.mods["Dexterity"] + 10
-        self.attack_bonus = (self.mods["Dexterity"] + 2)
-        self.spell_bonus = (self.mods["Charisma"] + 2)
+        self.attack_bonus = (self.mods["Dexterity"] * 2)
+        self.spell_bonus = (self.mods["Charisma"] * 2)
         self.stamina_max = self.level * 10 + self.mods["Strength"] * 5
         self.stamina_regen = self.level + self.mods["Constitution"] * 2
         self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
@@ -303,6 +307,7 @@ class Character:
         self.health_current = self.health_max
         self.stamina_current = self.stamina_max
         self.mana_current = self.mana_max
+        self.initiative_bonus=self.mods["Dexterity"]*5+self.mods["Charisma"]*2
 
 
 def save(data):
@@ -359,10 +364,16 @@ def overworld(screen, mixer, save_data, temp_data):
                 screen.update()
                 input_keys = pygame.key.get_pressed()
     else:
-        if temp_data["Moving"][2] >= 30:
+        if temp_data["Moving"][2] == 30:
             save_data["Position"] = temp_data["Moving"][1]
             temp_data["Moving"] = [False, 0, 0]
-        else:
+        elif temp_data["Moving"][2]==15:
+            for temp_encounter in save_data["Encounters"]:
+                if temp_data["Moving"][1] in temp_encounter and save_data["Position"] in temp_encounter:
+                    temp_data["EncounterData"]=copy.deepcopy(random.choice(temp_data["EncounterContent"]["RandomEncounters"]))
+                    save_data, temp_data = init_encounter(save_data, temp_data)
+                    save_data["Encounters"].remove(temp_encounter)
+        if not temp_data["ActiveScreen"]=="Encounter" and temp_data["Moving"][0]:
             temp_data["Moving"][2] += 1
             screen.place_image("Flag2",
                                (temp_data["PositionData"][temp_data["Moving"][1]][0][0] * (temp_data["Moving"][2]) +
@@ -715,9 +726,15 @@ def inventory(screen, mixer, save_data, temp_data):
     input_keys = pygame.key.get_pressed()
     for i in range(0,len(save_data["Party"])):
         offset=0
-        screen.place_text(save_data["Party"][i].name.upper()+";",40+i*100,250+offset)
+        screen.place_text(save_data["Party"][i].name.upper()+";",20+i*110,250+offset)
         offset+=20
-        screen.place_text(str(save_data["Party"][i].health_current)+" OUT OF "+str(save_data["Party"][i].health_max)+" HP", 40+i*100,250-offset)
+        screen.place_text(str("LVL "+str(save_data["Party"][i].level)), 20+i*110,250-offset)
+        if not save_data["Party"][i].name==save_data["Name"]:
+            screen.place_image(save_data["Party"][i].name,20+i*110,250-offset-70)
+        else:
+            screen.place_image("Spellsword", 20+i*110, 250 - offset-70)
+        offset+=80
+        screen.place_text(str(save_data["Party"][i].health_current)+" OUT OF "+str(save_data["Party"][i].health_max)+" HP", 20+i*110,250-offset)
         physical = False
         magical = False
         for Attack in save_data["Party"][i].attacks:
@@ -729,12 +746,22 @@ def inventory(screen, mixer, save_data, temp_data):
             offset+=10
             screen.place_text(
                 str(save_data["Party"][i].stamina_current) + " OUT OF " + str(save_data["Party"][i].stamina_max) + " STAMINA",
-                40 + i * 100, 250 - offset)
+                20+i*110, 250 - offset)
         if magical:
             offset += 10
             screen.place_text(
                 str(save_data["Party"][i].mana_current) + " OUT OF " + str(save_data["Party"][i].mana_max) + " MANA",
-                40 + i * 100, 250 - offset)
+                20+i*110, 250 - offset)
+        offset=150
+        screen.place_text(str(save_data["Party"][i].initiative_bonus) + " INITIATIVE BONUS",20+i*110, 250 - offset)
+        offset+=10
+        if physical:
+            screen.place_text(str(save_data["Party"][i].attack_bonus) + " PHYSICAL BONUS", 20+i*110, 250 - offset)
+            offset += 10
+        if magical:
+            screen.place_text(str(save_data["Party"][i].spell_bonus) + " MAGIC BONUS", 20+i*110, 250 - offset)
+            offset += 10
+        screen.place_text(str(save_data["Party"][i].initiative_bonus) + " DODGE BONUS", 20+i*110, 250 - offset)
     if input_keys[pygame.K_i]:
         temp_data["ActiveScreen"] = "Overworld"
         while input_keys[pygame.K_i]:
