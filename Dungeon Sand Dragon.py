@@ -19,10 +19,10 @@ def new_game():
     save_data = {"Position": 4, "Party": [], "Name": "LordQuaggan"}
     save_data["Party"].append(
         Character(save_data["Name"], 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 2], ["Magical", "Ranged", 2]]))
-    save_data["Party"].append(Character("WaterWizard", 1, 4, 8, 4, 12, 12, 10, [["Magical", "Ranged", 3]]))
+    save_data["GuildHall"]=[]
     save_data["StoryProgress"] = {}
     save_data["Inventory"] = {}
-    save_data["Inventory"]["HealthPotion"] = 1
+    save_data["Inventory"]["Health Potion"] = 1
     save_data["Inventory"]["Gold"] = 10
     temp_data = {"EncounterData": {}, "ActiveScreen": "Encounter"}
     temp_data["EncounterData"]["Type"] = "Dialogue"
@@ -30,8 +30,8 @@ def new_game():
     temp_data["EncounterData"]["Character"] = "None"
     temp_data["EncounterData"]["Dialogue"] = []
     temp_data["EncounterData"]["Dialogue"].append(
-        ["A LOUD, FRANTIC KNOCK ON THE DOOR SUDDENLY WAKES YOU UP", ["GET OUT OF BED AND ANSWER IT", 2, ["Character","WaterWizard"]], ["COVER YOUR EARS WITH A PILLOW AND TRY TO GO BACK TO SLEEP", 1]])
-    temp_data["EncounterData"]["Dialogue"].append(["THE KNOCKING INCREASES, IT'S NO USE", ["GIVE IN AND GET UP", 2, ["Character","WaterWizard"]], ["KEEP TRYING TO GO BACK TO SLEEP", 1]])
+        ["A LOUD, FRANTIC KNOCK ON THE DOOR SUDDENLY WAKES YOU UP", ["GET OUT OF BED AND ANSWER IT", 2, ["Character","Quin"]], ["COVER YOUR EARS WITH A PILLOW AND TRY TO GO BACK TO SLEEP", 1]])
+    temp_data["EncounterData"]["Dialogue"].append(["THE KNOCKING INCREASES, IT'S NO USE", ["GIVE IN AND GET UP", 2, ["Character","Quin"]], ["KEEP TRYING TO GO BACK TO SLEEP", 1]])
     temp_data["EncounterData"]["Dialogue"].append(["YOU OPEN THE DOOR TO SEE YOUR OLD FRIEND QUIN THE WATER MAGE.\nHE HAS BEEN MISSING FOR WEEKS", ["SAY HELLO", 3],["ASK HIM WHERE ON EARTH HE HAS BEEN! THE WHOLE TOWN HAS BEEN LOOKING FOR HIM!",4]])
     temp_data["EncounterData"]["Dialogue"].append(
         ["QUIN GREETS YOU CORDIALLY AND BEGINS HIS TALE", ["CONTINUE", 5]])
@@ -70,8 +70,8 @@ def new_game():
         "'WELL, IN FACT, I ALREADY HAVE. I NAMED IT THE LEAGUE OF DOWSERS! I HAVE NO CHANCE OF PAYING OFF\nMY MAGI UNI DEBT NOW, BUT I THINK IT WAS WORTH IT, THAT IS, IF YOU WERE TO JOIN IT WOULD BE'",
         ["SAY THAT YOU WOULD BE HAPPY TO JOIN IN ON HIS QUEST", 16], ["ASK WHAT'S IN IT FOR YOU", 17]])
     temp_data["EncounterData"]["Dialogue"].append([
-        "'HURRAY! LET'S GO COLLECT SOME JIGSAW PIECES AND SAVE THE WORLD!'",
-        ["EXIT", -1]])
+        "'HURRAY! LET'S GO COLLECT SOME JIGSAW PIECES AND SAVE THE WORLD!' (QUIN WILL BE IN THE GUILD HALL,\nGO TO THE GUILD HALL IN THE VILLAGE TO GET HIM IN YOUR PARTY)",
+        ["EXIT", -1, ["GuildHall",Character("Quin", 1, 4, 8, 4, 12, 12, 10, [["Magical", "Ranged", 3]])]]])
     temp_data["EncounterData"]["Dialogue"].append([
         "'NOT HAVING TO LIVE IN A DESERT@ NOT HAVING TO WORRY EVERY DAY\nIF THE SHIPMENTS OF WATER SUPPLIES HAVE GOTTEN LOST@ BEING A HERO@'",
         ["AGREE AND JOIN", 16],["DECLARE THAT YOU ARE STILL NOT CONVINCED",18]])
@@ -103,16 +103,18 @@ def new_game():
         ["WELCOME TO THE VILLAGE OF NIBIRU", ["SHOPS", 1, ["Background", "Town"]], ["GUILD HALL", 2], ["TAVERN", 3],
          ["LEAVE", -1]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["SHOPS ARE CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0, ["Background", "Town2"]]])
+        ["'WELCOME ADVENTURER, TO MY HUMBLE STORE, TAKE A LOOK AT MY GOODS;'", ["TAKE A LOOK",-2],["GO BACK", 0, ["Background", "Town2"]]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["GUILD HALL IS UNDER REPAIRS, PLEASE COME BACK LATER", ["GO BACK", 0]])
+        ["YOU ENTER YOUR GUILD HALL, HERE YOU CAN ADD AND SWAP PARTY MEMBERS", ["ADD MEMBER", -3],["SWAP MEMBER",-4]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
-
+        ["YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 10 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",["REST", -5],["GAMBLE",-6], ["GO BACK", 0]])
+    temp_data["EncounterContent"][4]["Dialogue"].append(
+        ["SKILL CHECKS ARE STILL A WORK IN PROGRESS",
+            ["GO BACK", 0]])
     temp_data["EncounterContent"][5] = {}
     temp_data["EncounterContent"][5]["Type"] = "Dialogue"
     temp_data["EncounterContent"][5]["Background"] = "WaterfallDried"
-    temp_data["EncounterContent"][5]["Character"] = "WaterWizard"
+    temp_data["EncounterContent"][5]["Character"] = "Quin"
     temp_data["EncounterContent"][5]["Dialogue"] = []
     temp_data["EncounterContent"][5]["Dialogue"].append(
         [
@@ -263,7 +265,8 @@ class SoundManager:
 class Character:
     def __init__(self, name, level, strength, constitution, dexterity, intelligence, wisdom, charisma, attacks):
         self.name = name
-        self.level = level
+        self.level = level-1
+        self.exp=0
         self.strength = strength
         self.constitution = constitution
         self.dexterity = dexterity
@@ -285,11 +288,11 @@ class Character:
         self.stamina_current = 0
         self.mana_current = 0
         self.initiative_bonus=0
-        self.unspent_points=-5
-        self.lvl_up()
+        self.unspent_points=0
+        self.level_up()
 
-    def lvl_up(self):
-        self.unspent_points+=5
+    def level_up(self):
+        self.level+=1
         self.mods = {"Strength": self.strength // 4,
                      "Constitution": self.constitution // 4,
                      "Dexterity": self.dexterity // 4,
@@ -297,9 +300,9 @@ class Character:
                      "Wisdom": self.wisdom // 4,
                      "Charisma": self.charisma // 4}
         self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
-        self.dodge_bonus = self.mods["Dexterity"] + 10
-        self.attack_bonus = (self.mods["Dexterity"] * 2)
-        self.spell_bonus = (self.mods["Charisma"] * 2)
+        self.dodge_bonus = self.mods["Dexterity"] * 7
+        self.attack_bonus = (self.mods["Dexterity"] * 5)+(self.mods["Strength"] * 2)
+        self.spell_bonus = (self.mods["Charisma"] * 5)+(self.mods["Intelligence"] * 2)
         self.stamina_max = self.level * 10 + self.mods["Strength"] * 5
         self.stamina_regen = self.level + self.mods["Constitution"] * 2
         self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
@@ -309,7 +312,27 @@ class Character:
         self.mana_current = self.mana_max
         self.initiative_bonus=self.mods["Dexterity"]*5+self.mods["Charisma"]*2
 
+    def increase_stats(self):
+        self.mods = {"Strength": self.strength // 4,
+                     "Constitution": self.constitution // 4,
+                     "Dexterity": self.dexterity // 4,
+                     "Intelligence": self.intelligence // 4,
+                     "Wisdom": self.wisdom // 4,
+                     "Charisma": self.charisma // 4}
+        self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
+        self.dodge_bonus = self.mods["Dexterity"] * 7
+        self.attack_bonus = (self.mods["Dexterity"] * 5) + (self.mods["Strength"] * 2)
+        self.spell_bonus = (self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2)
+        self.spell_bonus = (self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2)
+        self.spell_bonus = (self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2)
+        self.stamina_max = self.level * 10 + self.mods["Strength"] * 5
+        self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
+        self.initiative_bonus = self.mods["Dexterity"] * 5 + self.mods["Charisma"] * 2
 
+    def check_for_level_up(self):
+        if self.exp>100*self.level:
+            self.unspent_points+=5
+            self.exp=0
 def save(data):
     _pickle.dump(data, open(r"Saves\SaveFile.sav", "wb"))
 
@@ -355,6 +378,8 @@ def overworld(screen, mixer, save_data, temp_data):
                 pass
         elif input_keys[pygame.K_i]:
             temp_data["ActiveScreen"] = "Inventory"
+            temp_data["UIPos"]=0
+            temp_data["Selection"]={}
             while input_keys[pygame.K_i]:
                 screen.update()
                 input_keys = pygame.key.get_pressed()
@@ -622,6 +647,9 @@ def encounter(screen, mixer, save_data, temp_data):
                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
                             temp_data["EncounterData"]["Selection"]["Attack"]][2]
                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current<=0:
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
+                            "EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].level*30+30
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                         temp_data["EncounterData"]["EnemyParty"].pop(temp_data["EncounterData"]["Selection"]["Enemy"])
                         if len(temp_data["EncounterData"]["EnemyParty"])<1:
                             temp_data["ActiveScreen"]="Overworld"
@@ -647,94 +675,190 @@ def encounter(screen, mixer, save_data, temp_data):
         screen.place_image(temp_data["EncounterData"]["Background"], 0, 0)
         if not temp_data["EncounterData"]["Character"] == "None":
             screen.place_image(temp_data["EncounterData"]["Character"], 50, 100)
-        if not temp_data["PageNumber"] == -1:
+        if temp_data["PageNumber"] > -1:
             screen.place_text(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][0], 10, 80)
             for OptionNum in range(0, len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) - 1):
                 screen.place_text(str(OptionNum + 1) + "; " +
                                   temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][OptionNum + 1][0], 10,
                                   60 - OptionNum * 10)
-        else:
+            input_keys = pygame.key.get_pressed()
+            dialogue_script = [False, 0]
+            if input_keys[pygame.K_1] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 1:
+                if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1]) > 2:
+                    dialogue_script = [True, temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][2:]]
+                temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][1]
+                mixer.play_sound("ExampleSound", 0)
+            elif input_keys[pygame.K_2] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 2:
+                if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2]) > 2:
+                    dialogue_script = [True, temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][2:]]
+                temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][1]
+                mixer.play_sound("ExampleSound", 0)
+            elif input_keys[pygame.K_3] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 3:
+                if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3]) > 2:
+                    dialogue_script = [True, temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][2:]]
+                temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][1]
+                mixer.play_sound("ExampleSound", 0)
+            elif input_keys[pygame.K_4] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 4:
+                if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4]) > 2:
+                    dialogue_script = [True, temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4][2:]]
+                temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4][1]
+                mixer.play_sound("ExampleSound", 0)
+            if dialogue_script[0]:
+                for script in dialogue_script[1]:
+                    if script[0] in temp_data["EncounterData"].keys():
+                        temp_data["EncounterData"][script[0]] = script[1]
+                    elif script[0] == "Inventory":
+                        if script[1] in save_data["Inventory"].keys():
+                            save_data["Inventory"][script[1]] += script[2]
+                        else:
+                            save_data["Inventory"][script[1]] = script[2]
+                    elif script[0] == "Party":
+                        if len(save_data["Party"]) < 3:
+                            save_data["Party"].append(script[1])
+                        else:
+                            save_data["GuildHall"].append(script[1])
+                    elif script[0] == "GuildHall":
+                        save_data["GuildHall"].append(script[1])
+            while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4]:
+                input_keys = pygame.key.get_pressed()
+                pygame.event.get()
+        elif temp_data["PageNumber"]==-1:
             temp_data["ActiveScreen"] = "Overworld"
             return save_data, temp_data
-        input_keys = pygame.key.get_pressed()
-        if input_keys[pygame.K_1] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 1:
-            if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1]) > 2:
-                for i in range(2, len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1])):
-                    temp_data["EncounterData"][
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][i][0]] = temp_data[
-                        "EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][i][1]
-            temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][1][1]
-            mixer.play_sound("ExampleSound", 0)
-        elif input_keys[pygame.K_2] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 2:
-            if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2]) > 2:
-                for i in range(2, len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2])):
-                    temp_data["EncounterData"][
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][i][0]] = [
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][i][1]]
-            temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][2][1]
-            mixer.play_sound("ExampleSound", 0)
-        elif input_keys[pygame.K_3] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 3:
-            if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3]) > 2:
-                for i in range(2, len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3])):
-                    if temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0] in temp_data[
-                        "EncounterData"].keys():
-                        temp_data["EncounterData"][
-                            temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]] = [
-                            temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]]
-                    elif temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0] in save_data.keys():
-                        if temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0] == "Inventory":
-                            if temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1] in save_data[
-                                "Inventory"].keys():
-                                save_data["Inventory"][temp_data["EncounterData"]["Dialogue"][
-                                    temp_data["PageNumber"]][3][i][1]] += temp_data["EncounterData"][
-                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
-                        elif temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]=="Party":
-                            if  temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]=="health_current":
-                                for i2 in range(0,len(save_data["Party"])):
-                                    save_data["Party"][i2].health_current=temp_data["EncounterData"][
-                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
-                            elif  temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]=="stamina_current":
-                                for i2 in range(0,len(save_data["Party"])):
-                                    save_data["Party"][i2].stamina_current=temp_data["EncounterData"][
-                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
-                            elif  temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]=="mana_current":
-                                for i2 in range(0,len(save_data["Party"])):
-                                    save_data["Party"][i2].mana_current=temp_data["EncounterData"][
-                                    "Dialogue"][temp_data["PageNumber"]][3][i][2]
-                        else:
-                            save_data[
-                                temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][0]] = [
-                                temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][i][1]]
-            temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][3][1]
-            mixer.play_sound("ExampleSound", 0)
-        elif input_keys[pygame.K_4] and len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]]) > 4:
-            if len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4]) > 2:
-                for i in range(2, len(temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4])):
-                    temp_data["EncounterData"][
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4][i][0]] = [
-                        temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4][i][1]]
-            temp_data["PageNumber"] = temp_data["EncounterData"]["Dialogue"][temp_data["PageNumber"]][4][1]
-            mixer.play_sound("ExampleSound", 0)
-        while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4]:
+        elif temp_data["PageNumber"]==-2:
+            temp_data["PageNumber"] = 0
+        elif temp_data["PageNumber"]==-3:
             input_keys = pygame.key.get_pressed()
-            pygame.event.get()
+            if len(save_data["GuildHall"])>0:
+                if len(save_data["Party"])<3:
+                    screen.place_text("LIST OF PARTY MEMBERS TO ADD;", 10, 80)
+                    for OptionNum in range(0, len(save_data["GuildHall"])):
+                        screen.place_text(str(OptionNum + 1) + "; " +
+                                          save_data["GuildHall"][OptionNum].name.upper(), 10,60 - OptionNum * 10)
+                        if input_keys[pygame.K_1] and len(save_data["GuildHall"])>0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][0]))
+                            save_data["GuildHall"].pop(0)
+                            temp_data["PageNumber"]=0
+                        elif input_keys[pygame.K_2] and len(save_data["GuildHall"])>0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][1]))
+                            save_data["GuildHall"].pop(1)
+                            temp_data["PageNumber"] = 0
+                        elif input_keys[pygame.K_3] and len(save_data["GuildHall"]) > 0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][2]))
+                            save_data["GuildHall"].pop(2)
+                            temp_data["PageNumber"] = 0
+                        elif input_keys[pygame.K_4] and len(save_data["GuildHall"]) > 0:
+                            mixer.play_sound("ExampleSound", 0)
+                            temp_data["PageNumber"] = 0
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][3]))
+                            save_data["GuildHall"].pop(3)
+                        elif input_keys[pygame.K_5] and len(save_data["GuildHall"]) > 0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][4]))
+                            save_data["GuildHall"].pop(4)
+                            temp_data["PageNumber"] = 0
+                        while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or input_keys[pygame.K_5]:
+                            input_keys = pygame.key.get_pressed()
+                            pygame.event.get()
+                else:
+                    screen.place_text("YOUR PARTY IS FULL, TRY SWAPPING A PARTY MEMBER INSTEAD", 10, 80)
+                    for OptionNum in range(0, 1):
+                        screen.place_text(str(OptionNum + 1) + "; " +
+                                          "GO BACK", 10,60 - OptionNum * 10)
+                    if input_keys[pygame.K_1]:
+                        mixer.play_sound("ExampleSound", 0)
+                        temp_data["PageNumber"] = 0
+                    while input_keys[pygame.K_1]:
+                        input_keys = pygame.key.get_pressed()
+                        pygame.event.get()
+            else:
+                screen.place_text("YOUR GUILD HALL IS EMPTY, TRY RECRUITING NEW COMPANIONS BY VISITING LOCATIONS ON THE MAP", 10, 80)
+                for OptionNum in range(0, 1):
+                    screen.place_text(str(OptionNum + 1) + "; " +
+                                      "GO BACK", 10, 60 - OptionNum * 10)
+                if input_keys[pygame.K_1]:
+                    mixer.play_sound("ExampleSound", 0)
+                    temp_data["PageNumber"] = 0
+                while input_keys[pygame.K_1]:
+                    input_keys = pygame.key.get_pressed()
+                    pygame.event.get()
+        elif temp_data["PageNumber"]==-4:
+            input_keys = pygame.key.get_pressed()
+            if len(save_data["GuildHall"])>0:
+                if len(save_data["Party"])<3:
+                    screen.place_text("LIST OF PARTY MEMBERS TO ADD;", 10, 80)
+                    for OptionNum in range(0, len(save_data["GuildHall"])):
+                        screen.place_text(str(OptionNum + 1) + "; " +
+                                          save_data["GuildHall"][OptionNum].name.upper(), 10,60 - OptionNum * 10)
+                        if input_keys[pygame.K_1] and len(save_data["GuildHall"])>0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][0]))
+                            save_data["GuildHall"].pop(0)
+                            temp_data["PageNumber"]=0
+                        elif input_keys[pygame.K_2] and len(save_data["GuildHall"])>0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][1]))
+                            save_data["GuildHall"].pop(1)
+                            temp_data["PageNumber"] = 0
+                        elif input_keys[pygame.K_3] and len(save_data["GuildHall"]) > 0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][2]))
+                            save_data["GuildHall"].pop(2)
+                            temp_data["PageNumber"] = 0
+                        elif input_keys[pygame.K_4] and len(save_data["GuildHall"]) > 0:
+                            mixer.play_sound("ExampleSound", 0)
+                            temp_data["PageNumber"] = 0
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][3]))
+                            save_data["GuildHall"].pop(3)
+                        elif input_keys[pygame.K_5] and len(save_data["GuildHall"]) > 0:
+                            mixer.play_sound("ExampleSound", 0)
+                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][4]))
+                            save_data["GuildHall"].pop(4)
+                            temp_data["PageNumber"] = 0
+                        while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or input_keys[pygame.K_5]:
+                            input_keys = pygame.key.get_pressed()
+                            pygame.event.get()
+                else:
+                    screen.place_text("YOUR PARTY IS FULL, TRY SWAPPING A PARTY MEMBER INSTEAD", 10, 80)
+                    for OptionNum in range(0, 1):
+                        screen.place_text(str(OptionNum + 1) + "; " +
+                                          "GO BACK", 10,60 - OptionNum * 10)
+                    if input_keys[pygame.K_1]:
+                        mixer.play_sound("ExampleSound", 0)
+                        temp_data["PageNumber"] = 0
+                    while input_keys[pygame.K_1]:
+                        input_keys = pygame.key.get_pressed()
+                        pygame.event.get()
+            else:
+                screen.place_text("YOUR GUILD HALL IS EMPTY, TRY RECRUITING NEW COMPANIONS BY VISITING LOCATIONS ON THE MAP", 10, 80)
+                for OptionNum in range(0, 1):
+                    screen.place_text(str(OptionNum + 1) + "; " +
+                                      "GO BACK", 10, 60 - OptionNum * 10)
+                if input_keys[pygame.K_1]:
+                    mixer.play_sound("ExampleSound", 0)
+                    temp_data["PageNumber"] = 0
+                while input_keys[pygame.K_1]:
+                    input_keys = pygame.key.get_pressed()
+                    pygame.event.get()
     return save_data, temp_data
 
 
 def inventory(screen, mixer, save_data, temp_data):
     screen.place_image("BlankWhite", 0, 0)
-    input_keys = pygame.key.get_pressed()
     for i in range(0,len(save_data["Party"])):
         offset=0
-        screen.place_text(save_data["Party"][i].name.upper()+";",20+i*110,250+offset)
+        screen.place_text(save_data["Party"][i].name.upper()+";",20+i*110,260+offset)
         offset+=20
-        screen.place_text(str("LVL "+str(save_data["Party"][i].level)), 20+i*110,250-offset)
+        screen.place_text(str("LVL "+str(save_data["Party"][i].level)), 20+i*110,260-offset)
         if not save_data["Party"][i].name==save_data["Name"]:
-            screen.place_image(save_data["Party"][i].name,20+i*110,250-offset-70)
+            screen.place_image(save_data["Party"][i].name,20+i*110,260-offset-70)
         else:
-            screen.place_image("Spellsword", 20+i*110, 250 - offset-70)
+            screen.place_image("Spellsword", 20+i*110, 260 - offset-70)
         offset+=80
-        screen.place_text(str(save_data["Party"][i].health_current)+" OUT OF "+str(save_data["Party"][i].health_max)+" HP", 20+i*110,250-offset)
+        screen.place_text(str(save_data["Party"][i].health_current)+" OUT OF "+str(save_data["Party"][i].health_max)+" HP", 20+i*110,260-offset)
         physical = False
         magical = False
         for Attack in save_data["Party"][i].attacks:
@@ -746,22 +870,141 @@ def inventory(screen, mixer, save_data, temp_data):
             offset+=10
             screen.place_text(
                 str(save_data["Party"][i].stamina_current) + " OUT OF " + str(save_data["Party"][i].stamina_max) + " STAMINA",
-                20+i*110, 250 - offset)
+                20+i*110, 260 - offset)
         if magical:
             offset += 10
             screen.place_text(
                 str(save_data["Party"][i].mana_current) + " OUT OF " + str(save_data["Party"][i].mana_max) + " MANA",
-                20+i*110, 250 - offset)
-        offset=150
-        screen.place_text(str(save_data["Party"][i].initiative_bonus) + " INITIATIVE BONUS",20+i*110, 250 - offset)
+                20+i*110, 260 - offset)
+        offset=140
+        screen.place_text(str(save_data["Party"][i].initiative_bonus) + " INITIATIVE BONUS",20+i*110, 260 - offset)
         offset+=10
         if physical:
-            screen.place_text(str(save_data["Party"][i].attack_bonus) + " PHYSICAL BONUS", 20+i*110, 250 - offset)
+            screen.place_text(str(save_data["Party"][i].attack_bonus) + " PHYSICAL BONUS", 20+i*110, 260 - offset)
             offset += 10
         if magical:
-            screen.place_text(str(save_data["Party"][i].spell_bonus) + " MAGIC BONUS", 20+i*110, 250 - offset)
+            screen.place_text(str(save_data["Party"][i].spell_bonus) + " MAGIC BONUS", 20+i*110, 260 - offset)
             offset += 10
-        screen.place_text(str(save_data["Party"][i].initiative_bonus) + " DODGE BONUS", 20+i*110, 250 - offset)
+        screen.place_text(str(save_data["Party"][i].initiative_bonus) + " DODGE BONUS", 20 + i * 110, 260 - offset)
+        offset = 190
+        if temp_data["UIPos"]==0:
+            screen.place_text(str(i + 1) + "; " + str(save_data["Party"][i].unspent_points) + " UNSPENT POINTS",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+        else:
+            screen.place_text(str(save_data["Party"][i].unspent_points) + " UNSPENT POINTS",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+        if temp_data["UIPos"]==0 or not (temp_data["Selection"]["Character"]==i):
+            screen.place_text(str(save_data["Party"][i].strength) + " STRENGTH",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str(save_data["Party"][i].constitution) + " CONSTITUTION",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str(save_data["Party"][i].dexterity) + " DEXTERITY",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(
+                str(save_data["Party"][i].intelligence) + " INTELLIGENCE",
+                20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str(save_data["Party"][i].wisdom) + " WISDOM",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str(save_data["Party"][i].charisma) + " CHARISMA",
+                              20 + i * 110, 260 - offset)
+            offset += 10
+        else:
+            screen.place_text(str((offset-190)//10)+"; "+str(save_data["Party"][i].strength) + " STRENGTH", 20 + i * 110, 260 - offset)
+            offset+=10
+            screen.place_text(str((offset-190)//10)+"; "+str(save_data["Party"][i].constitution) + " CONSTITUTION", 20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str((offset-190)//10)+"; "+str(save_data["Party"][i].dexterity) + " DEXTERITY", 20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str((offset-190)//10)+"; "+str(save_data["Party"][i].intelligence) + " INTELLIGENCE", 20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str((offset-190)//10)+"; "+str(save_data["Party"][i].wisdom) + " WISDOM", 20 + i * 110, 260 - offset)
+            offset += 10
+            screen.place_text(str((offset-190)//10)+"; "+str(save_data["Party"][i].charisma) + " CHARISMA", 20 + i * 110, 260 - offset)
+            offset += 10
+    input_keys=pygame.key.get_pressed()
+    if temp_data["UIPos"]==0:
+        if input_keys[pygame.K_1] and len(save_data["Party"])>0:
+            mixer.play_sound("ExampleSound",0)
+            if save_data["Party"][0].unspent_points>0:
+                temp_data["UIPos"]=1
+                temp_data["Selection"]["Character"]=0
+        elif input_keys[pygame.K_2] and len(save_data["Party"])>1:
+            mixer.play_sound("ExampleSound",0)
+            if save_data["Party"][1].unspent_points>0:
+                temp_data["UIPos"]=1
+                temp_data["Selection"]["Character"]=1
+        elif input_keys[pygame.K_3] and len(save_data["Party"])>2:
+            mixer.play_sound("ExampleSound",0)
+            if save_data["Party"][2].unspent_points>0:
+                temp_data["UIPos"]=1
+                temp_data["Selection"]["Character"]=2
+    else:
+        if input_keys[pygame.K_1]:
+            mixer.play_sound("ExampleSound",0)
+            save_data["Party"][temp_data["Selection"]["Character"]].strength+=1
+            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points-=1
+            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points==0:
+                temp_data["UIPos"]=0
+                save_data["Party"][temp_data["Selection"]["Character"]].level_up()
+        elif input_keys[pygame.K_2]:
+            mixer.play_sound("ExampleSound",0)
+            save_data["Party"][temp_data["Selection"]["Character"]].constitution+=1
+            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points-=1
+            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points==0:
+                temp_data["UIPos"]=0
+                save_data["Party"][temp_data["Selection"]["Character"]].level_up()
+        elif input_keys[pygame.K_3]:
+            mixer.play_sound("ExampleSound",0)
+            save_data["Party"][temp_data["Selection"]["Character"]].dexterity+=1
+            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points-=1
+            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points==0:
+                temp_data["UIPos"]=0
+                save_data["Party"][temp_data["Selection"]["Character"]].level_up()
+        elif input_keys[pygame.K_4]:
+            mixer.play_sound("ExampleSound",0)
+            save_data["Party"][temp_data["Selection"]["Character"]].intelligence+=1
+            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points-=1
+            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points==0:
+                temp_data["UIPos"]=0
+                save_data["Party"][temp_data["Selection"]["Character"]].level_up()
+        elif input_keys[pygame.K_5]:
+            mixer.play_sound("ExampleSound",0)
+            save_data["Party"][temp_data["Selection"]["Character"]].wisdom+=1
+            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points-=1
+            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points==0:
+                temp_data["UIPos"]=0
+                save_data["Party"][temp_data["Selection"]["Character"]].level_up()
+        elif input_keys[pygame.K_6]:
+            mixer.play_sound("ExampleSound",0)
+            save_data["Party"][temp_data["Selection"]["Character"]].charisma+=1
+            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points-=1
+            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points==0:
+                temp_data["UIPos"]=0
+                save_data["Party"][temp_data["Selection"]["Character"]].level_up()
+    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or input_keys[pygame.K_5] or input_keys[pygame.K_6]:
+        input_keys = pygame.key.get_pressed()
+        pygame.event.get()
+    offset=0
+    i=3
+    screen.place_text("INVENTORY;", 20 + i * 110, 260 - offset)
+    offset+=20
+    for i2 in save_data["Inventory"].keys():
+        screen.place_text(i2.upper(), 20 + i * 110, 260 - offset)
+        screen.place_text(str(save_data["Inventory"][i2]), 100+ i * 110, 260 - offset)
+        offset+=10
     if input_keys[pygame.K_i]:
         temp_data["ActiveScreen"] = "Overworld"
         while input_keys[pygame.K_i]:
