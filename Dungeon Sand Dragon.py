@@ -578,6 +578,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                             "AttackAnimProg"]) / 30, True)
         if temp_data["EncounterData"]["Turn"] < len(save_data["Party"]) and temp_data["EncounterData"][
             "AttackAnimProg"] == 0:
+            screen.place_image("UIBox2", 5, 1)
             if temp_data["EncounterData"]["UIPos"] == 0:
                 for OptionNum in range(0, len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks)):
                     screen.place_text(str(OptionNum + 1) + "; " +
@@ -673,6 +674,7 @@ def encounter(screen, mixer, save_data, temp_data):
     # Non-battle code
     elif temp_data["EncounterData"]["Type"] == "Dialogue":
         screen.place_image(temp_data["EncounterData"]["Background"], 0, 0)
+        screen.place_image("UIBox",5,15)
         if not temp_data["EncounterData"]["Character"] == "None":
             screen.place_image(temp_data["EncounterData"]["Character"], 50, 100)
         if temp_data["PageNumber"] > -1:
@@ -735,34 +737,34 @@ def encounter(screen, mixer, save_data, temp_data):
                     for OptionNum in range(0, len(save_data["GuildHall"])):
                         screen.place_text(str(OptionNum + 1) + "; " +
                                           save_data["GuildHall"][OptionNum].name.upper(), 10,60 - OptionNum * 10)
-                        if input_keys[pygame.K_1] and len(save_data["GuildHall"])>0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][0]))
-                            save_data["GuildHall"].pop(0)
-                            temp_data["PageNumber"]=0
-                        elif input_keys[pygame.K_2] and len(save_data["GuildHall"])>0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][1]))
-                            save_data["GuildHall"].pop(1)
-                            temp_data["PageNumber"] = 0
-                        elif input_keys[pygame.K_3] and len(save_data["GuildHall"]) > 0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][2]))
-                            save_data["GuildHall"].pop(2)
-                            temp_data["PageNumber"] = 0
-                        elif input_keys[pygame.K_4] and len(save_data["GuildHall"]) > 0:
-                            mixer.play_sound("ExampleSound", 0)
-                            temp_data["PageNumber"] = 0
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][3]))
-                            save_data["GuildHall"].pop(3)
-                        elif input_keys[pygame.K_5] and len(save_data["GuildHall"]) > 0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][4]))
-                            save_data["GuildHall"].pop(4)
-                            temp_data["PageNumber"] = 0
-                        while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or input_keys[pygame.K_5]:
-                            input_keys = pygame.key.get_pressed()
-                            pygame.event.get()
+                    if input_keys[pygame.K_1] and len(save_data["GuildHall"])>0:
+                        mixer.play_sound("ExampleSound", 0)
+                        save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][0]))
+                        save_data["GuildHall"].pop(0)
+                        temp_data["PageNumber"]=0
+                    elif input_keys[pygame.K_2] and len(save_data["GuildHall"])>0:
+                        mixer.play_sound("ExampleSound", 0)
+                        save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][1]))
+                        save_data["GuildHall"].pop(1)
+                        temp_data["PageNumber"] = 0
+                    elif input_keys[pygame.K_3] and len(save_data["GuildHall"]) > 0:
+                        mixer.play_sound("ExampleSound", 0)
+                        save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][2]))
+                        save_data["GuildHall"].pop(2)
+                        temp_data["PageNumber"] = 0
+                    elif input_keys[pygame.K_4] and len(save_data["GuildHall"]) > 0:
+                        mixer.play_sound("ExampleSound", 0)
+                        temp_data["PageNumber"] = 0
+                        save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][3]))
+                        save_data["GuildHall"].pop(3)
+                    elif input_keys[pygame.K_5] and len(save_data["GuildHall"]) > 0:
+                        mixer.play_sound("ExampleSound", 0)
+                        save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][4]))
+                        save_data["GuildHall"].pop(4)
+                        temp_data["PageNumber"] = 0
+                    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or input_keys[pygame.K_5]:
+                        input_keys = pygame.key.get_pressed()
+                        pygame.event.get()
                 else:
                     screen.place_text("YOUR PARTY IS FULL, TRY SWAPPING A PARTY MEMBER INSTEAD", 10, 80)
                     for OptionNum in range(0, 1):
@@ -788,41 +790,26 @@ def encounter(screen, mixer, save_data, temp_data):
         elif temp_data["PageNumber"]==-4:
             input_keys = pygame.key.get_pressed()
             if len(save_data["GuildHall"])>0:
-                if len(save_data["Party"])<3:
-                    screen.place_text("LIST OF PARTY MEMBERS TO ADD;", 10, 80)
-                    for OptionNum in range(0, len(save_data["GuildHall"])):
+                if len(save_data["Party"])>1:
+                    screen.place_text("LIST OF PARTY MEMBERS TO REMOVE;", 10, 80)
+                    for OptionNum in range(1, len(save_data["Party"])):
                         screen.place_text(str(OptionNum + 1) + "; " +
-                                          save_data["GuildHall"][OptionNum].name.upper(), 10,60 - OptionNum * 10)
-                        if input_keys[pygame.K_1] and len(save_data["GuildHall"])>0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][0]))
-                            save_data["GuildHall"].pop(0)
-                            temp_data["PageNumber"]=0
-                        elif input_keys[pygame.K_2] and len(save_data["GuildHall"])>0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][1]))
-                            save_data["GuildHall"].pop(1)
-                            temp_data["PageNumber"] = 0
-                        elif input_keys[pygame.K_3] and len(save_data["GuildHall"]) > 0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][2]))
-                            save_data["GuildHall"].pop(2)
-                            temp_data["PageNumber"] = 0
-                        elif input_keys[pygame.K_4] and len(save_data["GuildHall"]) > 0:
-                            mixer.play_sound("ExampleSound", 0)
-                            temp_data["PageNumber"] = 0
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][3]))
-                            save_data["GuildHall"].pop(3)
-                        elif input_keys[pygame.K_5] and len(save_data["GuildHall"]) > 0:
-                            mixer.play_sound("ExampleSound", 0)
-                            save_data["Party"].append(copy.deepcopy(save_data["GuildHall"][4]))
-                            save_data["GuildHall"].pop(4)
-                            temp_data["PageNumber"] = 0
-                        while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or input_keys[pygame.K_5]:
-                            input_keys = pygame.key.get_pressed()
-                            pygame.event.get()
+                                          save_data["Party"][OptionNum].name.upper(), 10,60 - OptionNum * 10)
+                    if input_keys[pygame.K_1] and len(save_data["Party"])>1:
+                        mixer.play_sound("ExampleSound", 0)
+                        save_data["GuildHall"].append(copy.deepcopy(save_data["Party"][1]))
+                        save_data["Party"].pop(1)
+                        temp_data["PageNumber"] = -3
+                    elif input_keys[pygame.K_2] and len(save_data["Party"]) > 2:
+                        mixer.play_sound("ExampleSound", 0)
+                        save_data["GuildHall"].append(copy.deepcopy(save_data["Party"][2]))
+                        save_data["Party"].pop(2)
+                        temp_data["PageNumber"] = 0
+                    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3]:
+                        input_keys = pygame.key.get_pressed()
+                        pygame.event.get()
                 else:
-                    screen.place_text("YOUR PARTY IS FULL, TRY SWAPPING A PARTY MEMBER INSTEAD", 10, 80)
+                    screen.place_text("YOUR PARTY IS FULL EMPTY (YOU MAY NOT SWAP OUT YOUR PLAYER CHARACTER)\nTRY ADDING A MEMBER TO YOUR PARTY INSTEAD", 10, 80)
                     for OptionNum in range(0, 1):
                         screen.place_text(str(OptionNum + 1) + "; " +
                                           "GO BACK", 10,60 - OptionNum * 10)
