@@ -235,7 +235,7 @@ def new_game():
                                                                                                       ["Physical",
                                                                                                        "Melee", 5],
                                                                                                       ["Special",
-                                                                                                       "Ugly",
+                                                                                                       "Confuse",
                                                                                                        10]])]]])
     temp_data["EncounterContent"][0]["Dialogue"].append(
         ["AS YOU APPROACH, THE GOBLIN GETS MORE AND MORE FRUSTRATED AND\n   IT'S POINTING GETS MORE AND MORE FRANTIC",
@@ -522,7 +522,7 @@ class Character:
         self.stamina_regen = int((self.mods["Strength"]) * (self.level / 5))+1
         self.mana_max = int((10 + self.mods["Wisdom"] * 2) * (self.level / 4))+8
         self.mana_regen = int((self.mods["Intelligence"]) * (self.level / 5))+1
-        self.initiative_bonus = int(self.mods["Dexterity"] * 5 + self.mods["Intelligence"])
+        self.initiative_bonus = int(self.mods["Dexterity"] * 4 + self.mods["Intelligence"] + self.mods["Wisdom"])
         self.health_current = self.health_max
         self.stamina_current = self.stamina_max
         self.mana_current = self.mana_max
@@ -923,9 +923,9 @@ def encounter(screen, mixer, save_data, temp_data):
                     screen.place_image(save_data["Party"][i].name,
                                        i * 30 + 40,
                                        i * 60 + 40)
-                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
+                if (save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
                     1] == "Ranged" and save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
-                    0] == "Physical":
+                    0] == "Physical"):
                     if not save_data["Party"][i].name == save_data["Name"]:
                         screen.place_image(save_data["Party"][i].name,
                                            i * 30 + 40,
@@ -943,8 +943,18 @@ def encounter(screen, mixer, save_data, temp_data):
                                         ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 60 + 64) *
                                         temp_data["EncounterData"][
                                             "AttackAnimProg"]) / 30)
+                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1]=="Pin":
+                    screen.place_image("ProjectilePhysicalMagic",
+                                       ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * -30 + 400) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30,
+                                       ((i * 60 + 64) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 60 + 64) *
+                                        temp_data["EncounterData"][
+                                            "AttackAnimProg"]) / 30)
                 if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
-                    1] == "Special" and not (save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "DoubleAttack" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal"):
+                    0] == "Special" and not (save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "DoubleAttack" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal"):
                     screen.place_image(save_data["Party"][i].name,
                                        i * 30 + 40,
                                        i * 60 + 40)
@@ -1235,7 +1245,16 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                   temp_data[
                                                                                                       "EncounterData"][
                                                                                                       "Selection"][
-                                                                                                      "Enemy"]].level * 30 + 10
+                                                                                                      "Enemy"]].level * 15 + 10
+                                for i3 in range(0,len(save_data["Party"])):
+                                    save_data["Party"][i3].exp += temp_data[
+                                                                                                      "EncounterData"][
+                                                                                                      "EnemyParty"][
+                                                                                                      temp_data[
+                                                                                                          "EncounterData"][
+                                                                                                          "Selection"][
+                                                                                                          "Enemy"]].level * 15 + 10
+                                    save_data["Party"][i3].check_for_level_up()
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                 save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                 temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1456,7 +1475,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     if len(temp_data["EncounterData"]["EnemyParty"]) < 1:
                                         temp_data["ActiveScreen"] = "Overworld"
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
-                            temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Ugly":
+                            temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Confuse":
                             temp_data["EncounterData"]["EnemyParty"][
                                 temp_data["EncounterData"]["Selection"]["Enemy"]].dexterity -= 2
                             temp_data["EncounterData"]["EnemyParty"][
@@ -1465,8 +1484,9 @@ def encounter(screen, mixer, save_data, temp_data):
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Pin":
                             temp_data["EncounterData"]["TurnOrder"].remove(
                                 temp_data["EncounterData"]["Selection"]["Enemy"] + len(save_data["Party"]))
-                            temp_data["EncounterData"]["TurnOrder"].insert(tenp_data["EncounterData"]["TurnPos"],
+                            temp_data["EncounterData"]["TurnOrder"].insert(temp_data["EncounterData"]["TurnPos"],
                                 temp_data["EncounterData"]["Selection"]["Enemy"] + len(save_data["Party"]))
+                            temp_data["EncounterData"]["TurnPos"]+=1
                 else:
                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Turn"] - len(
                             save_data["Party"])].attacks[
@@ -1626,7 +1646,7 @@ def encounter(screen, mixer, save_data, temp_data):
             return save_data, temp_data
         elif temp_data["PageNumber"] == -2:
             input_keys = pygame.key.get_pressed()
-            screen.place_text("YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER FOR 50 GOLD\n(PLUS 1 DMG TO ALL BASIC ATTACKS), WHICH ONE@", 10,
+            screen.place_text("YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER FOR 50 GOLD\n(PLUS 1 DMG TO ALL BASIC ATTACKS BUT ALSO PLUS e1 TO STAMINA COST OF SPECIAL), WHICH ONE@", 10,
                               80)
             OptionNum = 0
             for OptionNum in range(0, len(save_data["Party"])):
