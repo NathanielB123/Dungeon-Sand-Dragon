@@ -154,7 +154,7 @@ def new_game():
         ["'OH, SO YOU'RE JUST LIKE THE OTHER HUMANS. I SUPPOSE I'M A FOOL FOR THINKING OTHERWISE, FAREWELL'\nHE VANISHES",
             ["LEAVE", -1, ["StoryProgress", 2, "Done"]]])
     temp_data["EncounterContent"][2]["Dialogue"].append(
-        ["'SO, QUIT FRANKLY, I WANT TO JOIN YOU, HELP YOU IN YOUR STRUGGLE,I WON'T TAKE PLEASURE IN WORKING\nWITH YOU HUMANS, BUT THE ENEMY OF MY ENEMY IS MY FRIEND OR SO THEY SAY'",
+        ["'SO, QUITE FRANKLY, I WANT TO JOIN YOU, HELP YOU IN YOUR STRUGGLE,I WON'T TAKE PLEASURE IN WORKING\nWITH YOU HUMANS, BUT THE ENEMY OF MY ENEMY IS MY FRIEND OR SO THEY SAY'",
             ["SAY YOU WILL MEET HIM BACK AT THE GUILD HALL", -1,["StoryProgress",2,"Done"],["GuildHall", Character("Loran",1,8,6,14,8,8,6,[["Physical","Melee",4],["Physical","Ranged",4]])]],
             ["SAY THAT YOU DON'T WANT ANY DAMN THIEVING ELVES IN YOUR PARTY", 4]])
 
@@ -185,14 +185,17 @@ def new_game():
         ["THE GOBLIN CAN'T TAKE IT ANYMORE, THEY JUMP AWAY SEEMINGLY INTO THIN AIR",
          ["LEAVE", -1, ["StoryProgress", 0, "Done"]]])
 
-    temp_data["EncounterContent"][0] = {}
-    temp_data["EncounterContent"][0]["Type"] = "Dialogue"
-    temp_data["EncounterContent"][0]["Background"] = "EncounterBack"
-    temp_data["EncounterContent"][0]["Character"] = "Gundren"
-    temp_data["EncounterContent"][0]["Dialogue"] = []
-    temp_data["EncounterContent"][0]["Dialogue"].append(
-        ["YOU FIND A GOBLIN AND PREPARE TO ATTACK WHEN SUDDENLY, IT DROPS IT'S WEAPON ON THE GROUND",
-         ["DROP YOUR WEAPON AND APPROACH", 1], ["KEEP YOUR WEAPON AT THE READY AND APPROACH", 2], ["ATTACK", 3]])
+    temp_data["EncounterContent"][7] = {}
+    temp_data["EncounterContent"][7]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][7]["Background"] = "EncounterBack"
+    temp_data["EncounterContent"][7]["Character"] = "Gundren"
+    temp_data["EncounterContent"][7]["Dialogue"] = []
+    temp_data["EncounterContent"][7]["Dialogue"].append(
+        ["YOU ARE WALKING ACROSS THE DESERT WHEN YOU FIND A VERY SHORT INDIVIDUAL WITH A VERY LARGE CROSSBOW"
+         ["GREET HIM", 1], ["THAT CROSSBOW LOOKS INTIMIDATING, RUN AWAY", -1]])
+    temp_data["EncounterContent"][7]["Dialogue"].append(
+        ["' '"
+         ["GREET HIM", 1], ["THAT CROSSBOW LOOKS INTIMIDATING, RUN AWAY", -1]])
 
     temp_data["EncounterContent"][6] = {}
     temp_data["EncounterContent"][6]["Type"] = "Dialogue"
