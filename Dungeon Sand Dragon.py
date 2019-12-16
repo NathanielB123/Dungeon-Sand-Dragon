@@ -56,7 +56,7 @@ def new_game():
         "'ANYWAY, IN THIS BOOK IT STATES THAT TO REPAIR THE GREAT FOUNTAIN INSIDE THE PYRAMID OF LIFE,\nONE MUST COLLECT 4 JIGSAW PIECES AND COMBINE THEM'",
         ["ASK HIM WHERE THESE JIGSAW PIECES ARE", 11]])
     temp_data["EncounterData"]["Dialogue"].append([
-        "'WELL, TURNS OUT THE LOCATIONS OF THE JIGSAW PIECES WASN'T PART OF THE AQA SPEC,\nBUT LUCKILY THEY HAVE IT WRITTEN IN THIS OCR TEXTBOOK HERE'",
+        "'WELL, TURNS OUT THE LOCATIONS OF THE JIGSAW PIECES WASN'T PART OF THE AQA SPEC,\nBUT LUCKILY THEY HAD IT IN THIS MORE COMPREHENSIVE RESOURCE NAMED 'WIKIPEDIA''",
         ["REPEAT YOUR QUESTION", 12]])
     temp_data["EncounterData"]["Dialogue"].append([
         "'OKAY, OKAY. THEY ARE HERE, HERE, HERE AND HERE.' HIS FINGER JABS AT TO PAGES SEEMINGLY RANDOMLY\nALL AROUND THE EDGES OF THE DESERT",
@@ -224,7 +224,7 @@ def new_game():
     temp_data["EncounterContent"][3]["Character"] = "None"
     temp_data["EncounterContent"][3]["Dialogue"] = []
     temp_data["EncounterContent"][3]["Dialogue"].append(
-        ["WELCOME TO THE VILLAGE OF DENDONCKERVILLE", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
+        ["WELCOME TO THE VILLAGE OF QUINTUSINHORTO", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
          ["LEAVE", -1]])
     temp_data["EncounterContent"][3]["Dialogue"].append(
         ["'WELCOME ADVENTURER, TO MY HUMBLE STORE, TAKE A LOOK AT MY GOODS;'", ["TAKE A LOOK", -2],
