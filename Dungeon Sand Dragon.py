@@ -117,21 +117,21 @@ def new_game():
 
     temp_data["EncounterContent"][8] = {}
     temp_data["EncounterContent"][8]["Type"] = "Dialogue"
-    temp_data["EncounterContent"][8]["Background"] = "WaterfallDried"
+    temp_data["EncounterContent"][8]["Background"] = "EncounterBack"
     temp_data["EncounterContent"][8]["Character"] = "None"
     temp_data["EncounterContent"][8]["Dialogue"] = []
     temp_data["EncounterContent"][8]["Dialogue"].append(
-        ["YOU FIND A FOUNTAIN (WIP)",
+        ["THIS PLACE USED TO BE A LUSH, GREEN FERTILE VALLEY. NOW ALL YOU CAN SEE IS ENDLESS SAND",
          ["LEAVE", -1]])
 
     temp_data["EncounterContent"][1] = {}
     temp_data["EncounterContent"][1]["Type"] = "Dialogue"
     temp_data["EncounterContent"][1]["Background"] = "WaterfallDried"
-    temp_data["EncounterContent"][1]["Character"] = "None"
+    temp_data["EncounterContent"][1]["Character"] = "Meat"
     temp_data["EncounterContent"][1]["Dialogue"] = []
     temp_data["EncounterContent"][1]["Dialogue"].append(
-        ["YOU FIND A FOUNTAIN (WIP)",
-         ["LEAVE", -1]])
+        ["YEOW",
+         ["NO, YOU'RE NOT GETTING ANY CONTEXT, LEAVE", -1]])
 
     temp_data["EncounterContent"][5] = {}
     temp_data["EncounterContent"][5]["Type"] = "Dialogue"
@@ -475,7 +475,6 @@ class SoundManager:
             print(
                 "ERROR: Sound " + sound_id + " has not been loaded. Make sure you have placed the sound in "
                                              "the sounds folder and spelt the file name correctly.")
-
     @staticmethod
     def stop_sounds():
         pygame.mixer.stop()
@@ -1277,7 +1276,15 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                   temp_data[
                                                                                                       "EncounterData"][
                                                                                                       "Selection"][
-                                                                                                      "Enemy"]].level * 30 + 10
+                                                                                                      "Enemy"]].level * 15 + 10
+                                for i in range(0,save_data["Party"]):
+                                    save_data["Party"][i]["Turn"].exp += temp_data[
+                                                                                                      "EncounterData"][
+                                                                                                      "EnemyParty"][
+                                                                                                      temp_data[
+                                                                                                          "EncounterData"][
+                                                                                                          "Selection"][
+                                                                                                          "Enemy"]].level * 15 + 10
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                 temp_data["EncounterData"]["EnemyParty"].pop(
                                     temp_data["EncounterData"]["Selection"]["Enemy"])
@@ -1299,7 +1306,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     0.1 * save_data["Party"][temp_data["EncounterData"]["Turn"]].attack_bonus + 1)):
                                 temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]*3
                                 if temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
@@ -1308,7 +1315,15 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                       temp_data[
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
-                                                                                                          "Enemy"]].level * 30 + 10
+                                                                                                          "Enemy"]].level * 15 + 10
+                                    for i in range(0, save_data["Party"]):
+                                        save_data["Party"][i]["Turn"].exp += temp_data[
+                                                                                 "EncounterData"][
+                                                                                 "EnemyParty"][
+                                                                                 temp_data[
+                                                                                     "EncounterData"][
+                                                                                     "Selection"][
+                                                                                     "Enemy"]].level * 15 + 10
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1328,7 +1343,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     0.1 * save_data["Party"][temp_data["EncounterData"]["Turn"]].spell_bonus + 1)):
                                 temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]*3
                                 if temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
@@ -1337,7 +1352,15 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                       temp_data[
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
-                                                                                                          "Enemy"]].level * 30 + 10
+                                                                                                          "Enemy"]].level * 15 + 10
+                                    for i in range(0, save_data["Party"]):
+                                        save_data["Party"][i]["Turn"].exp += temp_data[
+                                                                                 "EncounterData"][
+                                                                                 "EnemyParty"][
+                                                                                 temp_data[
+                                                                                     "EncounterData"][
+                                                                                     "Selection"][
+                                                                                     "Enemy"]].level * 15 + 10
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1378,7 +1401,15 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                       temp_data[
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
-                                                                                                          "Enemy"]].level * 30 + 10
+                                                                                                          "Enemy"]].level * 15 + 10
+                                    for i in range(0, save_data["Party"]):
+                                        save_data["Party"][i]["Turn"].exp += temp_data[
+                                                                                 "EncounterData"][
+                                                                                 "EnemyParty"][
+                                                                                 temp_data[
+                                                                                     "EncounterData"][
+                                                                                     "Selection"][
+                                                                                     "Enemy"]].level * 15 + 10
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1428,6 +1459,11 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
+                                    screen.placeimage("GameOver",False)
+                                    input_keys=pygame.key.get_pressed()
+                                    while not input_keys[pygame.K_ESC]:
+                                        input_keys = pygame.key.get_pressed()
+                                        screen.update()
                                     pygame.quit()
                                     while True:
                                         pass
@@ -1461,6 +1497,11 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
+                                    screen.placeimage("GameOver", False)
+                                    input_keys = pygame.key.get_pressed()
+                                    while not input_keys[pygame.K_ESC]:
+                                        input_keys = pygame.key.get_pressed()
+                                        screen.update()
                                     pygame.quit()
                                     while True:
                                         pass
@@ -1554,7 +1595,7 @@ def encounter(screen, mixer, save_data, temp_data):
             return save_data, temp_data
         elif temp_data["PageNumber"] == -2:
             input_keys = pygame.key.get_pressed()
-            screen.place_text("YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER (+1 DMG) FOR 50 GOLD, WHICH ONE@", 10,
+            screen.place_text("YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER FOR 50 GOLD\n(PLUS 1 DMG TO ALL BASIC ATTACKS), WHICH ONE@", 10,
                               80)
             OptionNum = 0
             for OptionNum in range(0, len(save_data["Party"])):
@@ -1966,9 +2007,16 @@ def inventory(screen, mixer, save_data, temp_data):
 
 
 def settings(screen, mixer, save_data, temp_data):
-    screen.place_image("Blank", 0, 0)
+    screen.place_image("BlankWhite", 0, 0)
     input_keys = pygame.key.get_pressed()
-    screen.update()
+    if input_keys[pygame.K_1]:
+        save(save_data)
+    elif input_keys[pygame.K_2]:
+        save_data=load()
+    elif input_keys[pygame.K_3]:
+        pygame.quit()
+        while True:
+            pass
     if input_keys[pygame.K_ESCAPE]:
         temp_data["ActiveScreen"] = "Overworld"
         while input_keys[pygame.K_ESCAPE]:
