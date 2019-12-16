@@ -16,7 +16,7 @@ pygame.init()
 
 
 def new_game():
-    save_data = {"Position": 4, "Party": [], "Name": "LordQuaggan"}
+    save_data = {"Position": 4, "Party": [], "Name": "You"}
     save_data["Party"].append(
         Character(save_data["Name"], 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 4], ["Magical", "Ranged", 4]]))
     save_data["GuildHall"]=[]
@@ -191,11 +191,19 @@ def new_game():
     temp_data["EncounterContent"][7]["Character"] = "Gundren"
     temp_data["EncounterContent"][7]["Dialogue"] = []
     temp_data["EncounterContent"][7]["Dialogue"].append(
-        ["YOU ARE WALKING ACROSS THE DESERT WHEN YOU FIND A VERY SHORT INDIVIDUAL WITH A VERY LARGE CROSSBOW"
+        ["YOU ARE WALKING ACROSS THE DESERT WHEN YOU FIND A VERY SHORT INDIVIDUAL WITH A VERY LARGE CROSSBOW",
          ["GREET HIM", 1], ["THAT CROSSBOW LOOKS INTIMIDATING, RUN AWAY", -1]])
     temp_data["EncounterContent"][7]["Dialogue"].append(
-        ["' '"
-         ["GREET HIM", 1], ["THAT CROSSBOW LOOKS INTIMIDATING, RUN AWAY", -1]])
+        ["''ELLO STRANGER, YOUR THE FIRST PERSON I HAVE SEEN WHO AIN'T A BLINKIN' GOBLIN OR ORC'",
+         ["ASK WHAT A DWARF IS DOING HERE", 2], ["MENTION THAT HE SEEMS A LITTLE OUT OF PLACE HIMSELF IN THE DESERT", 2]])
+    temp_data["EncounterContent"][7]["Dialogue"].append(
+        ["'WELL YA SEE LADDY, THAT'S THE THING, THIS BLASTED DROUGHT HAS DONE WEIRD THINGS WITH THE WEATHER\nAND NOW MY PATH HOME TO THE FROSTBACKS IS FROZEN OVER'",
+         ["MENTION THAT YOU ARE PART OF A GUILD SET UP TO FIX THIS MESS", 3],
+         ["SAY HOW THAT'S VERY SAD AND THEN GO ON YOUR WAY", -1]])
+    temp_data["EncounterContent"][7]["Dialogue"].append(
+        ["'OH REALLY, TELL YA WHAT. I THINK I'LL JOIN MYSELF, GET TA' KILL SOME OF THEM DAMN GOBLINS AND\nGET BACK HOME AT THE SAME TIME!'",
+            ["SAY YOU'LL MEET HIM BACK AT THE GUILD HALL", 3],
+            ["SAY THAT, ON SECOND THOUGHT, YOU DON'T REALLY WANT A DWARF IN YOUR PARTY", -1]])
 
     temp_data["EncounterContent"][6] = {}
     temp_data["EncounterContent"][6]["Type"] = "Dialogue"
