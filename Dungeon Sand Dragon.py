@@ -20,7 +20,7 @@ def new_game():
     save_data["Party"].append(
         Character(save_data["Name"], 1, 8, 8, 8, 8, 8, 8, [["Physical", "Melee", 4], ["Magical", "Ranged", 4]]))
     save_data["GuildHall"]=[]
-    save_data["StoryProgress"] = {"JigsawPieces": 1}
+    save_data["StoryProgress"] = {"JigsawPieces": 0}
     save_data["Tutorial"]=True
     save_data["Inventory"] = {}
     save_data["Inventory"]["Gold"] = 10
@@ -512,7 +512,7 @@ def overworld(screen, mixer, save_data, temp_data):
             except KeyError:
                 if save_data["Position"]==9 or save_data["Position"]==10 or save_data["Position"]==11 or save_data["Position"]==12 or save_data["Position"]==13:
                     if not save_data["Position"] in save_data["StoryProgress"].keys():
-                        temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                        temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
                         print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
@@ -535,7 +535,7 @@ def overworld(screen, mixer, save_data, temp_data):
                                 print("ERROR - UNKNOWN")
                     elif not save_data["StoryProgress"][save_data["Position"]] == "Done":
                         temp_data["EncounterData"] = copy.deepcopy(
-                            temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                            temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
                         print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
@@ -591,7 +591,7 @@ def overworld(screen, mixer, save_data, temp_data):
                         save_data["Position"] == 12 or save_data["Position"] == 13:
                     if not save_data["Position"] in save_data["StoryProgress"].keys():
                         temp_data["EncounterData"] = copy.deepcopy(
-                            temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                            temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
                         print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
@@ -614,7 +614,7 @@ def overworld(screen, mixer, save_data, temp_data):
                                 print("ERROR - UNKNOWN")
                     elif not save_data["StoryProgress"][save_data["Position"]] == "Done":
                         temp_data["EncounterData"] = copy.deepcopy(
-                            temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                            temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
                         print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
