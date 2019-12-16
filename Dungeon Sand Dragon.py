@@ -521,10 +521,10 @@ class Character:
         self.dodge_bonus = int(self.mods["Dexterity"] * 6)
         self.attack_bonus = int((self.mods["Dexterity"] * 3) + (self.mods["Strength"] * 3))
         self.spell_bonus = int((self.mods["Charisma"] * 3) + (self.mods["Intelligence"] * 3))
-        self.stamina_max = int((10 + self.mods["Strength"] * 2) * self.level / 4)
-        self.stamina_regen = int(self.level + self.mods["Constitution"] * 2)
-        self.mana_max = int((10 + self.mods["Wisdom"] * 2) * self.level / 4)
-        self.mana_regen = int(self.level + self.mods["Intelligence"] * 2)
+        self.stamina_max = int((10 + self.mods["Strength"] * 2) * (self.level / 4))+8
+        self.stamina_regen = int((self.mods["Strength"]) * (self.level / 5))+1
+        self.mana_max = int((10 + self.mods["Wisdom"] * 2) * (self.level / 4))+8
+        self.mana_regen = int((self.mods["Intelligence"]) * (self.level / 5))+1
         self.initiative_bonus = int(self.mods["Dexterity"] * 5 + self.mods["Intelligence"])
         self.health_current = self.health_max
         self.stamina_current = self.stamina_max
@@ -541,10 +541,10 @@ class Character:
         self.dodge_bonus = int(self.mods["Dexterity"] * 6)
         self.attack_bonus = int((self.mods["Dexterity"] * 3) + (self.mods["Strength"] * 3))
         self.spell_bonus = int((self.mods["Charisma"] * 3) + (self.mods["Intelligence"] * 3))
-        self.stamina_max = int((10 + self.mods["Strength"] * 2) * self.level / 4)
-        self.stamina_regen = int(self.level + self.mods["Constitution"] * 2)
-        self.mana_max = int((10 + self.mods["Wisdom"] * 2) * self.level / 4)
-        self.mana_regen = int(self.level + self.mods["Intelligence"] * 2)
+        self.stamina_max = int((10 + self.mods["Strength"] * 2) * (self.level / 4)) + 8
+        self.stamina_regen = int((self.mods["Strength"]) * (self.level / 5)) + 1
+        self.mana_max = int((10 + self.mods["Wisdom"] * 2) * (self.level / 4)) + 8
+        self.mana_regen = int((self.mods["Intelligence"]) * (self.level / 5)) + 1
         self.initiative_bonus = int(self.mods["Dexterity"] * 5 + self.mods["Intelligence"])
 
     def check_for_level_up(self):
@@ -832,6 +832,8 @@ def init_encounter(save_data, temp_data):
 
 
 def encounter(screen, mixer, save_data, temp_data):
+    magical=False
+    physical=False
     if temp_data["EncounterData"]["Type"] == "Battle":
         screen.place_image("EncounterBack", 0, 0)
         for i in range(len(save_data["Party"]) - 1, -1, -1):
@@ -911,8 +913,8 @@ def encounter(screen, mixer, save_data, temp_data):
                                             "AttackAnimProg"]) / 30)
                 if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Heal":
                     screen.place_image("ProjectileMagic",
-                                       ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
-                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 30 + 40) *
+                                       ((i * 30 + 64) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
+                                        ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 30 + 64) *
                                         temp_data["EncounterData"][
                                             "AttackAnimProg"]) / 30,
                                        ((i * 60 + 64) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
@@ -964,20 +966,20 @@ def encounter(screen, mixer, save_data, temp_data):
                                        (temp_data["EncounterData"]["EnemyParty"][i].health_current /
                                         temp_data["EncounterData"]["EnemyParty"][i].health_max) * 48, 5)
                 offset += 6
-                physical = False
-                magical = False
+                physical1 = False
+                magical1 = False
                 for Attack in temp_data["EncounterData"]["EnemyParty"][i].attacks:
                     if "Physical" in Attack:
-                        physical = True
+                        physical1 = True
                     elif "Magical" in Attack:
-                        magical = True
-                if physical:
+                        magical1 = True
+                if physical1:
                     screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120 - offset, 48, 5)
                     screen.place_rectangle((0, 255, 0), i * -30 + 400, i * 60 + 120 - offset,
                                            (temp_data["EncounterData"]["EnemyParty"][i].stamina_current /
                                             temp_data["EncounterData"]["EnemyParty"][i].stamina_max) * 48, 5)
                     offset += 6
-                if magical:
+                if magical1:
                     screen.place_rectangle((0, 0, 0), i * -30 + 400, i * 60 + 120 - offset, 48, 5)
                     screen.place_rectangle((0, 0, 255), i * -30 + 400, i * 60 + 120 - offset,
                                            (temp_data["EncounterData"]["EnemyParty"][i].mana_current /
@@ -1050,19 +1052,101 @@ def encounter(screen, mixer, save_data, temp_data):
                     input_keys = pygame.key.get_pressed()
                     if input_keys[pygame.K_1] and len(
                             save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 0:
-                        temp_data["EncounterData"]["Selection"]["Attack"] = 0
-                        temp_data["EncounterData"]["UIPos"] += 1
                         mixer.play_sound("ExampleSound", 0)
+                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][0]=="Special":
+                            if magical and physical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current>=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2] and \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current-=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            elif magical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current>=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current-=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            elif physical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][1]=="Taunt":
+                                temp_data["AttackAnimProg"]=1
+                                temp_data["UIPos"] += 1
+                        else:
+                            temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                            temp_data["EncounterData"]["UIPos"] += 1
                     elif input_keys[pygame.K_2] and len(
                             save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 1:
-                        temp_data["EncounterData"]["Selection"]["Attack"] = 1
-                        temp_data["EncounterData"]["UIPos"] += 1
                         mixer.play_sound("ExampleSound", 0)
+                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][0] == "Special":
+                            if magical and physical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2] and \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 1
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            elif magical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 1
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            elif physical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 1
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1]=="Taunt":
+                                temp_data["AttackAnimProg"]=1
+                                temp_data["UIPos"] += 1
+                        else:
+                            temp_data["EncounterData"]["Selection"]["Attack"] = 1
+                            temp_data["EncounterData"]["UIPos"] += 1
                     elif input_keys[pygame.K_3] and len(
                             save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 2:
-                        temp_data["EncounterData"]["Selection"]["Attack"] = 2
-                        temp_data["EncounterData"]["UIPos"] += 1
                         mixer.play_sound("ExampleSound", 0)
+                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][0] == "Special":
+                            if magical and physical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2] and \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            elif magical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            elif physical:
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                    temp_data["EncounterData"]["Selection"]["Attack"] = 0
+                                    temp_data["EncounterData"]["UIPos"] += 1
+                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1]=="Taunt":
+                                temp_data["AttackAnimProg"]=1
+                                temp_data["UIPos"]+=1
+                        else:
+                            temp_data["EncounterData"]["Selection"]["Attack"] = 2
+                            temp_data["EncounterData"]["UIPos"] += 1
                     while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3]:
                         input_keys = pygame.key.get_pressed()
                         pygame.event.get()
@@ -1271,6 +1355,8 @@ def encounter(screen, mixer, save_data, temp_data):
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Heal":
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max>save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current+10:
                                 save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current+=10
+                            else:
+                                save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current =save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Threaten":
                             temp_data["ThreatenActive"]=True
@@ -1391,6 +1477,15 @@ def encounter(screen, mixer, save_data, temp_data):
                     temp_data["EncounterData"]["TurnPos"] = 0
                 temp_data["EncounterData"]["Turn"] = temp_data["EncounterData"]["TurnOrder"][
                     temp_data["EncounterData"]["TurnPos"]]
+                if temp_data["EncounterData"]["Turn"]<len(save_data["Party"]):
+                    print("Huh")
+                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current+=save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_regen
+                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current += save_data["Party"][
+                        temp_data["EncounterData"]["Turn"]].mana_regen
+                    if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current>save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_max:
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current=save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_max
+                    if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current>save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_max:
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current=save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_max
     #
     #
     # Non-battle code
