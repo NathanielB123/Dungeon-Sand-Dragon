@@ -1066,7 +1066,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][1] == "Taunt":
-                                temp_data["AttackAnimProg"] = 1
+                                temp_data["EncounterData"]["AttackAnimProg"] = 1
                                 temp_data["EncounterData"]["UIPos"] += 1
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 0
@@ -1101,7 +1101,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 1
                                     temp_data["EncounterData"]["UIPos"] += 1
                             if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1]=="Taunt":
-                                temp_data["AttackAnimProg"]=1
+                                temp_data["EncounterData"]["AttackAnimProg"] = 1
                                 temp_data["EncounterData"]["UIPos"] += 1
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 1
@@ -1136,7 +1136,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][1] == "Taunt":
-                                temp_data["AttackAnimProg"] = 1
+                                temp_data["EncounterData"]["AttackAnimProg"] = 1
                                 temp_data["EncounterData"]["UIPos"] += 1
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 2
@@ -1465,7 +1465,7 @@ def encounter(screen, mixer, save_data, temp_data):
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Pin":
                             temp_data["EncounterData"]["TurnOrder"].remove(
                                 temp_data["EncounterData"]["Selection"]["Enemy"] + len(save_data["Party"]))
-                            temp_data["EncounterData"]["TurnOrder"].append(
+                            temp_data["EncounterData"]["TurnOrder"].insert(tenp_data["EncounterData"]["TurnPos"],
                                 temp_data["EncounterData"]["Selection"]["Enemy"] + len(save_data["Party"]))
                 else:
                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Turn"] - len(
