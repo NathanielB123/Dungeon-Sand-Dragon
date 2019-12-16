@@ -2,8 +2,6 @@ import time
 import random
 import math
 import copy
-# import numpy
-# import panda
 import pygame
 import ctypes
 import _pickle
@@ -947,14 +945,9 @@ def encounter(screen, mixer, save_data, temp_data):
                                             "AttackAnimProg"]) / 30)
                 if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
                     1] == "Special" and not (save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "DoubleAttack" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal"):
-                    if not save_data["Party"][i].name == save_data["Name"]:
-                        screen.place_image(save_data["Party"][i].name,
-                                           i * 30 + 40,
-                                           i * 60 + 40)
-                    else:
-                        screen.place_image("Spellsword",
-                                           i * 30 + 40,
-                                           i * 60 + 40)
+                    screen.place_image(save_data["Party"][i].name,
+                                       i * 30 + 40,
+                                       i * 60 + 40)
         for i in range(len(temp_data["EncounterData"]["EnemyParty"]) - 1, -1, -1):
             if not (temp_data["EncounterData"]["AttackAnimProg"] > 0 and temp_data["EncounterData"]["Turn"] - len(
                     save_data["Party"]) == i):
@@ -1072,9 +1065,9 @@ def encounter(screen, mixer, save_data, temp_data):
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
-                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][1]=="Taunt":
-                                temp_data["AttackAnimProg"]=1
-                                temp_data["UIPos"] += 1
+                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][1] == "Taunt":
+                                temp_data["AttackAnimProg"] = 1
+                                temp_data["EncounterData"]["UIPos"] += 1
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 0
                             temp_data["EncounterData"]["UIPos"] += 1
@@ -1109,7 +1102,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     temp_data["EncounterData"]["UIPos"] += 1
                             if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1]=="Taunt":
                                 temp_data["AttackAnimProg"]=1
-                                temp_data["UIPos"] += 1
+                                temp_data["EncounterData"]["UIPos"] += 1
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 1
                             temp_data["EncounterData"]["UIPos"] += 1
@@ -1142,9 +1135,9 @@ def encounter(screen, mixer, save_data, temp_data):
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
-                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1]=="Taunt":
-                                temp_data["AttackAnimProg"]=1
-                                temp_data["UIPos"]+=1
+                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][1] == "Taunt":
+                                temp_data["AttackAnimProg"] = 1
+                                temp_data["EncounterData"]["UIPos"] += 1
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 2
                             temp_data["EncounterData"]["UIPos"] += 1
@@ -1199,6 +1192,7 @@ def encounter(screen, mixer, save_data, temp_data):
         elif temp_data["EncounterData"]["AttackAnimProg"] == 0:
             if not temp_data["ThreatenActive"]:
                 temp_data["EncounterData"]["Selection"]["Enemy"] = random.randrange(0, len(save_data["Party"]))
+                temp_data["ThreatenActive"]=False
             else:
                 num=0
                 for temp_temp_temp_temp in range(0,len(save_data["Party"])):
@@ -1287,8 +1281,8 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
                                                                                                           "Enemy"]].level * 15 + 10
-                                save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
-                                if temp_data["EncounterData"]["EnemyParty"].name=="SandDragon":
+                                    save_data["Party"][i3].check_for_level_up()
+                                if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                     screen.place_image("GameWin", False)
                                     input_keys = pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESC]:
@@ -1327,7 +1321,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
                                                                                                           "Enemy"]].level * 15 + 10
-                                    for i3 in range(0, save_data["Party"]):
+                                    for i3 in range(0, len(save_data["Party"])):
                                         save_data["Party"][i3].exp += temp_data[
                                                                                  "EncounterData"][
                                                                                  "EnemyParty"][
@@ -1335,8 +1329,8 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "EncounterData"][
                                                                                      "Selection"][
                                                                                      "Enemy"]].level * 15 + 10
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
-                                    if temp_data["EncounterData"]["EnemyParty"].name == "SandDragon":
+                                        save_data["Party"][i3].check_for_level_up()
+                                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                         screen.place_image("GameWin", False)
                                         input_keys = pygame.key.get_pressed()
                                         while not input_keys[pygame.K_ESC]:
@@ -1373,7 +1367,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
                                                                                                           "Enemy"]].level * 15 + 10
-                                    for i3 in range(0, save_data["Party"]):
+                                    for i3 in range(0, len(save_data["Party"])):
                                         save_data["Party"][i3].exp += temp_data[
                                                                                  "EncounterData"][
                                                                                  "EnemyParty"][
@@ -1381,8 +1375,8 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "EncounterData"][
                                                                                      "Selection"][
                                                                                      "Enemy"]].level * 15 + 10
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
-                                    if temp_data["EncounterData"]["EnemyParty"].name == "SandDragon":
+                                        save_data["Party"][i3].check_for_level_up()
+                                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                         screen.place_image("GameWin", False)
                                         input_keys = pygame.key.get_pressed()
                                         while not input_keys[pygame.K_ESC]:
@@ -1410,7 +1404,7 @@ def encounter(screen, mixer, save_data, temp_data):
                             else:
                                 save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current =save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
-                            temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Threaten":
+                            temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Taunt":
                             temp_data["ThreatenActive"]=True
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal":
@@ -1431,7 +1425,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "EncounterData"][
                                                                                                           "Selection"][
                                                                                                           "Enemy"]].level * 15 + 10
-                                    for i3 in range(0, save_data["Party"]):
+                                    for i3 in range(0, len(save_data["Party"])):
                                         save_data["Party"][i3].exp += temp_data[
                                                                                  "EncounterData"][
                                                                                  "EnemyParty"][
@@ -1439,8 +1433,8 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "EncounterData"][
                                                                                      "Selection"][
                                                                                      "Enemy"]].level * 15 + 10
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
-                                    if temp_data["EncounterData"]["EnemyParty"].name == "SandDragon":
+                                        save_data["Party"][i3].check_for_level_up()
+                                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                         screen.place_image("GameWin", False)
                                         input_keys = pygame.key.get_pressed()
                                         while not input_keys[pygame.K_ESC]:
@@ -1643,12 +1637,12 @@ def encounter(screen, mixer, save_data, temp_data):
             if input_keys[pygame.K_1]:
                 if len(save_data["Party"]) > 0:
                     mixer.play_sound("ExampleSound", 0)
-                    if save_data["Inventory"]["Gold"] > 100:
+                    if save_data["Inventory"]["Gold"] >= 50:
                         for attack_num in range(0, len(save_data["Party"][0].attacks)):
                             save_data["Party"][0].attacks[attack_num][2] += 1
                         temp_data["PageNumber"] = 0
                         temp_data["EncounterData"]["Background"] = "Town2"
-                        save_data["Inventory"]["Gold"] -= 100
+                        save_data["Inventory"]["Gold"] -= 50
                     else:
                         temp_data["PageNumber"] = -6
                         temp_data["EncounterData"]["Background"] = "Town2"
@@ -1823,7 +1817,7 @@ def encounter(screen, mixer, save_data, temp_data):
                               "LEAVE", 10, 60 - 1 * 10)
             if input_keys[pygame.K_1]:
                 mixer.play_sound("ExampleSound", 0)
-                if save_data["Inventory"]["Gold"] > 50:
+                if save_data["Inventory"]["Gold"] >= 50:
                     temp_data["PageNumber"] = 0
                     save_data["Inventory"]["Gold"] -= 50
                     for character_num in range(0, len(save_data["Party"])):
