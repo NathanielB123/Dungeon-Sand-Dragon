@@ -109,6 +109,16 @@ def new_game():
     temp_data["EncounterContent"][8]["Dialogue"].append(
         ["YOU FIND A FOUNTAIN (WIP)",
          ["LEAVE", -1]])
+
+    temp_data["EncounterContent"][1] = {}
+    temp_data["EncounterContent"][1]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][1]["Background"] = "WaterfallDried"
+    temp_data["EncounterContent"][1]["Character"] = "None"
+    temp_data["EncounterContent"][1]["Dialogue"] = []
+    temp_data["EncounterContent"][1]["Dialogue"].append(
+        ["YOU FIND A FOUNTAIN (WIP)",
+         ["LEAVE", -1]])
+
     temp_data["EncounterContent"][5] = {}
     temp_data["EncounterContent"][5]["Type"] = "Dialogue"
     temp_data["EncounterContent"][5]["Background"] = "WaterfallDried"
