@@ -24,6 +24,7 @@ def new_game():
     save_data["Tutorial"]=True
     save_data["Inventory"] = {}
     save_data["Inventory"]["Gold"] = 10
+    save_data["Inventory"]["Jigsaw Pieces"] = 0
     temp_data = {"EncounterData": {}, "ActiveScreen": "Encounter"}
     temp_data["EncounterData"]["Type"] = "Dialogue"
     temp_data["EncounterData"]["Background"] = "House"
@@ -107,7 +108,7 @@ def new_game():
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["YOU ENTER YOUR GUILD HALL, HERE YOU CAN ADD AND SWAP PARTY MEMBERS", ["ADD MEMBER", -3],["SWAP MEMBER",-4]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 10 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",["REST", -5],["GAMBLE",-6], ["GO BACK", 0]])
+        ["YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 60 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",["REST", -5],["GAMBLE",-6], ["GO BACK", 0]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["SKILL CHECKS ARE STILL A WORK IN PROGRESS",
             ["GO BACK", 0]])
@@ -157,6 +158,33 @@ def new_game():
             ["SAY YOU WILL MEET HIM BACK AT THE GUILD HALL", -1,["StoryProgress",2,"Done"],["GuildHall", Character("Loran",1,8,6,14,8,8,6,[["Physical","Melee",4],["Physical","Ranged",4]])]],
             ["SAY THAT YOU DON'T WANT ANY DAMN THIEVING ELVES IN YOUR PARTY", 4]])
 
+    temp_data["EncounterContent"][0] = {}
+    temp_data["EncounterContent"][0]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][0]["Background"] = "EncounterBack"
+    temp_data["EncounterContent"][0]["Character"] = "Turncoat"
+    temp_data["EncounterContent"][0]["Dialogue"] = []
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["YOU FIND A GOBLIN AND PREPARE TO ATTACK WHEN SUDDENLY, IT DROPS IT'S WEAPON ON THE GROUND",
+         ["DROP YOUR WEAPON AND APPROACH", 1], ["KEEP YOUR WEAPON AT THE READY AND APPROACH", 2], ["ATTACK",3]])
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["THE GOBLIN SQUEAKS AND SQUEALS IN INCOMPREHENSIBLE SYLLABLES AND THE OFFERS ITS HAND",
+         ["SHAKE ITS HAND", 4],["RUN AWAY", -1, ["StoryProgress", 0, "Done"]]])
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["THE GOBLIN SQUEALS AND FURIOUSLY POINTS AT YOUR WEAPON AND THEN TO THE GROUND",
+         ["DROP YOUR WEAPON", 1], ["KEEP HOLDING IT AND MOVE FORWARDS", 5, ],["ATTACK", 3]])
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["YOU KILL THE GOBLIN QUICKLY AT TAKE A LARGE SATCHEL OF 100 GOLD OF ITS CORPSE",
+         ["LEAVE", -1,["StoryProgress", 0, "Done"], ["Inventory","Gold",100]]])
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["THE GOBLIN SHAKES IT THOROUGHLY AND THEN RUNS OFF TOWARDS YOUR GUILD HALL",
+         ["YOU GUESS YOU WILL FIND HIM AGAIN THERE", -1, ["StoryProgress", 0, "Done"],["GuildHall", Character("Turncoat",1,8,81,16,6,6,6,[["Physical","Ranged",4]])]]])
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["AS YOU APPROACH, THE GOBLIN GETS MORE AND MORE FRUSTRATED AND\n   IT'S POINTING GETS MORE AND MORE FRANTIC",
+         ["DROP YOUR WEAPON", 1], ["KEEP WALKING AND GRIP YOUR WEAPON TIGHTER",6]])
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["THE GOBLIN CAN'T TAKE IT ANYMORE, THEY JUMP AWAY SEEMINGLY INTO THIN AIR",
+         ["LEAVE", -1, ["StoryProgress", 0, "Done"]]])
+
     temp_data["EncounterContent"][6] = {}
     temp_data["EncounterContent"][6]["Type"] = "Dialogue"
     temp_data["EncounterContent"][6]["Background"] = "Town2"
@@ -172,13 +200,16 @@ def new_game():
 
     temp_data["EnemyNPCs"]={}
     temp_data["EnemyNPCs"]["Goblin"]=Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 3]])
-    temp_data["EnemyNPCs"]["GoblinArcher"] = Character("GoblinArcher", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Ranged", 3]])
-    temp_data["EnemyNPCs"]["Orc"] = Character("Orc", 1, 12, 12, 6, 1, 2, 2, [["Physical", "Melee", 4]])
-    temp_data["EnemyNPCs"]["Boss1"] = Character("Boss1", 3, 8, 8, 8, 12, 16, 8, [["Magical", "Ranged", 5]])
-    temp_data["EnemyNPCs"]["Boss2"] = Character("Boss2", 5, 16, 20, 6, 14, 8, 0, [["Physical", "Melee", 7]])
-    temp_data["EnemyNPCs"]["Boss3"] = Character("Boss1", 7, 8, 8, 8, 12, 16, 8, [["Magical", "Ranged", 9]])
-    temp_data["EnemyNPCs"]["Boss4"] = Character("Boss1", 8, 8, 8, 8, 12, 16, 8, [["Magical", "Ranged", 10]])
-    temp_data["EnemyNPCs"]["Boss5"] = Character("Dragon", 10, 20, 20, 20, 20, 20, 20, [["Magical", "Ranged", 10],["Physical","Melee",10]])
+    temp_data["EnemyNPCs"]["GoblinArcher"] = Character("GoblinArcher", 2, 10, 5, 12, 2, 2, 6, [["Physical", "Ranged", 4]])
+    temp_data["EnemyNPCs"]["Orc"] = Character("Orc", 3, 14, 14, 6, 2, 2, 2, [["Physical", "Melee", 5]])
+    temp_data["EnemyNPCs"]["RedGoblin"] = Character("WeirdGoblin", 6,  12, 6, 16, 10, 5, 6, [["Physical", "Melee", 8]])
+    temp_data["EnemyNPCs"]["RedGoblinArcher"] = Character("WeirdGoblinArcher", 6,  14, 6, 18, 10, 6, 6,[["Physical", "Ranged", 9]])
+    temp_data["EnemyNPCs"]["RedOrc"] = Character("WeirdOrc", 8, 18, 18, 10, 8, 8, 5, [["Physical", "Melee", 10]])
+    temp_data["EnemyNPCs"]["Boss1"] = Character("Troll", 3, 10, 10, 10, 10, 10, 10, [["Physical", "Melee", 5]])
+    temp_data["EnemyNPCs"]["Boss2"] = Character("Golem", 5, 12, 12, 12, 12, 12, 12, [["Physical", "Melee", 7]])
+    temp_data["EnemyNPCs"]["Boss3"] = Character("Orb", 7, 14, 14, 14, 14, 14, 14, [["Physical", "Melee", 8],["Magical", "Ranged", 8]]) #2 attacks so 8 instead of 9
+    temp_data["EnemyNPCs"]["Boss4"] = Character("Slime", 8, 16, 16, 16, 16, 16, 16, [["Magical", "Ranged", 10]])
+    temp_data["EnemyNPCs"]["Boss5"] = Character("Dragon", 10, 20, 20, 20, 20, 20, 20, [["Magical", "Ranged", 10],["Physical","Melee",10]]) #2 attacks so 10 instead of 12
 
     temp_data["EncounterContent"]["Jigsaw"]=[]
     temp_data["EncounterContent"]["Jigsaw"].append({})
@@ -362,44 +393,44 @@ class Character:
         self.level_up()
 
     def level_up(self):
-        self.mods = {"Strength": self.strength // 4,
-                     "Constitution": self.constitution // 4,
-                     "Dexterity": self.dexterity // 4,
-                     "Intelligence": self.intelligence // 4,
-                     "Wisdom": self.wisdom // 4,
-                     "Charisma": self.charisma // 4}
-        self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
-        self.dodge_bonus = self.mods["Dexterity"] * 7
-        self.attack_bonus = (self.mods["Dexterity"] * 5)+(self.mods["Strength"] * 2)
-        self.spell_bonus = (self.mods["Charisma"] * 5)+(self.mods["Intelligence"] * 2)
-        self.stamina_max = self.level * 10 + self.mods["Strength"] * 5
-        self.stamina_regen = self.level + self.mods["Constitution"] * 2
-        self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
-        self.mana_regen = self.level + self.mods["Intelligence"] * 2
+        self.mods = {"Strength": self.strength / 4,
+                     "Constitution": self.constitution / 4,
+                     "Dexterity": self.dexterity / 4,
+                     "Intelligence": self.intelligence / 4,
+                     "Wisdom": self.wisdom / 4,
+                     "Charisma": self.charisma / 4}
+        self.health_max = int(self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
+        self.dodge_bonus = int(self.mods["Dexterity"] * 7)
+        self.attack_bonus = int((self.mods["Dexterity"] * 5)+(self.mods["Strength"] * 2))
+        self.spell_bonus = int((self.mods["Charisma"] * 5)+(self.mods["Intelligence"] * 2))
+        self.stamina_max = int(self.level * 10 + self.mods["Strength"] * 5)
+        self.stamina_regen = int(self.level + self.mods["Constitution"] * 2)
+        self.mana_max = int(self.level * 10 + self.mods["Wisdom"] * 5)
+        self.mana_regen = int(self.level + self.mods["Intelligence"] * 2)
         self.health_current = self.health_max
         self.stamina_current = self.stamina_max
         self.mana_current = self.mana_max
-        self.initiative_bonus=self.mods["Dexterity"]*5+self.mods["Charisma"]*2
+        self.initiative_bonus=int(self.mods["Dexterity"]*5+self.mods["Charisma"]*2)
 
     def increase_stats(self):
-        self.mods = {"Strength": self.strength // 4,
-                     "Constitution": self.constitution // 4,
-                     "Dexterity": self.dexterity // 4,
-                     "Intelligence": self.intelligence // 4,
-                     "Wisdom": self.wisdom // 4,
-                     "Charisma": self.charisma // 4}
-        self.health_max = (self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
-        self.dodge_bonus = self.mods["Dexterity"] * 7
-        self.attack_bonus = (self.mods["Dexterity"] * 5) + (self.mods["Strength"] * 2)
-        self.spell_bonus = (self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2)
-        self.spell_bonus = (self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2)
-        self.spell_bonus = (self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2)
-        self.stamina_max = self.level * 10 + self.mods["Strength"] * 5
-        self.mana_max = self.level * 10 + self.mods["Wisdom"] * 5
-        self.initiative_bonus = self.mods["Dexterity"] * 5 + self.mods["Charisma"] * 2
+        self.mods = {"Strength": self.strength / 4,
+                     "Constitution": self.constitution / 4,
+                     "Dexterity": self.dexterity / 4,
+                     "Intelligence": self.intelligence / 4,
+                     "Wisdom": self.wisdom / 4,
+                     "Charisma": self.charisma / 4}
+        self.health_max = int(self.mods["Constitution"] + 10 + (self.mods["Constitution"] + 5) * (self.level - 1))
+        self.dodge_bonus = int(self.mods["Dexterity"] * 7)
+        self.attack_bonus = int((self.mods["Dexterity"] * 5) + (self.mods["Strength"] * 2))
+        self.spell_bonus = int((self.mods["Charisma"] * 5) + (self.mods["Intelligence"] * 2))
+        self.stamina_max = int(self.level * 10 + self.mods["Strength"] * 5)
+        self.stamina_regen = int(self.level + self.mods["Constitution"] * 2)
+        self.mana_max = int(self.level * 10 + self.mods["Wisdom"] * 5)
+        self.mana_regen = int(self.level + self.mods["Intelligence"] * 2)
+        self.initiative_bonus = int(self.mods["Dexterity"] * 5 + self.mods["Charisma"] * 2)
 
     def check_for_level_up(self):
-        if self.exp>100*self.level:
+        if self.exp>=100*self.level:
             self.unspent_points+=5
             self.exp=0
             self.level+=1
@@ -464,12 +495,44 @@ def overworld(screen, mixer, save_data, temp_data):
                         temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
+                        save_data["Inventory"]["Jigsaw Pieces"] += 1
                         save_data["StoryProgress"][save_data["Position"]] = "Done"
+                        save_data["Encounters"]=[]
+                        to_delete = []
+                        for i in range(0, 6):
+                            save_data["Encounters"].append([random.randint(0, len(temp_data["PositionData"]) - 1), -1])
+                            while save_data["Encounters"][i][1] == -1:
+                                save_data["Encounters"][i][1] = random.choice(
+                                    temp_data["PositionData"][save_data["Encounters"][i][0]][1])
+                            for i2 in range(0, i):
+                                if save_data["Encounters"][i2] == save_data["Encounters"][i]:
+                                    to_delete.append(i)
+                        for i in range(0, len(to_delete)):
+                            if len(save_data["Encounters"]) > 0:
+                                save_data["Encounters"].pop(to_delete[i] - i)
+                            else:
+                                print("ERROR - UNKNOWN")
                     elif not save_data["StoryProgress"][save_data["Position"]] == "Done":
                         temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"]+=1
+                        save_data["Inventory"]["Jigsaw Pieces"]+=1
                         save_data["StoryProgress"][save_data["Position"]]="Done"
+                        save_data["Encounters"] = []
+                        to_delete = []
+                        for i in range(0, 6):
+                            save_data["Encounters"].append([random.randint(0, len(temp_data["PositionData"]) - 1), -1])
+                            while save_data["Encounters"][i][1] == -1:
+                                save_data["Encounters"][i][1] = random.choice(
+                                    temp_data["PositionData"][save_data["Encounters"][i][0]][1])
+                            for i2 in range(0, i):
+                                if save_data["Encounters"][i2] == save_data["Encounters"][i]:
+                                    to_delete.append(i)
+                        for i in range(0, len(to_delete)):
+                            if len(save_data["Encounters"]) > 0:
+                                save_data["Encounters"].pop(to_delete[i] - i)
+                            else:
+                                print("ERROR - UNKNOWN")
                     else:
                         temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"]["Empty"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
@@ -526,7 +589,7 @@ def overworld(screen, mixer, save_data, temp_data):
                     for character in save_data["Party"]:
                         stat_target += character.level
                     stat_target=stat_target
-                    inaccuracy=0.5
+                    inaccuracy=0.25
                     stat_total = 0
                     while not int(stat_target/inaccuracy)==int(stat_total/inaccuracy):
                         temp_data["EncounterData"] = {}
@@ -543,7 +606,7 @@ def overworld(screen, mixer, save_data, temp_data):
                         stat_total = 0
                         for character in temp_data["EncounterData"]["EnemyParty"]:
                             stat_total += character.level
-                        inaccuracy += 0.5
+                        inaccuracy += 0.25
                     save_data, temp_data = init_encounter(save_data, temp_data)
                     save_data["Encounters"].remove(temp_encounter)
         if not temp_data["ActiveScreen"]=="Encounter" and temp_data["Moving"][0]:
@@ -849,7 +912,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current<=0:
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
-                                    "EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].level*30+30
+                                    "EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].level*30+10
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                 save_data["Inventory"]["Gold"]+=random.randint(0,5)*10
                                 temp_data["EncounterData"]["EnemyParty"].pop(temp_data["EncounterData"]["Selection"]["Enemy"])
@@ -870,8 +933,9 @@ def encounter(screen, mixer, save_data, temp_data):
                                     temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current<=0:
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
-                                    "EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].level*30+30
+                                    "EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].level*30+10
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
+                                save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                 temp_data["EncounterData"]["EnemyParty"].pop(temp_data["EncounterData"]["Selection"]["Enemy"])
                                 temp_data["EncounterData"]["TurnOrder"].remove(
                                     temp_data["EncounterData"]["Selection"]["Enemy"]+len(save_data["Party"]))
@@ -1069,7 +1133,7 @@ def encounter(screen, mixer, save_data, temp_data):
                         mixer.play_sound("ExampleSound", 0)
                         save_data["GuildHall"].append(copy.deepcopy(save_data["Party"][2]))
                         save_data["Party"].pop(2)
-                        temp_data["PageNumber"] = 0
+                        temp_data["PageNumber"] = -3
                     while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3]:
                         input_keys = pygame.key.get_pressed()
                         pygame.event.get()
@@ -1097,16 +1161,20 @@ def encounter(screen, mixer, save_data, temp_data):
                     pygame.event.get()
         elif temp_data["PageNumber"] == -5:
             input_keys = pygame.key.get_pressed()
-            screen.place_text("IT COSTS 30 GOLD TO REST BUT WILL REPLENISH ALL CURRENT PARTY MEMBERS' HP, STAMINA AND MANA", 10, 80)
+            screen.place_text("IT COSTS 60 GOLD TO REST BUT WILL REPLENISH ALL CURRENT PARTY MEMBERS' HP, STAMINA AND MANA", 10, 80)
             screen.place_text(str(1) + "; " +
                                   "PAY UP", 10, 60 - 0 * 10)
             screen.place_text(str(2) + "; " +
                               "LEAVE", 10, 60 - 1 * 10)
             if input_keys[pygame.K_1]:
                 mixer.play_sound("ExampleSound", 0)
-                if save_data["Inventory"]["Gold"]>30:
+                if save_data["Inventory"]["Gold"]>60:
                     temp_data["PageNumber"] = 0
-                    save_data["Inventory"]["Gold"]-=30
+                    save_data["Inventory"]["Gold"]-=60
+                    for character_num in range(0,len(save_data["Party"])):
+                        save_data["Party"][character_num].health_current=save_data["Party"][character_num].health_max
+                        save_data["Party"][character_num].mana_current = save_data["Party"][character_num].mana_max
+                        save_data["Party"][character_num].stamina_current = save_data["Party"][character_num].stamina_max
                 else:
                     temp_data["PageNumber"]=-6
             elif input_keys[pygame.K_2]:
