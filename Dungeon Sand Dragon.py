@@ -177,13 +177,22 @@ def new_game():
          ["LEAVE", -1,["StoryProgress", 0, "Done"], ["Inventory","Gold",100]]])
     temp_data["EncounterContent"][0]["Dialogue"].append(
         ["THE GOBLIN SHAKES IT THOROUGHLY AND THEN RUNS OFF TOWARDS YOUR GUILD HALL",
-         ["YOU GUESS YOU WILL FIND HIM AGAIN THERE", -1, ["StoryProgress", 0, "Done"],["GuildHall", Character("Turncoat",1,8,81,16,6,6,6,[["Physical","Ranged",4]])]]])
+         ["YOU GUESS YOU WILL FIND HIM AGAIN THERE", -1, ["StoryProgress", 0, "Done"],["GuildHall", Character("Turncoat",1,8,8,16,6,6,6,[["Physical","Melee",5]])]]])
     temp_data["EncounterContent"][0]["Dialogue"].append(
         ["AS YOU APPROACH, THE GOBLIN GETS MORE AND MORE FRUSTRATED AND\n   IT'S POINTING GETS MORE AND MORE FRANTIC",
          ["DROP YOUR WEAPON", 1], ["KEEP WALKING AND GRIP YOUR WEAPON TIGHTER",6]])
     temp_data["EncounterContent"][0]["Dialogue"].append(
         ["THE GOBLIN CAN'T TAKE IT ANYMORE, THEY JUMP AWAY SEEMINGLY INTO THIN AIR",
          ["LEAVE", -1, ["StoryProgress", 0, "Done"]]])
+
+    temp_data["EncounterContent"][0] = {}
+    temp_data["EncounterContent"][0]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][0]["Background"] = "EncounterBack"
+    temp_data["EncounterContent"][0]["Character"] = "Gundren"
+    temp_data["EncounterContent"][0]["Dialogue"] = []
+    temp_data["EncounterContent"][0]["Dialogue"].append(
+        ["YOU FIND A GOBLIN AND PREPARE TO ATTACK WHEN SUDDENLY, IT DROPS IT'S WEAPON ON THE GROUND",
+         ["DROP YOUR WEAPON AND APPROACH", 1], ["KEEP YOUR WEAPON AT THE READY AND APPROACH", 2], ["ATTACK", 3]])
 
     temp_data["EncounterContent"][6] = {}
     temp_data["EncounterContent"][6]["Type"] = "Dialogue"
@@ -220,22 +229,22 @@ def new_game():
     temp_data["EncounterContent"]["Jigsaw"].append({})
     temp_data["EncounterContent"]["Jigsaw"][1]["Type"] = "Battle"
     temp_data["EncounterContent"]["Jigsaw"][1]["EnemyParty"] = []
-    temp_data["EncounterContent"]["Jigsaw"][1]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss1"]))
+    temp_data["EncounterContent"]["Jigsaw"][1]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss2"]))
 
     temp_data["EncounterContent"]["Jigsaw"].append({})
     temp_data["EncounterContent"]["Jigsaw"][2]["Type"] = "Battle"
     temp_data["EncounterContent"]["Jigsaw"][2]["EnemyParty"] = []
-    temp_data["EncounterContent"]["Jigsaw"][2]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss1"]))
+    temp_data["EncounterContent"]["Jigsaw"][2]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss3"]))
 
     temp_data["EncounterContent"]["Jigsaw"].append({})
     temp_data["EncounterContent"]["Jigsaw"][3]["Type"] = "Battle"
     temp_data["EncounterContent"]["Jigsaw"][3]["EnemyParty"] = []
-    temp_data["EncounterContent"]["Jigsaw"][3]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss1"]))
+    temp_data["EncounterContent"]["Jigsaw"][3]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss4"]))
 
     temp_data["EncounterContent"]["Jigsaw"].append({})
     temp_data["EncounterContent"]["Jigsaw"][4]["Type"] = "Battle"
     temp_data["EncounterContent"]["Jigsaw"][4]["EnemyParty"] = []
-    temp_data["EncounterContent"]["Jigsaw"][4]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss1"]))
+    temp_data["EncounterContent"]["Jigsaw"][4]["EnemyParty"].append(copy.deepcopy(temp_data["EnemyNPCs"]["Boss5"]))
 
     temp_data["EncounterContent"]["Empty"] = {}
     temp_data["EncounterContent"]["Empty"]["Type"] = "Dialogue"
