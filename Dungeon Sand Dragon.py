@@ -33,7 +33,7 @@ def new_game():
     temp_data["EncounterData"]["Dialogue"].append(
         ["A LOUD, FRANTIC KNOCK ON THE DOOR SUDDENLY WAKES YOU UP", ["GET OUT OF BED AND ANSWER IT", 2, ["Character","Quin"]], ["COVER YOUR EARS WITH A PILLOW AND TRY TO GO BACK TO SLEEP", 1]])
     temp_data["EncounterData"]["Dialogue"].append(["THE KNOCKING INCREASES, IT'S NO USE", ["GIVE IN AND GET UP", 2, ["Character","Quin"]], ["KEEP TRYING TO GO BACK TO SLEEP", 1]])
-    temp_data["EncounterData"]["Dialogue"].append(["YOU OPEN THE DOOR TO SEE YOUR OLD FRIEND QUIN THE WATER MAGE.\nHE HAS BEEN MISSING FOR WEEKS", ["SAY HELLO", 3],["ASK HIM WHERE ON EARTH HE HAS BEEN! THE WHOLE TOWN HAS BEEN LOOKING FOR HIM!",4]])
+    temp_data["EncounterData"]["Dialogue"].append(["YOU OPEN THE DOOR TO SEE YOUR OLD FRIEND QUIN THE WATER MAGE.\nHE HAS BEEN MISSING FOR WEEKS", ["SAY HELLO", 3],["ASK HIM WHERE ON EARTH HE HAS BEEN! THE WHOLE VILLAGE HAS BEEN LOOKING FOR HIM!",4]])
     temp_data["EncounterData"]["Dialogue"].append(
         ["QUIN GREETS YOU CORDIALLY AND BEGINS HIS TALE", ["CONTINUE", 5]])
     temp_data["EncounterData"]["Dialogue"].append(
@@ -82,18 +82,6 @@ def new_game():
     save_data, temp_data = init_encounter(save_data, temp_data)
 
     temp_data["EncounterContent"] = {}
-    temp_data["EncounterContent"][3] = {}
-    temp_data["EncounterContent"][3]["Type"] = "Dialogue"
-    temp_data["EncounterContent"][3]["Background"] = "Town2"
-    temp_data["EncounterContent"][3]["Character"] = "None"
-    temp_data["EncounterContent"][3]["Dialogue"] = []
-    temp_data["EncounterContent"][3]["Dialogue"].append(
-        ["WELCOME TO THE VILLAGE OF TENAGRA", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
-         ["LEAVE", -1]])
-    temp_data["EncounterContent"][3]["Dialogue"].append(
-        ["SHOPS ARE CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0, ["Background", "Town2"]]])
-    temp_data["EncounterContent"][3]["Dialogue"].append(
-        ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
 
     temp_data["EncounterContent"][4] = {}
     temp_data["EncounterContent"][4]["Type"] = "Dialogue"
@@ -108,17 +96,27 @@ def new_game():
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["YOU ENTER YOUR GUILD HALL, HERE YOU CAN ADD AND SWAP PARTY MEMBERS", ["ADD MEMBER", -3],["SWAP MEMBER",-4]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 60 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",["REST", -5],["GAMBLE",-6], ["GO BACK", 0]])
+        ["YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 60 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",["REST", -5],["GAMBLE",-7], ["GO BACK", 0]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["SKILL CHECKS ARE STILL A WORK IN PROGRESS",
             ["GO BACK", 0]])
+
+    temp_data["EncounterContent"][8] = {}
+    temp_data["EncounterContent"][8]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][8]["Background"] = "WaterfallDried"
+    temp_data["EncounterContent"][8]["Character"] = "None"
+    temp_data["EncounterContent"][8]["Dialogue"] = []
+    temp_data["EncounterContent"][8]["Dialogue"].append(
+        ["YOU FIND A FOUNTAIN (WIP)",
+         ["LEAVE", -1]])
+
     temp_data["EncounterContent"][5] = {}
     temp_data["EncounterContent"][5]["Type"] = "Dialogue"
     temp_data["EncounterContent"][5]["Background"] = "WaterfallDried"
     temp_data["EncounterContent"][5]["Character"] = "Garik"
     temp_data["EncounterContent"][5]["Dialogue"] = []
     temp_data["EncounterContent"][5]["Dialogue"].append(
-        ["YOU SEE A MAN A SHIRTLESS, TRIBAL LOOKING MAN LOOKING UP AT A GAP IN THE CLIFFSIDE",
+        ["YOU SEE A SHIRTLESS, TRIBAL LOOKING MAN LOOKING UP AT A GAP IN THE CLIFFSIDE",
             ["APPROACH HIM", 1], ["WALK AWAY AND FIND ANOTHER ROUTE AROUND", -1,["StoryProgress",5,"Done"]]])
     temp_data["EncounterContent"][5]["Dialogue"].append(
         ["THE MAN SHOWS NO REACTION TO YOUR APPROACH, BUT SUDDENLY A DEEP, POWERFUL VOICE SOUNDS",
@@ -187,8 +185,8 @@ def new_game():
 
     temp_data["EncounterContent"][7] = {}
     temp_data["EncounterContent"][7]["Type"] = "Dialogue"
-    temp_data["EncounterContent"][7]["Background"] = "EncounterBack"
-    temp_data["EncounterContent"][7]["Character"] = "Gundren"
+    temp_data["EncounterContent"][7]["Background"] = "WaterfallDried"
+    temp_data["EncounterContent"][7]["Character"] = "Grungeldelf"
     temp_data["EncounterContent"][7]["Dialogue"] = []
     temp_data["EncounterContent"][7]["Dialogue"].append(
         ["YOU ARE WALKING ACROSS THE DESERT WHEN YOU FIND A VERY SHORT INDIVIDUAL WITH A VERY LARGE CROSSBOW",
@@ -197,12 +195,12 @@ def new_game():
         ["''ELLO STRANGER, YOUR THE FIRST PERSON I HAVE SEEN WHO AIN'T A BLINKIN' GOBLIN OR ORC'",
          ["ASK WHAT A DWARF IS DOING HERE", 2], ["MENTION THAT HE SEEMS A LITTLE OUT OF PLACE HIMSELF IN THE DESERT", 2]])
     temp_data["EncounterContent"][7]["Dialogue"].append(
-        ["'WELL YA SEE LADDY, THAT'S THE THING, THIS BLASTED DROUGHT HAS DONE WEIRD THINGS WITH THE WEATHER\nAND NOW MY PATH HOME TO THE FROSTBACKS IS FROZEN OVER'",
+        ["'WELL YA SEE LADDY, THAT'S THE THING, THIS BLASTED DROUGHT HAS DONE WEIRD THINGS WITH THE\nWEATHER AND NOW MY PATH HOME TO THE FROSTBACKS IS FROZEN OVER'",
          ["MENTION THAT YOU ARE PART OF A GUILD SET UP TO FIX THIS MESS", 3],
          ["SAY HOW THAT'S VERY SAD AND THEN GO ON YOUR WAY", -1]])
     temp_data["EncounterContent"][7]["Dialogue"].append(
         ["'OH REALLY, TELL YA WHAT. I THINK I'LL JOIN MYSELF, GET TA' KILL SOME OF THEM DAMN GOBLINS AND\nGET BACK HOME AT THE SAME TIME!'",
-            ["SAY YOU'LL MEET HIM BACK AT THE GUILD HALL", -1, ["StoryProgress", 7, "Done"],["GuildHall", Character("Gundren",1,12,10,12,4,6,6,[["Physical","Ranged",5]])]],
+            ["SAY YOU'LL MEET HIM BACK AT THE GUILD HALL", -1, ["StoryProgress", 7, "Done"],["GuildHall", Character("Grungeldelf",1,12,10,12,4,6,6,[["Physical","Ranged",5]])]],
             ["SAY THAT, ON SECOND THOUGHT, YOU DON'T REALLY WANT A DWARF IN YOUR PARTY", -1]])
 
     temp_data["EncounterContent"][6] = {}
@@ -214,9 +212,27 @@ def new_game():
         ["WELCOME TO THE VILLAGE OF LEDONIA", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
          ["LEAVE", -1]])
     temp_data["EncounterContent"][6]["Dialogue"].append(
-        ["SHOPS ARE CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0, ["Background", "Town2"]]])
+        ["'WELCOME ADVENTURER, TO MY HUMBLE STORE, TAKE A LOOK AT MY GOODS;'", ["TAKE A LOOK", -2],
+         ["GO BACK", 0, ["Background", "Town2"]]])
     temp_data["EncounterContent"][6]["Dialogue"].append(
-        ["TAVERN CLOSED RIGHT NOW, PLEASE COME BACK LATER", ["GO BACK", 0]])
+        [
+            "YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 60 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",
+            ["REST", -5], ["GAMBLE", -7], ["GO BACK", 0]])
+
+    temp_data["EncounterContent"][3] = {}
+    temp_data["EncounterContent"][3]["Type"] = "Dialogue"
+    temp_data["EncounterContent"][3]["Background"] = "Town2"
+    temp_data["EncounterContent"][3]["Character"] = "None"
+    temp_data["EncounterContent"][3]["Dialogue"] = []
+    temp_data["EncounterContent"][3]["Dialogue"].append(
+        ["WELCOME TO THE VILLAGE OF DENDONCKERVILLE", ["SHOPS", 1, ["Background", "Town"]], ["TAVERN", 2],
+         ["LEAVE", -1]])
+    temp_data["EncounterContent"][3]["Dialogue"].append(
+        ["'WELCOME ADVENTURER, TO MY HUMBLE STORE, TAKE A LOOK AT MY GOODS;'", ["TAKE A LOOK", -2],
+         ["GO BACK", 0, ["Background", "Town2"]]])
+    temp_data["EncounterContent"][3]["Dialogue"].append(
+        ["YOU ENTER THE TAVERN, YOU CAN REST HERE FOR 60 GOLD RECOVERING ALL HEALTH, STAMINA AND MANA\nOR TRY YOUR LUCK AT CARDS",
+            ["REST", -5], ["GAMBLE", -7], ["GO BACK", 0]])
 
     temp_data["EnemyNPCs"]={}
     temp_data["EnemyNPCs"]["Goblin"]=Character("Goblin", 1, 8, 4, 10, 2, 2, 6, [["Physical", "Melee", 3]])
@@ -1114,7 +1130,78 @@ def encounter(screen, mixer, save_data, temp_data):
                 save_data["Tutorial"]=False
             return save_data, temp_data
         elif temp_data["PageNumber"]==-2:
-            temp_data["PageNumber"] = 0
+            input_keys = pygame.key.get_pressed()
+            screen.place_text("YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER FOR 100 GOLD, WHICH ONE?", 10, 80)
+            OptionNum=0
+            for OptionNum in range(0, len(save_data["Party"])):
+                screen.place_text(str(OptionNum + 1) + "; " +
+                                  save_data["Party"][OptionNum].name.upper(), 10, 60 - OptionNum * 10)
+            OptionNum+=1
+            screen.place_text(str(OptionNum + 1) + "LEAVE", 10, 60 - OptionNum * 10)
+            if input_keys[pygame.K_1]:
+                if len(save_data["Party"])>0:
+                    mixer.play_sound("ExampleSound", 0)
+                    if save_data["Inventory"]["Gold"]>100:
+                        for attack_num in range(0,len(save_data["Party"][0].attacks)):
+                            save_data["Party"][0].attacks[attack_num][2]+=1
+                        temp_data["PageNumber"] = 0
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                        save_data["Inventory"]["Gold"]-=100
+                    else:
+                        temp_data["PageNumber"] = -6
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                elif len(save_data["Party"])==0:
+                    mixer.play_sound("ExampleSound", 0)
+                    temp_data["PageNumber"]=0
+                    temp_data["EncounterData"]["Background"]="Town2"
+            elif input_keys[pygame.K_2]:
+                if len(save_data["Party"])>1:
+                    mixer.play_sound("ExampleSound", 0)
+                    if save_data["Inventory"]["Gold"]>100:
+                        for attack_num in range(0,len(save_data["Party"][1].attacks)):
+                            save_data["Party"][1].attacks[attack_num][2]+=1
+                        temp_data["PageNumber"] = 0
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                        save_data["Inventory"]["Gold"]-=100
+                    else:
+                        temp_data["PageNumber"] = -6
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                elif len(save_data["Party"])==1:
+                    mixer.play_sound("ExampleSound", 0)
+                    temp_data["PageNumber"]=0
+                    temp_data["EncounterData"]["Background"]="Town2"
+            elif input_keys[pygame.K_3]:
+                if len(save_data["Party"])>2:
+                    mixer.play_sound("ExampleSound", 0)
+                    if save_data["Inventory"]["Gold"]>100:
+                        for attack_num in range(0,len(save_data["Party"][2].attacks)):
+                            save_data["Party"][2].attacks[attack_num][2]+=1
+                        temp_data["PageNumber"] = 0
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                        save_data["Inventory"]["Gold"]-=100
+                    else:
+                        temp_data["PageNumber"] = -6
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                elif len(save_data["Party"])==2:
+                    mixer.play_sound("ExampleSound", 0)
+                    temp_data["PageNumber"]=0
+                    temp_data["EncounterData"]["Background"]="Town2"
+            elif input_keys[pygame.K_4]:
+                if len(save_data["Party"]) > 3:
+                    mixer.play_sound("ExampleSound", 0)
+                    if save_data["Inventory"]["Gold"] > 100:
+                        for attack_num in range(0, len(save_data["Party"][3].attacks)):
+                            save_data["Party"][3].attacks[attack_num][2] += 1
+                        temp_data["PageNumber"] = 0
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                        save_data["Inventory"]["Gold"] -= 100
+                    else:
+                        temp_data["PageNumber"] = -6
+                        temp_data["EncounterData"]["Background"] = "Town2"
+                elif len(save_data["Party"]) == 3:
+                    mixer.play_sound("ExampleSound", 0)
+                    temp_data["PageNumber"] = 0
+                    temp_data["EncounterData"]["Background"] = "Town2"
         elif temp_data["PageNumber"]==-3:
             input_keys = pygame.key.get_pressed()
             if len(save_data["GuildHall"])>0:
@@ -1244,6 +1331,19 @@ def encounter(screen, mixer, save_data, temp_data):
             input_keys = pygame.key.get_pressed()
             screen.place_text(
                 "YOU DO NOT HAVE ENOUGH MONEY", 10, 80)
+            screen.place_text(str(1) + "; " +
+                              "LEAVE", 10, 60 - 0 * 10)
+            if input_keys[pygame.K_1]:
+                mixer.play_sound("ExampleSound", 0)
+                temp_data["PageNumber"] = 0
+            while input_keys[pygame.K_1] or input_keys[pygame.K_2]:
+                input_keys = pygame.key.get_pressed()
+                pygame.event.get()
+        elif temp_data["PageNumber"] == -7:
+            input_keys = pygame.key.get_pressed()
+            screen.place_text(
+                "YOU LOST ALL YOUR GOLD ;(", 10, 80)
+            save_data["Inventory"]["Gold"]=0
             screen.place_text(str(1) + "; " +
                               "LEAVE", 10, 60 - 0 * 10)
             if input_keys[pygame.K_1]:
