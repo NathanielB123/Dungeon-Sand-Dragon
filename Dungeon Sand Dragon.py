@@ -202,7 +202,7 @@ def new_game():
          ["SAY HOW THAT'S VERY SAD AND THEN GO ON YOUR WAY", -1]])
     temp_data["EncounterContent"][7]["Dialogue"].append(
         ["'OH REALLY, TELL YA WHAT. I THINK I'LL JOIN MYSELF, GET TA' KILL SOME OF THEM DAMN GOBLINS AND\nGET BACK HOME AT THE SAME TIME!'",
-            ["SAY YOU'LL MEET HIM BACK AT THE GUILD HALL", 3],
+            ["SAY YOU'LL MEET HIM BACK AT THE GUILD HALL", -1, ["StoryProgress", 7, "Done"],["GuildHall", Character("Gundren",1,12,10,12,4,6,6,[["Physical","Ranged",5]])]],
             ["SAY THAT, ON SECOND THOUGHT, YOU DON'T REALLY WANT A DWARF IN YOUR PARTY", -1]])
 
     temp_data["EncounterContent"][6] = {}
@@ -512,7 +512,8 @@ def overworld(screen, mixer, save_data, temp_data):
             except KeyError:
                 if save_data["Position"]==9 or save_data["Position"]==10 or save_data["Position"]==11 or save_data["Position"]==12 or save_data["Position"]==13:
                     if not save_data["Position"] in save_data["StoryProgress"].keys():
-                        temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
+                        temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                        print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
                         save_data["Inventory"]["Jigsaw Pieces"] += 1
@@ -533,11 +534,13 @@ def overworld(screen, mixer, save_data, temp_data):
                             else:
                                 print("ERROR - UNKNOWN")
                     elif not save_data["StoryProgress"][save_data["Position"]] == "Done":
-                        temp_data["EncounterData"] = copy.deepcopy(temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
+                        temp_data["EncounterData"] = copy.deepcopy(
+                            temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                        print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
-                        save_data["StoryProgress"]["JigsawPieces"]+=1
-                        save_data["Inventory"]["Jigsaw Pieces"]+=1
-                        save_data["StoryProgress"][save_data["Position"]]="Done"
+                        save_data["StoryProgress"]["JigsawPieces"] += 1
+                        save_data["Inventory"]["Jigsaw Pieces"] += 1
+                        save_data["StoryProgress"][save_data["Position"]] = "Done"
                         save_data["Encounters"] = []
                         to_delete = []
                         for i in range(0, 6):
@@ -588,16 +591,50 @@ def overworld(screen, mixer, save_data, temp_data):
                         save_data["Position"] == 12 or save_data["Position"] == 13:
                     if not save_data["Position"] in save_data["StoryProgress"].keys():
                         temp_data["EncounterData"] = copy.deepcopy(
-                            temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
+                            temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                        print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
+                        save_data["Inventory"]["Jigsaw Pieces"] += 1
                         save_data["StoryProgress"][save_data["Position"]] = "Done"
+                        save_data["Encounters"] = []
+                        to_delete = []
+                        for i in range(0, 6):
+                            save_data["Encounters"].append([random.randint(0, len(temp_data["PositionData"]) - 1), -1])
+                            while save_data["Encounters"][i][1] == -1:
+                                save_data["Encounters"][i][1] = random.choice(
+                                    temp_data["PositionData"][save_data["Encounters"][i][0]][1])
+                            for i2 in range(0, i):
+                                if save_data["Encounters"][i2] == save_data["Encounters"][i]:
+                                    to_delete.append(i)
+                        for i in range(0, len(to_delete)):
+                            if len(save_data["Encounters"]) > 0:
+                                save_data["Encounters"].pop(to_delete[i] - i)
+                            else:
+                                print("ERROR - UNKNOWN")
                     elif not save_data["StoryProgress"][save_data["Position"]] == "Done":
                         temp_data["EncounterData"] = copy.deepcopy(
-                            temp_data["EncounterContent"]["Jigsaw"][save_data["StoryProgress"]["JigsawPieces"]])
+                            temp_data["EncounterContent"][save_data["StoryProgress"]["JigsawPieces"]])
+                        print(save_data["StoryProgress"]["JigsawPieces"])
                         save_data, temp_data = init_encounter(save_data, temp_data)
                         save_data["StoryProgress"]["JigsawPieces"] += 1
+                        save_data["Inventory"]["Jigsaw Pieces"] += 1
                         save_data["StoryProgress"][save_data["Position"]] = "Done"
+                        save_data["Encounters"] = []
+                        to_delete = []
+                        for i in range(0, 6):
+                            save_data["Encounters"].append([random.randint(0, len(temp_data["PositionData"]) - 1), -1])
+                            while save_data["Encounters"][i][1] == -1:
+                                save_data["Encounters"][i][1] = random.choice(
+                                    temp_data["PositionData"][save_data["Encounters"][i][0]][1])
+                            for i2 in range(0, i):
+                                if save_data["Encounters"][i2] == save_data["Encounters"][i]:
+                                    to_delete.append(i)
+                        for i in range(0, len(to_delete)):
+                            if len(save_data["Encounters"]) > 0:
+                                save_data["Encounters"].pop(to_delete[i] - i)
+                            else:
+                                print("ERROR - UNKNOWN")
                     else:
                         pass
                 else:
