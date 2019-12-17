@@ -1376,7 +1376,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                 if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                     screen.place_image("GameWin",0,0, False)
                                     input_keys = pygame.key.get_pressed()
-                                    while not input_keys[pygame.K_ESC]:
+                                    while not input_keys[pygame.K_ESCAPE]:
                                         input_keys = pygame.key.get_pressed()
                                         screen.update()
                                     pygame.quit()
@@ -1424,7 +1424,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                         screen.place_image("GameWin",0,0, False)
                                         input_keys = pygame.key.get_pressed()
-                                        while not input_keys[pygame.K_ESC]:
+                                        while not input_keys[pygame.K_ESCAPE]:
                                             input_keys = pygame.key.get_pressed()
                                             screen.update()
                                         pygame.quit()
@@ -1470,7 +1470,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                         screen.place_image("GameWin",0,0, False)
                                         input_keys = pygame.key.get_pressed()
-                                        while not input_keys[pygame.K_ESC]:
+                                        while not input_keys[pygame.K_ESCAPE]:
                                             input_keys = pygame.key.get_pressed()
                                             screen.update()
                                         pygame.quit()
@@ -1528,7 +1528,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
                                         screen.place_image("GameWin",0,0, False)
                                         input_keys = pygame.key.get_pressed()
-                                        while not input_keys[pygame.K_ESC]:
+                                        while not input_keys[pygame.K_ESCAPE]:
                                             input_keys = pygame.key.get_pressed()
                                             screen.update()
                                         pygame.quit()
@@ -1585,7 +1585,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
                                     screen.place_image("GameOver",0,0,False)
                                     input_keys=pygame.key.get_pressed()
-                                    while not input_keys[pygame.K_ESC]:
+                                    while not input_keys[pygame.K_ESCAPE]:
                                         input_keys = pygame.key.get_pressed()
                                         screen.update()
                                     pygame.quit()
@@ -1623,7 +1623,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
                                     screen.place_image("GameOver",0,0, False)
                                     input_keys = pygame.key.get_pressed()
-                                    while not input_keys[pygame.K_ESC]:
+                                    while not input_keys[pygame.K_ESCAPE]:
                                         input_keys = pygame.key.get_pressed()
                                         screen.update()
                                     pygame.quit()
