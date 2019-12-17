@@ -642,7 +642,6 @@ def load():
 def overworld(screen, mixer, save_data, temp_data):
     temp_data["ActiveScreen"] = "Overworld"
     temp_data["EncounterData"] = None
-    screen.place_text("I; INVENTORY\n\nESC; SAVE, LOAD OR QUIT",100,100)
     if save_data["StoryProgress"]["JigsawPieces"] < 4:
         screen.place_image("Map", 0, 0)
     else:
@@ -650,6 +649,13 @@ def overworld(screen, mixer, save_data, temp_data):
             temp_data["PositionData"].append([[231, 128], [-1, -1, -1, -1]])
             temp_data["PositionData"][3][1][1] = 13
             temp_data["PositionData"][6][1][3] = 13
+    screen.place_text("I; INVENTORY\n\nESC; SAVE, LOAD OR QUIT", 150, 20)
+    lvl_up=False
+    for i in save_data["Party"]:
+        if i.unspent_points>0:
+            lvl_up=True
+    if lvl_up:
+        screen.place_image("AlertOld", 135, 15,False)
     if not temp_data["Moving"][0]:
         screen.place_image("Flag2", temp_data["PositionData"][save_data["Position"]][0][0],
                            temp_data["PositionData"][save_data["Position"]][0][1])
@@ -1741,12 +1747,12 @@ def encounter(screen, mixer, save_data, temp_data):
             elif input_keys[pygame.K_2]:
                 if len(save_data["Party"]) > 1:
                     mixer.play_sound("ExampleSound", 0)
-                    if save_data["Inventory"]["Gold"] > 100:
+                    if save_data["Inventory"]["Gold"] >= 50:
                         for attack_num in range(0, len(save_data["Party"][1].attacks)):
                             save_data["Party"][1].attacks[attack_num][2] += 1
                         temp_data["PageNumber"] = 0
                         temp_data["EncounterData"]["Background"] = "Town2"
-                        save_data["Inventory"]["Gold"] -= 100
+                        save_data["Inventory"]["Gold"] -= 50
                     else:
                         temp_data["PageNumber"] = -6
                         temp_data["EncounterData"]["Background"] = "Town2"
@@ -1757,12 +1763,12 @@ def encounter(screen, mixer, save_data, temp_data):
             elif input_keys[pygame.K_3]:
                 if len(save_data["Party"]) > 2:
                     mixer.play_sound("ExampleSound", 0)
-                    if save_data["Inventory"]["Gold"] > 100:
+                    if save_data["Inventory"]["Gold"] >=50:
                         for attack_num in range(0, len(save_data["Party"][2].attacks)):
                             save_data["Party"][2].attacks[attack_num][2] += 1
                         temp_data["PageNumber"] = 0
                         temp_data["EncounterData"]["Background"] = "Town2"
-                        save_data["Inventory"]["Gold"] -= 100
+                        save_data["Inventory"]["Gold"] -= 50
                     else:
                         temp_data["PageNumber"] = -6
                         temp_data["EncounterData"]["Background"] = "Town2"
@@ -1773,12 +1779,12 @@ def encounter(screen, mixer, save_data, temp_data):
             elif input_keys[pygame.K_4]:
                 if len(save_data["Party"]) > 3:
                     mixer.play_sound("ExampleSound", 0)
-                    if save_data["Inventory"]["Gold"] > 100:
+                    if save_data["Inventory"]["Gold"] >= 50:
                         for attack_num in range(0, len(save_data["Party"][3].attacks)):
                             save_data["Party"][3].attacks[attack_num][2] += 1
                         temp_data["PageNumber"] = 0
                         temp_data["EncounterData"]["Background"] = "Town2"
-                        save_data["Inventory"]["Gold"] -= 100
+                        save_data["Inventory"]["Gold"] -= 50
                     else:
                         temp_data["PageNumber"] = -6
                         temp_data["EncounterData"]["Background"] = "Town2"
