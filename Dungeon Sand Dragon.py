@@ -323,7 +323,7 @@ def new_game():
                                                                                    ["Magical", "Ranged",
                                                                                     8]])  # 2 attacks so 8 instead of 9
     temp_data["EnemyNPCs"]["Boss4"] = Character("Slime", 8, 16, 16, 16, 16, 16, 16, [["Magical", "Ranged", 10]])
-    temp_data["EnemyNPCs"]["Boss5"] = Character("Dragon", 10, 20, 20, 20, 20, 20, 20, [["Magical", "Ranged", 10],
+    temp_data["EnemyNPCs"]["Boss5"] = Character("SandDragon", 10, 20, 20, 20, 20, 20, 20, [["Magical", "Ranged", 10],
                                                                                        ["Physical", "Melee",
                                                                                         10]])  # 2 attacks so 10 instead of 12
 
@@ -649,6 +649,7 @@ def overworld(screen, mixer, save_data, temp_data):
             temp_data["PositionData"].append([[231, 128], [-1, -1, -1, -1]])
             temp_data["PositionData"][3][1][1] = 13
             temp_data["PositionData"][6][1][3] = 13
+        screen.place_image("Map2", 0, 0)
     screen.place_text("I; INVENTORY\n\nESC; SAVE, LOAD OR QUIT", 150, 20)
     lvl_up=False
     for i in save_data["Party"]:
@@ -1373,15 +1374,6 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "Selection"][
                                                                                                           "Enemy"]].level * 15 + 10
                                     save_data["Party"][i3].check_for_level_up()
-                                if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                    screen.place_image("GameWin",0,0, False)
-                                    input_keys = pygame.key.get_pressed()
-                                    while not input_keys[pygame.K_ESCAPE]:
-                                        input_keys = pygame.key.get_pressed()
-                                        screen.update()
-                                    pygame.quit()
-                                    while True:
-                                        pass
                                 temp_data["EncounterData"]["EnemyParty"].pop(
                                     temp_data["EncounterData"]["Selection"]["Enemy"])
                                 temp_data["EncounterData"]["TurnOrder"].remove(
@@ -1421,15 +1413,6 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "Selection"][
                                                                                      "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
-                                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                        screen.place_image("GameWin",0,0, False)
-                                        input_keys = pygame.key.get_pressed()
-                                        while not input_keys[pygame.K_ESCAPE]:
-                                            input_keys = pygame.key.get_pressed()
-                                            screen.update()
-                                        pygame.quit()
-                                        while True:
-                                            pass
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
                                         temp_data["EncounterData"]["Selection"]["Enemy"])
@@ -1467,15 +1450,6 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "Selection"][
                                                                                      "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
-                                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                        screen.place_image("GameWin",0,0, False)
-                                        input_keys = pygame.key.get_pressed()
-                                        while not input_keys[pygame.K_ESCAPE]:
-                                            input_keys = pygame.key.get_pressed()
-                                            screen.update()
-                                        pygame.quit()
-                                        while True:
-                                            pass
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
                                         temp_data["EncounterData"]["Selection"]["Enemy"])
@@ -1525,15 +1499,6 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "Selection"][
                                                                                      "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
-                                    if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                        screen.place_image("GameWin",0,0, False)
-                                        input_keys = pygame.key.get_pressed()
-                                        while not input_keys[pygame.K_ESCAPE]:
-                                            input_keys = pygame.key.get_pressed()
-                                            screen.update()
-                                        pygame.quit()
-                                        while True:
-                                            pass
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
                                         temp_data["EncounterData"]["Selection"]["Enemy"])
@@ -1583,10 +1548,10 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
-                                    screen.place_image("GameOver",0,0,False)
                                     input_keys=pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESCAPE]:
                                         input_keys = pygame.key.get_pressed()
+                                        screen.place_image("GameOver", 0, 0, False)
                                         screen.update()
                                     pygame.quit()
                                     while True:
@@ -1621,11 +1586,11 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
-                                    screen.place_image("GameOver",0,0, False)
                                     input_keys = pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESCAPE]:
                                         input_keys = pygame.key.get_pressed()
                                         screen.update()
+                                        screen.place_image("GameOver", 0, 0, False)
                                     pygame.quit()
                                     while True:
                                         pass
@@ -2071,46 +2036,52 @@ def inventory(screen, mixer, save_data, temp_data):
     else:
         if input_keys[pygame.K_1]:
             mixer.play_sound("ExampleSound", 0)
-            save_data["Party"][temp_data["Selection"]["Character"]].strength += 1
-            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
-            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
-            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
-                temp_data["UIPos"] = 0
+            if not save_data["Party"][temp_data["Selection"]["Character"]].strength==20:
+                save_data["Party"][temp_data["Selection"]["Character"]].strength += 1
+                save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
+                save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+                if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
+                    temp_data["UIPos"] = 0
         elif input_keys[pygame.K_2]:
             mixer.play_sound("ExampleSound", 0)
-            save_data["Party"][temp_data["Selection"]["Character"]].constitution += 1
-            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
-            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
-            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
-                temp_data["UIPos"] = 0
+            if not save_data["Party"][temp_data["Selection"]["Character"]].constitution == 20:
+                save_data["Party"][temp_data["Selection"]["Character"]].constitution += 1
+                save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
+                save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+                if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
+                    temp_data["UIPos"] = 0
         elif input_keys[pygame.K_3]:
             mixer.play_sound("ExampleSound", 0)
-            save_data["Party"][temp_data["Selection"]["Character"]].dexterity += 1
-            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
-            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
-            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
-                temp_data["UIPos"] = 0
+            if not save_data["Party"][temp_data["Selection"]["Character"]].dexterity == 20:
+                save_data["Party"][temp_data["Selection"]["Character"]].dexterity += 1
+                save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
+                save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+                if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
+                    temp_data["UIPos"] = 0
         elif input_keys[pygame.K_4]:
             mixer.play_sound("ExampleSound", 0)
-            save_data["Party"][temp_data["Selection"]["Character"]].intelligence += 1
-            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
-            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
-            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
-                temp_data["UIPos"] = 0
+            if not save_data["Party"][temp_data["Selection"]["Character"]].intelligence == 20:
+                save_data["Party"][temp_data["Selection"]["Character"]].intelligence += 1
+                save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
+                save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+                if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
+                    temp_data["UIPos"] = 0
         elif input_keys[pygame.K_5]:
             mixer.play_sound("ExampleSound", 0)
-            save_data["Party"][temp_data["Selection"]["Character"]].wisdom += 1
-            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
-            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
-            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
-                temp_data["UIPos"] = 0
+            if not save_data["Party"][temp_data["Selection"]["Character"]].wisdom == 20:
+                save_data["Party"][temp_data["Selection"]["Character"]].wisdom += 1
+                save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
+                save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+                if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
+                    temp_data["UIPos"] = 0
         elif input_keys[pygame.K_6]:
             mixer.play_sound("ExampleSound", 0)
-            save_data["Party"][temp_data["Selection"]["Character"]].charisma += 1
-            save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
-            save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
-            if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
-                temp_data["UIPos"] = 0
+            if not save_data["Party"][temp_data["Selection"]["Character"]].charisma == 20:
+                save_data["Party"][temp_data["Selection"]["Character"]].charisma += 1
+                save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
+                save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
+                if save_data["Party"][temp_data["Selection"]["Character"]].unspent_points == 0:
+                    temp_data["UIPos"] = 0
     while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4] or \
             input_keys[pygame.K_5] or input_keys[pygame.K_6]:
         input_keys = pygame.key.get_pressed()
@@ -2163,19 +2134,16 @@ def start(screen, mixer, save_data, temp_data):
     if input_keys[pygame.K_1]:
         mixer.play_sound("ExampleSound",0)
         temp_data["ActiveScreen"] = "Encounter"
-        while input_keys[pygame.K_ESCAPE]:
+        while input_keys[pygame.K_1]:
             screen.update()
             input_keys = pygame.key.get_pressed()
     elif input_keys[pygame.K_2]:
         mixer.play_sound("ExampleSound",0)
         save_data=load()
         temp_data["ActiveScreen"] = "Overworld"
-        while input_keys[pygame.K_ESCAPE]:
+        while input_keys[pygame.K_2]:
             screen.update()
             input_keys = pygame.key.get_pressed()
-    while input_keys[pygame.K_1] or input_keys[pygame.K_2]:
-        screen.update()
-        input_keys=pygame.key.get_pressed()
     return save_data, temp_data
 
 
@@ -2187,37 +2155,47 @@ def main():
     save_data, temp_data = new_game()
     temp_data["ActiveScreen"]="Start"
     while True:
-        frame_time = time.time()
-        if temp_data["ActiveScreen"] == "Start":
-            save_data, temp_data = start(screen, mixer, save_data, temp_data)
-            mixer.play_theme()
-        elif temp_data["ActiveScreen"] == "Encounter":
-            save_data, temp_data = encounter(screen, mixer, save_data, temp_data)
-            if temp_data["EncounterData"]["Type"]=="Battle":
-                try:
-                    if temp_data["EncounterData"]["EnemyParty"][0].name=="SandDragon" or temp_data["EncounterData"]["EnemyParty"][0].name=="Troll" or temp_data["EncounterData"]["EnemyParty"][0].name=="Orb" or temp_data["EncounterData"]["EnemyParty"][0].name=="Golem" or temp_data["EncounterData"]["EnemyParty"][0].name=="Slime":
-                        mixer.play_boss()
-                    else:
+        if not (save_data["Inventory"]["Jigsaw Pieces"]==5 and temp_data["ActiveScreen"]=="Overworld"):
+            frame_time = time.time()
+            if temp_data["ActiveScreen"] == "Start":
+                save_data, temp_data = start(screen, mixer, save_data, temp_data)
+                mixer.play_theme()
+            elif temp_data["ActiveScreen"] == "Encounter":
+                save_data, temp_data = encounter(screen, mixer, save_data, temp_data)
+                if temp_data["EncounterData"]["Type"]=="Battle":
+                    try:
+                        if temp_data["EncounterData"]["EnemyParty"][0].name=="SandDragon" or temp_data["EncounterData"]["EnemyParty"][0].name=="Troll" or temp_data["EncounterData"]["EnemyParty"][0].name=="Orb" or temp_data["EncounterData"]["EnemyParty"][0].name=="Golem" or temp_data["EncounterData"]["EnemyParty"][0].name=="Slime":
+                            mixer.play_boss()
+                        else:
+                            mixer.play_battle()
+                    except IndexError:
                         mixer.play_battle()
-                except IndexError:
-                    mixer.play_battle()
-            elif temp_data["EncounterData"]["Background"]=="Town" or temp_data["EncounterData"]["Background"]=="Town2":
-                mixer.play_town()
+                elif temp_data["EncounterData"]["Background"]=="Town" or temp_data["EncounterData"]["Background"]=="Town2":
+                    mixer.play_town()
+                else:
+                    mixer.play_spook()
+            elif temp_data["ActiveScreen"] == "Inventory":
+                save_data, temp_data = inventory(screen, mixer, save_data, temp_data)
+            elif temp_data["ActiveScreen"] == "Overworld":
+                save_data, temp_data = overworld(screen, mixer, save_data, temp_data)
+                mixer.play_theme()
+            elif temp_data["ActiveScreen"] == "Settings":
+                save_data, temp_data = settings(screen, mixer, save_data, temp_data)
             else:
-                mixer.play_spook()
-        elif temp_data["ActiveScreen"] == "Inventory":
-            save_data, temp_data = inventory(screen, mixer, save_data, temp_data)
-        elif temp_data["ActiveScreen"] == "Overworld":
-            save_data, temp_data = overworld(screen, mixer, save_data, temp_data)
-            mixer.play_theme()
-        elif temp_data["ActiveScreen"] == "Settings":
-            save_data, temp_data = settings(screen, mixer, save_data, temp_data)
+                print("ERROR: Active screen is set to " + temp_data["ActiveScreen"] + " which does not exist")
+            temp_data["AnimateTick"] += 1
+            screen.update()
+            if frame_time + 0.016 > time.time():
+                time.sleep(0.017 - (time.time() - frame_time))
         else:
-            print("ERROR: Active screen is set to " + temp_data["ActiveScreen"] + " which does not exist")
-        temp_data["AnimateTick"] += 1
-        screen.update()
-        if frame_time + 0.016 > time.time():
-            time.sleep(0.017 - (time.time() - frame_time))
+            input_keys = pygame.key.get_pressed()
+            while not input_keys[pygame.K_ESCAPE]:
+                input_keys = pygame.key.get_pressed()
+                screen.place_image("GameWin", 0, 0, False)
+                screen.update()
+            pygame.quit()
+            while True:
+                pass
 
 
 main()
