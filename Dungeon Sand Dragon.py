@@ -98,7 +98,8 @@ def new_game():
     temp_data["EncounterContent"][4]["Character"] = "None"
     temp_data["EncounterContent"][4]["Dialogue"] = []
     temp_data["EncounterContent"][4]["Dialogue"].append(
-        ["WELCOME TO THE VILLAGE OF QUINTUSESTINHORTO", ["SHOPS", 1, ["Background", "Town"]], ["GUILD HALL", 2], ["TAVERN", 3],
+        ["WELCOME TO THE VILLAGE OF QUINTUSESTINHORTO", ["SHOPS", 1, ["Background", "Town"]], ["GUILD HALL", 2],
+         ["TAVERN", 3],
          ["LEAVE", -1]])
     temp_data["EncounterContent"][4]["Dialogue"].append(
         ["'WELCOME ADVENTURER, TO MY HUMBLE STORE, TAKE A LOOK AT MY GOODS;'", ["TAKE A LOOK", -2],
@@ -1484,11 +1485,13 @@ def encounter(screen, mixer, save_data, temp_data):
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Heal":
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max > \
                                     save_data["Party"][
-                                        temp_data["EncounterData"]["Selection"]["Enemy"]].health_current + save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
-                            temp_data["EncounterData"]["Selection"]["Attack"]][2]:
+                                        temp_data["EncounterData"]["Selection"]["Enemy"]].health_current + \
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
+                                        temp_data["EncounterData"]["Selection"]["Attack"]][2]:
                                 save_data["Party"][
-                                    temp_data["EncounterData"]["Selection"]["Enemy"]].health_current += save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
-                            temp_data["EncounterData"]["Selection"]["Attack"]][2]
+                                    temp_data["EncounterData"]["Selection"]["Enemy"]].health_current += \
+                                save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
+                                    temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             else:
                                 save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current = \
                                     save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max
