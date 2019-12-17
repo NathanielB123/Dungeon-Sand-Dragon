@@ -154,13 +154,13 @@ def new_game():
                                                                                                 Character("Garik", 1,
                                                                                                           12, 14, 2, 8,
                                                                                                           10, 4, [[
-                                                                                                                      "Physical",
-                                                                                                                      "Melee",
-                                                                                                                      5],
-                                                                                                                  [
-                                                                                                                      "Special",
-                                                                                                                      "Taunt",
-                                                                                                                      10]])]],
+                                                                                                        "Physical",
+                                                                                                        "Melee",
+                                                                                                        5],
+                                                                                                              [
+                                                                                                                  "Special",
+                                                                                                                  "Taunt",
+                                                                                                                  10]])]],
             ["REFUSE HIS OFFER", 6]])
     temp_data["EncounterContent"][5]["Dialogue"].append(
         [
@@ -199,15 +199,15 @@ def new_game():
                                                                                                 Character("Loran", 1, 8,
                                                                                                           6, 14, 8, 8,
                                                                                                           6, [[
-                                                                                                                  "Physical",
-                                                                                                                  "Melee",
-                                                                                                                  5], [
-                                                                                                                  "Physical",
-                                                                                                                  "Ranged",
-                                                                                                                  5], [
-                                                                                                                  "Special",
-                                                                                                                  "Steal",
-                                                                                                                  10]])]],
+                                                                                                        "Physical",
+                                                                                                        "Melee",
+                                                                                                        5], [
+                                                                                                        "Physical",
+                                                                                                        "Ranged",
+                                                                                                        5], [
+                                                                                                        "Special",
+                                                                                                        "Steal",
+                                                                                                        10]])]],
             ["SAY THAT YOU DON'T WANT ANY DAMN THIEVING ELVES IN YOUR PARTY", 4]])
 
     temp_data["EncounterContent"][0] = {}
@@ -324,8 +324,8 @@ def new_game():
                                                                                     8]])  # 2 attacks so 8 instead of 9
     temp_data["EnemyNPCs"]["Boss4"] = Character("Slime", 8, 16, 16, 16, 16, 16, 16, [["Magical", "Ranged", 10]])
     temp_data["EnemyNPCs"]["Boss5"] = Character("SandDragon", 10, 20, 20, 20, 20, 20, 20, [["Magical", "Ranged", 10],
-                                                                                       ["Physical", "Melee",
-                                                                                        10]])  # 2 attacks so 10 instead of 12
+                                                                                           ["Physical", "Melee",
+                                                                                            10]])  # 2 attacks so 10 instead of 12
 
     temp_data["EncounterContent"]["Jigsaw"] = []
     temp_data["EncounterContent"]["Jigsaw"].append({})
@@ -461,17 +461,17 @@ class SoundManager:
     def __init__(self):
         self.Sounds = {}
         pygame.mixer.set_num_channels(10)
-        self.theme_channel=pygame.mixer.Channel(3)
+        self.theme_channel = pygame.mixer.Channel(3)
         self.town_channel = pygame.mixer.Channel(4)
         self.spook_channel = pygame.mixer.Channel(5)
         self.battle_channel = pygame.mixer.Channel(6)
         self.boss_channel = pygame.mixer.Channel(7)
         self.luca_channel = pygame.mixer.Channel(2)
 
-    def play_luca(self,number):
+    def play_luca(self, number):
         if self.luca_channel.get_busy():
             self.luca_channel.stop()
-        self.luca_channel.play(self.Sounds["Luca"+str(number)])
+        self.luca_channel.play(self.Sounds["Luca" + str(number)])
 
     def load_sounds(self):
         for Sound in os.listdir("Sounds"):
@@ -487,7 +487,7 @@ class SoundManager:
         elif self.battle_channel.get_busy():
             self.battle_channel.stop()
         if not self.theme_channel.get_busy():
-            self.theme_channel.play(self.Sounds["DesertTheme1"],loops=-1)
+            self.theme_channel.play(self.Sounds["DesertTheme1"], loops=-1)
 
     def play_town(self):
         if self.theme_channel.get_busy():
@@ -499,7 +499,7 @@ class SoundManager:
         elif self.battle_channel.get_busy():
             self.battle_channel.stop()
         if not self.town_channel.get_busy():
-            self.town_channel.play(self.Sounds["TownTheme"],loops=-1)
+            self.town_channel.play(self.Sounds["TownTheme"], loops=-1)
 
     def play_spook(self):
         if self.theme_channel.get_busy():
@@ -511,7 +511,7 @@ class SoundManager:
         elif self.battle_channel.get_busy():
             self.battle_channel.stop()
         if not self.spook_channel.get_busy():
-            self.spook_channel.play(self.Sounds["SpookTheme"],loops=-1)
+            self.spook_channel.play(self.Sounds["SpookTheme"], loops=-1)
 
     def play_battle(self):
         if self.theme_channel.get_busy():
@@ -524,7 +524,7 @@ class SoundManager:
             self.boss_channel.stop()
         if not self.battle_channel.get_busy():
             self.battle_channel.play(self.Sounds["BattleLoop"])
-            for _ in range(0,99):
+            for _ in range(0, 99):
                 self.battle_channel.queue(self.Sounds["BattleLoop1"])
 
     def play_boss(self):
@@ -538,7 +538,7 @@ class SoundManager:
             self.battle_channel.stop()
         if not self.boss_channel.get_busy():
             self.boss_channel.play(self.Sounds["BossLoop"])
-            for _ in range(0,99):
+            for _ in range(0, 99):
                 self.boss_channel.queue(self.Sounds["BossLoop1"])
 
     def play_sound(self, sound_id, loops):
@@ -548,6 +548,7 @@ class SoundManager:
             print(
                 "ERROR: Sound " + sound_id + " has not been loaded. Make sure you have placed the sound in "
                                              "the sounds folder and spelt the file name correctly.")
+
     @staticmethod
     def stop_sounds():
         pygame.mixer.stop()
@@ -593,10 +594,10 @@ class Character:
         self.dodge_bonus = int(self.mods["Dexterity"] * 6)
         self.attack_bonus = int((self.mods["Dexterity"] * 3) + (self.mods["Strength"] * 3))
         self.spell_bonus = int((self.mods["Charisma"] * 3) + (self.mods["Intelligence"] * 3))
-        self.stamina_max = int((10 + self.mods["Strength"] * 2) * (self.level / 4))+8
-        self.stamina_regen = int((self.mods["Strength"]) * (self.level / 5))+1
-        self.mana_max = int((10 + self.mods["Wisdom"] * 2) * (self.level / 4))+8
-        self.mana_regen = int((self.mods["Intelligence"]) * (self.level / 5))+1
+        self.stamina_max = int((10 + self.mods["Strength"] * 2) * (self.level / 4)) + 8
+        self.stamina_regen = int((self.mods["Strength"]) * (self.level / 5)) + 1
+        self.mana_max = int((10 + self.mods["Wisdom"] * 2) * (self.level / 4)) + 8
+        self.mana_regen = int((self.mods["Intelligence"]) * (self.level / 5)) + 1
         self.initiative_bonus = int(self.mods["Dexterity"] * 4 + self.mods["Intelligence"] + self.mods["Wisdom"])
         self.health_current = self.health_max
         self.stamina_current = self.stamina_max
@@ -651,12 +652,12 @@ def overworld(screen, mixer, save_data, temp_data):
             temp_data["PositionData"][6][1][3] = 13
         screen.place_image("Map2", 0, 0)
     screen.place_text("I; INVENTORY\n\nESC; SAVE, LOAD OR QUIT", 150, 20)
-    lvl_up=False
+    lvl_up = False
     for i in save_data["Party"]:
-        if i.unspent_points>0:
-            lvl_up=True
+        if i.unspent_points > 0:
+            lvl_up = True
     if lvl_up:
-        screen.place_image("AlertOld", 135, 15,False)
+        screen.place_image("AlertOld", 135, 15, False)
     if not temp_data["Moving"][0]:
         screen.place_image("Flag2", temp_data["PositionData"][save_data["Position"]][0][0],
                            temp_data["PositionData"][save_data["Position"]][0][1])
@@ -744,7 +745,7 @@ def overworld(screen, mixer, save_data, temp_data):
                     print("ERROR: NO ENCOUNTER AT POSITION " + str(save_data["Position"]))
         elif input_keys[pygame.K_i]:
             temp_data["ActiveScreen"] = "Inventory"
-            mixer.play_sound("ExampleSound",0)
+            mixer.play_sound("ExampleSound", 0)
             temp_data["UIPos"] = 0
             temp_data["Selection"] = {}
             while input_keys[pygame.K_i]:
@@ -753,7 +754,7 @@ def overworld(screen, mixer, save_data, temp_data):
         elif input_keys[pygame.K_ESCAPE]:
             temp_data["ActiveScreen"] = "Settings"
             while input_keys[pygame.K_ESCAPE]:
-                mixer.play_sound("ExampleSound",0)
+                mixer.play_sound("ExampleSound", 0)
                 screen.update()
                 input_keys = pygame.key.get_pressed()
     else:
@@ -889,7 +890,7 @@ def init_encounter(save_data, temp_data):
         temp_data["EncounterData"]["Selection"] = {"Attack": 0, "Enemy": 0}
         temp_data["EncounterData"]["AttackAnimProg"] = 0
         temp_data["EncounterData"]["TurnOrder"] = []
-        temp_data["ThreatenActive"]=False
+        temp_data["ThreatenActive"] = False
         temp_list = []
         for character in save_data["Party"]:
             temp_list.append(character.initiative_bonus)
@@ -951,7 +952,10 @@ def encounter(screen, mixer, save_data, temp_data):
                                             save_data["Party"][i].mana_max) * 48, 5)
                     offset += 6
             else:
-                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Melee" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "DoubleAttack" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal":
+                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Melee" or \
+                        save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
+                            1] == "DoubleAttack" or \
+                        save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal":
                     if not save_data["Party"][i].name == save_data["Name"]:
                         screen.place_image(save_data["Party"][i].name,
                                            ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
@@ -972,7 +976,9 @@ def encounter(screen, mixer, save_data, temp_data):
                                             ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 60 + 40) *
                                             temp_data["EncounterData"][
                                                 "AttackAnimProg"]) / 30)
-                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][0] == "Magical" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "DoubleAttack":
+                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][0] == "Magical" or \
+                        save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
+                            1] == "DoubleAttack":
                     if not save_data["Party"][i].name == save_data["Name"]:
                         screen.place_image(save_data["Party"][i].name,
                                            i * 30 + 40,
@@ -1023,7 +1029,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                         ((temp_data["EncounterData"]["Selection"]["Enemy"]) * 60 + 64) *
                                         temp_data["EncounterData"][
                                             "AttackAnimProg"]) / 30)
-                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1]=="Pin":
+                if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Pin":
                     screen.place_image("ProjectilePhysicalMagic",
                                        ((i * 30 + 40) * (30 - temp_data["EncounterData"]["AttackAnimProg"]) +
                                         ((temp_data["EncounterData"]["Selection"]["Enemy"]) * -30 + 400) *
@@ -1034,7 +1040,10 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"][
                                             "AttackAnimProg"]) / 30)
                 if save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
-                    0] == "Special" and not (save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "DoubleAttack" or save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal"):
+                    0] == "Special" and not (
+                        save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][
+                            1] == "DoubleAttack" or
+                        save_data["Party"][i].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal"):
                     screen.place_image(save_data["Party"][i].name,
                                        i * 30 + 40,
                                        i * 60 + 40)
@@ -1109,44 +1118,52 @@ def encounter(screen, mixer, save_data, temp_data):
                                           save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][
                                               0].upper() + " " +
                                           save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][
-                                              1].upper()+" ("+
+                                              1].upper() + " (" +
                                           str(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[OptionNum][
                                                   2]) + " " +
                                           "MANA-STAMINA)", 10, 30 - OptionNum * 10)
                     input_keys = pygame.key.get_pressed()
-                    physical=False
-                    magical=False
-                    for i in range(0,len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks)):
-                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[i][0]=="Physical":
-                            physical=True
-                        elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[i][0]=="Magical":
-                            magical=True
+                    physical = False
+                    magical = False
+                    for i in range(0, len(save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks)):
+                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[i][0] == "Physical":
+                            physical = True
+                        elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[i][0] == "Magical":
+                            magical = True
                     if input_keys[pygame.K_1] and len(
                             save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks) > 0:
                         mixer.play_sound("ExampleSound", 0)
-                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][0]=="Special":
+                        if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][0] == "Special":
                             if magical and physical:
-                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2] and \
-                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current-=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2] and \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             elif magical:
-                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current-=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             elif physical:
-                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >=save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
+                                if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]:
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             else:
                                 print("ERROR UNKNOWN")
                             if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][1] == "Taunt":
                                 temp_data["EncounterData"]["AttackAnimProg"] = 1
-                                temp_data["EncounterData"]["UIPos"] =0
+                                temp_data["EncounterData"]["UIPos"] = 0
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 0
                             temp_data["EncounterData"]["UIPos"] += 1
@@ -1160,30 +1177,30 @@ def encounter(screen, mixer, save_data, temp_data):
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 1
                                     temp_data["EncounterData"]["UIPos"] += 1
                             elif magical:
                                 if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 1
                                     temp_data["EncounterData"]["UIPos"] += 1
                             elif physical:
                                 if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 1
                                     temp_data["EncounterData"]["UIPos"] += 1
                             else:
                                 print("ERROR UNKNOWN")
-                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1]=="Taunt":
+                            if save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][1] == "Taunt":
                                 temp_data["EncounterData"]["AttackAnimProg"] = 1
-                                temp_data["EncounterData"]["UIPos"] =0
+                                temp_data["EncounterData"]["UIPos"] = 0
                         else:
                             temp_data["EncounterData"]["Selection"]["Attack"] = 1
                             temp_data["EncounterData"]["UIPos"] += 1
@@ -1197,23 +1214,23 @@ def encounter(screen, mixer, save_data, temp_data):
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             elif magical:
                                 if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current >= \
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             elif physical:
                                 if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current >= \
                                         save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
+                                        save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[2][2]
                                     temp_data["EncounterData"]["Selection"]["Attack"] = 0
                                     temp_data["EncounterData"]["UIPos"] += 1
                             else:
@@ -1228,7 +1245,8 @@ def encounter(screen, mixer, save_data, temp_data):
                         input_keys = pygame.key.get_pressed()
                         pygame.event.get()
             elif temp_data["EncounterData"]["UIPos"] == 1:
-                if not save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[temp_data["EncounterData"]["Selection"]["Attack"]][1]=="Heal":
+                if not save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
+                           temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Heal":
                     for OptionNum in range(0, len(temp_data["EncounterData"]["EnemyParty"])):
                         screen.place_text(str(OptionNum + 1) + "; " +
                                           temp_data["EncounterData"]["EnemyParty"][OptionNum].name.upper() + " (" + str(
@@ -1276,10 +1294,10 @@ def encounter(screen, mixer, save_data, temp_data):
             if not temp_data["ThreatenActive"]:
                 temp_data["EncounterData"]["Selection"]["Enemy"] = random.randrange(0, len(save_data["Party"]))
             else:
-                num=0
-                for temp_temp_temp_temp in range(0,len(save_data["Party"])):
+                num = 0
+                for temp_temp_temp_temp in range(0, len(save_data["Party"])):
                     if save_data["Party"][temp_temp_temp_temp].name == "Garik":
-                        num=temp_temp_temp_temp
+                        num = temp_temp_temp_temp
                 temp_data["EncounterData"]["Selection"]["Enemy"] = num
                 temp_data["ThreatenActive"] = False
             temp_data["EncounterData"]["Selection"]["Attack"] = random.randrange(
@@ -1319,14 +1337,14 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                       "EncounterData"][
                                                                                                       "Selection"][
                                                                                                       "Enemy"]].level * 15 + 10
-                                for i3 in range(0,len(save_data["Party"])):
+                                for i3 in range(0, len(save_data["Party"])):
                                     save_data["Party"][i3].exp += temp_data[
-                                                                                                      "EncounterData"][
-                                                                                                      "EnemyParty"][
-                                                                                                      temp_data[
-                                                                                                          "EncounterData"][
-                                                                                                          "Selection"][
-                                                                                                          "Enemy"]].level * 15 + 10
+                                                                      "EncounterData"][
+                                                                      "EnemyParty"][
+                                                                      temp_data[
+                                                                          "EncounterData"][
+                                                                          "Selection"][
+                                                                          "Enemy"]].level * 15 + 10
                                     save_data["Party"][i3].check_for_level_up()
                                 save_data["Party"][temp_data["EncounterData"]["Turn"]].check_for_level_up()
                                 save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
@@ -1365,14 +1383,14 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                       "EncounterData"][
                                                                                                       "Selection"][
                                                                                                       "Enemy"]].level * 15 + 10
-                                for i3 in range(0,len(save_data["Party"])):
+                                for i3 in range(0, len(save_data["Party"])):
                                     save_data["Party"][i3].exp += temp_data[
-                                                                                                      "EncounterData"][
-                                                                                                      "EnemyParty"][
-                                                                                                      temp_data[
-                                                                                                          "EncounterData"][
-                                                                                                          "Selection"][
-                                                                                                          "Enemy"]].level * 15 + 10
+                                                                      "EncounterData"][
+                                                                      "EnemyParty"][
+                                                                      temp_data[
+                                                                          "EncounterData"][
+                                                                          "Selection"][
+                                                                          "Enemy"]].level * 15 + 10
                                     save_data["Party"][i3].check_for_level_up()
                                 temp_data["EncounterData"]["EnemyParty"].pop(
                                     temp_data["EncounterData"]["Selection"]["Enemy"])
@@ -1394,7 +1412,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     0.1 * save_data["Party"][temp_data["EncounterData"]["Turn"]].attack_bonus + 1)):
                                 temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]*3
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2] * 3
                                 if temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
@@ -1406,12 +1424,12 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "Enemy"]].level * 15 + 10
                                     for i3 in range(0, len(save_data["Party"])):
                                         save_data["Party"][i3].exp += temp_data[
-                                                                                 "EncounterData"][
-                                                                                 "EnemyParty"][
-                                                                                 temp_data[
-                                                                                     "EncounterData"][
-                                                                                     "Selection"][
-                                                                                     "Enemy"]].level * 15 + 10
+                                                                          "EncounterData"][
+                                                                          "EnemyParty"][
+                                                                          temp_data[
+                                                                              "EncounterData"][
+                                                                              "Selection"][
+                                                                              "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1431,7 +1449,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                     0.1 * save_data["Party"][temp_data["EncounterData"]["Turn"]].spell_bonus + 1)):
                                 temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current -= \
-                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2]*3
+                                    save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[1][2] * 3
                                 if temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
@@ -1443,12 +1461,12 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "Enemy"]].level * 15 + 10
                                     for i3 in range(0, len(save_data["Party"])):
                                         save_data["Party"][i3].exp += temp_data[
-                                                                                 "EncounterData"][
-                                                                                 "EnemyParty"][
-                                                                                 temp_data[
-                                                                                     "EncounterData"][
-                                                                                     "Selection"][
-                                                                                     "Enemy"]].level * 15 + 10
+                                                                          "EncounterData"][
+                                                                          "EnemyParty"][
+                                                                          temp_data[
+                                                                              "EncounterData"][
+                                                                              "Selection"][
+                                                                              "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1464,13 +1482,17 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["ActiveScreen"] = "Overworld"
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Heal":
-                            if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max>save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current+10:
-                                save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current+=10
+                            if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max > \
+                                    save_data["Party"][
+                                        temp_data["EncounterData"]["Selection"]["Enemy"]].health_current + 10:
+                                save_data["Party"][
+                                    temp_data["EncounterData"]["Selection"]["Enemy"]].health_current += 10
                             else:
-                                save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current =save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max
+                                save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current = \
+                                    save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_max
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Taunt":
-                            temp_data["ThreatenActive"]=True
+                            temp_data["ThreatenActive"] = True
                         elif save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[
                             temp_data["EncounterData"]["Selection"]["Attack"]][1] == "Steal":
                             random_number = random.randint(0, 100)
@@ -1480,7 +1502,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                 temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current -= \
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].attacks[0][2]
-                                save_data["Inventory"]["Gold"] += random.randint(0,2)*10
+                                save_data["Inventory"]["Gold"] += random.randint(0, 2) * 10
                                 if temp_data["EncounterData"]["EnemyParty"][
                                     temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                     save_data["Party"][temp_data["EncounterData"]["Turn"]].exp += temp_data[
@@ -1492,12 +1514,12 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "Enemy"]].level * 15 + 10
                                     for i3 in range(0, len(save_data["Party"])):
                                         save_data["Party"][i3].exp += temp_data[
-                                                                                 "EncounterData"][
-                                                                                 "EnemyParty"][
-                                                                                 temp_data[
-                                                                                     "EncounterData"][
-                                                                                     "Selection"][
-                                                                                     "Enemy"]].level * 15 + 10
+                                                                          "EncounterData"][
+                                                                          "EnemyParty"][
+                                                                          temp_data[
+                                                                              "EncounterData"][
+                                                                              "Selection"][
+                                                                              "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
                                     save_data["Inventory"]["Gold"] += random.randint(0, 5) * 10
                                     temp_data["EncounterData"]["EnemyParty"].pop(
@@ -1522,8 +1544,9 @@ def encounter(screen, mixer, save_data, temp_data):
                             temp_data["EncounterData"]["TurnOrder"].remove(
                                 temp_data["EncounterData"]["Selection"]["Enemy"] + len(save_data["Party"]))
                             temp_data["EncounterData"]["TurnOrder"].insert(temp_data["EncounterData"]["TurnPos"],
-                                temp_data["EncounterData"]["Selection"]["Enemy"] + len(save_data["Party"]))
-                            temp_data["EncounterData"]["TurnPos"]+=1
+                                                                           temp_data["EncounterData"]["Selection"][
+                                                                               "Enemy"] + len(save_data["Party"]))
+                            temp_data["EncounterData"]["TurnPos"] += 1
                 else:
                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Turn"] - len(
                             save_data["Party"])].attacks[
@@ -1548,7 +1571,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
-                                    input_keys=pygame.key.get_pressed()
+                                    input_keys = pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESCAPE]:
                                         input_keys = pygame.key.get_pressed()
                                         screen.place_image("GameOver", 0, 0, False)
@@ -1607,14 +1630,19 @@ def encounter(screen, mixer, save_data, temp_data):
                     temp_data["EncounterData"]["TurnPos"] = 0
                 temp_data["EncounterData"]["Turn"] = temp_data["EncounterData"]["TurnOrder"][
                     temp_data["EncounterData"]["TurnPos"]]
-                if temp_data["EncounterData"]["Turn"]<len(save_data["Party"]):
-                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current+=save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_regen
+                if temp_data["EncounterData"]["Turn"] < len(save_data["Party"]):
+                    save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current += save_data["Party"][
+                        temp_data["EncounterData"]["Turn"]].stamina_regen
                     save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current += save_data["Party"][
                         temp_data["EncounterData"]["Turn"]].mana_regen
-                    if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current>save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_max:
-                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current=save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_max
-                    if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current>save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_max:
-                        save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current=save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_max
+                    if save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current > save_data["Party"][
+                        temp_data["EncounterData"]["Turn"]].stamina_max:
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].stamina_current = save_data["Party"][
+                            temp_data["EncounterData"]["Turn"]].stamina_max
+                    if save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current > save_data["Party"][
+                        temp_data["EncounterData"]["Turn"]].mana_max:
+                        save_data["Party"][temp_data["EncounterData"]["Turn"]].mana_current = save_data["Party"][
+                            temp_data["EncounterData"]["Turn"]].mana_max
     #
     #
     # Non-battle code
@@ -1685,8 +1713,10 @@ def encounter(screen, mixer, save_data, temp_data):
             return save_data, temp_data
         elif temp_data["PageNumber"] == -2:
             input_keys = pygame.key.get_pressed()
-            screen.place_text("YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER FOR 50 GOLD\n(PLUS 1 DMG TO ALL BASIC ATTACKS BUT ALSO PLUS 1 TO STAMINA COST OF SPECIAL), WHICH ONE@", 10,
-                              80)
+            screen.place_text(
+                "YOU CAN UPGRADE THE EQUIPMENT OF 1 PARTY MEMBER FOR 50 GOLD\n(PLUS 1 DMG TO ALL BASIC ATTACKS BUT ALSO PLUS 1 TO STAMINA COST OF SPECIAL), WHICH ONE@",
+                10,
+                80)
             OptionNum = 0
             for OptionNum in range(0, len(save_data["Party"])):
                 screen.place_text(str(OptionNum + 1) + "; " +
@@ -1728,7 +1758,7 @@ def encounter(screen, mixer, save_data, temp_data):
             elif input_keys[pygame.K_3]:
                 if len(save_data["Party"]) > 2:
                     mixer.play_sound("ExampleSound", 0)
-                    if save_data["Inventory"]["Gold"] >=50:
+                    if save_data["Inventory"]["Gold"] >= 50:
                         for attack_num in range(0, len(save_data["Party"][2].attacks)):
                             save_data["Party"][2].attacks[attack_num][2] += 1
                         temp_data["PageNumber"] = 0
@@ -2036,7 +2066,7 @@ def inventory(screen, mixer, save_data, temp_data):
     else:
         if input_keys[pygame.K_1]:
             mixer.play_sound("ExampleSound", 0)
-            if not save_data["Party"][temp_data["Selection"]["Character"]].strength==20:
+            if not save_data["Party"][temp_data["Selection"]["Character"]].strength == 20:
                 save_data["Party"][temp_data["Selection"]["Character"]].strength += 1
                 save_data["Party"][temp_data["Selection"]["Character"]].unspent_points -= 1
                 save_data["Party"][temp_data["Selection"]["Character"]].increase_stats()
@@ -2096,7 +2126,7 @@ def inventory(screen, mixer, save_data, temp_data):
         offset += 10
     if input_keys[pygame.K_i]:
         temp_data["ActiveScreen"] = "Overworld"
-        mixer.play_sound("ExampleSound",0)
+        mixer.play_sound("ExampleSound", 0)
         while input_keys[pygame.K_i]:
             screen.update()
             input_keys = pygame.key.get_pressed()
@@ -2107,39 +2137,40 @@ def settings(screen, mixer, save_data, temp_data):
     screen.place_image("Settings", 0, 0)
     input_keys = pygame.key.get_pressed()
     if input_keys[pygame.K_1]:
-        mixer.play_sound("ExampleSound",0)
+        mixer.play_sound("ExampleSound", 0)
         save(save_data)
     elif input_keys[pygame.K_2]:
-        mixer.play_sound("ExampleSound",0)
-        save_data=load()
+        mixer.play_sound("ExampleSound", 0)
+        save_data = load()
     elif input_keys[pygame.K_3]:
-        mixer.play_sound("ExampleSound",0)
+        mixer.play_sound("ExampleSound", 0)
         pygame.quit()
         while True:
             pass
     if input_keys[pygame.K_ESCAPE]:
-        mixer.play_sound("ExampleSound",0)
+        mixer.play_sound("ExampleSound", 0)
         temp_data["ActiveScreen"] = "Overworld"
         while input_keys[pygame.K_ESCAPE]:
             screen.update()
             input_keys = pygame.key.get_pressed()
-    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or  input_keys[pygame.K_3]:
+    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3]:
         screen.update()
         input_keys = pygame.key.get_pressed()
     return save_data, temp_data
+
 
 def start(screen, mixer, save_data, temp_data):
     screen.place_image("Title", 0, 0)
     input_keys = pygame.key.get_pressed()
     if input_keys[pygame.K_1]:
-        mixer.play_sound("ExampleSound",0)
+        mixer.play_sound("ExampleSound", 0)
         temp_data["ActiveScreen"] = "Encounter"
         while input_keys[pygame.K_1]:
             screen.update()
             input_keys = pygame.key.get_pressed()
     elif input_keys[pygame.K_2]:
-        mixer.play_sound("ExampleSound",0)
-        save_data=load()
+        mixer.play_sound("ExampleSound", 0)
+        save_data = load()
         temp_data["ActiveScreen"] = "Overworld"
         while input_keys[pygame.K_2]:
             screen.update()
@@ -2153,24 +2184,29 @@ def main():
     mixer = SoundManager()
     mixer.load_sounds()
     save_data, temp_data = new_game()
-    temp_data["ActiveScreen"]="Start"
+    temp_data["ActiveScreen"] = "Start"
     while True:
-        if not (save_data["Inventory"]["Jigsaw Pieces"]==5 and temp_data["ActiveScreen"]=="Overworld"):
+        if not (save_data["Inventory"]["Jigsaw Pieces"] == 5 and temp_data["ActiveScreen"] == "Overworld"):
             frame_time = time.time()
             if temp_data["ActiveScreen"] == "Start":
                 save_data, temp_data = start(screen, mixer, save_data, temp_data)
                 mixer.play_theme()
             elif temp_data["ActiveScreen"] == "Encounter":
                 save_data, temp_data = encounter(screen, mixer, save_data, temp_data)
-                if temp_data["EncounterData"]["Type"]=="Battle":
+                if temp_data["EncounterData"]["Type"] == "Battle":
                     try:
-                        if temp_data["EncounterData"]["EnemyParty"][0].name=="SandDragon" or temp_data["EncounterData"]["EnemyParty"][0].name=="Troll" or temp_data["EncounterData"]["EnemyParty"][0].name=="Orb" or temp_data["EncounterData"]["EnemyParty"][0].name=="Golem" or temp_data["EncounterData"]["EnemyParty"][0].name=="Slime":
+                        if temp_data["EncounterData"]["EnemyParty"][0].name == "SandDragon" or \
+                                temp_data["EncounterData"]["EnemyParty"][0].name == "Troll" or \
+                                temp_data["EncounterData"]["EnemyParty"][0].name == "Orb" or \
+                                temp_data["EncounterData"]["EnemyParty"][0].name == "Golem" or \
+                                temp_data["EncounterData"]["EnemyParty"][0].name == "Slime":
                             mixer.play_boss()
                         else:
                             mixer.play_battle()
                     except IndexError:
                         mixer.play_battle()
-                elif temp_data["EncounterData"]["Background"]=="Town" or temp_data["EncounterData"]["Background"]=="Town2":
+                elif temp_data["EncounterData"]["Background"] == "Town" or temp_data["EncounterData"][
+                    "Background"] == "Town2":
                     mixer.play_town()
                 else:
                     mixer.play_spook()
