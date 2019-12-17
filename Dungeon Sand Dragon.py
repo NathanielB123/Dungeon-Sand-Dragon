@@ -1374,7 +1374,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                                           "Enemy"]].level * 15 + 10
                                     save_data["Party"][i3].check_for_level_up()
                                 if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                    screen.place_image("GameWin", False)
+                                    screen.place_image("GameWin",0,0, False)
                                     input_keys = pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESC]:
                                         input_keys = pygame.key.get_pressed()
@@ -1422,7 +1422,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
                                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                        screen.place_image("GameWin", False)
+                                        screen.place_image("GameWin",0,0, False)
                                         input_keys = pygame.key.get_pressed()
                                         while not input_keys[pygame.K_ESC]:
                                             input_keys = pygame.key.get_pressed()
@@ -1468,7 +1468,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
                                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                        screen.place_image("GameWin", False)
+                                        screen.place_image("GameWin",0,0, False)
                                         input_keys = pygame.key.get_pressed()
                                         while not input_keys[pygame.K_ESC]:
                                             input_keys = pygame.key.get_pressed()
@@ -1526,7 +1526,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                                                                      "Enemy"]].level * 15 + 10
                                         save_data["Party"][i3].check_for_level_up()
                                     if temp_data["EncounterData"]["EnemyParty"][temp_data["EncounterData"]["Selection"]["Enemy"]].name=="SandDragon":
-                                        screen.place_image("GameWin", False)
+                                        screen.place_image("GameWin",0,0, False)
                                         input_keys = pygame.key.get_pressed()
                                         while not input_keys[pygame.K_ESC]:
                                             input_keys = pygame.key.get_pressed()
@@ -1583,7 +1583,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
-                                    screen.place_image("GameOver",False)
+                                    screen.place_image("GameOver",0,0,False)
                                     input_keys=pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESC]:
                                         input_keys = pygame.key.get_pressed()
@@ -1621,7 +1621,7 @@ def encounter(screen, mixer, save_data, temp_data):
                                         temp_data["EncounterData"]["Selection"]["Attack"]][2]
                             if save_data["Party"][temp_data["EncounterData"]["Selection"]["Enemy"]].health_current <= 0:
                                 if temp_data["EncounterData"]["Selection"]["Enemy"] == 0:
-                                    screen.place_image("GameOver", False)
+                                    screen.place_image("GameOver",0,0, False)
                                     input_keys = pygame.key.get_pressed()
                                     while not input_keys[pygame.K_ESC]:
                                         input_keys = pygame.key.get_pressed()
