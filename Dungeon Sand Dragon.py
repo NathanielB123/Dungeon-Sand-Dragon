@@ -145,12 +145,12 @@ def new_game():
          ["LISTEN", 2]])
     temp_data["EncounterContent"][5]["Dialogue"].append(
         [
-            "'STRANGER, I DON'T KNOW YOUR NAME, I DON'T KNOW YOUR BACKGROUND, I DON'T YOU PASSIONS AND OR YOUR HATES,\nBUT THAT IS OF NO CONSEQUENCE, THE SPIRITS TOLD BE YOU WOULD COME, AND THAT YOU WOULD BE OUR SAVIOUR'",
+            "'STRANGER, I DON'T KNOW YOUR NAME, I DON'T KNOW YOUR BACKGROUND, BUT THAT IS OF NO CONSEQUENCE.\nTHE SPIRITS TOLD BE YOU WOULD COME, AND THAT YOU WOULD BE OUR SAVIOUR'",
             ["ASK HIM WHAT HE MEANS", 3],
             ["RUN AWAY FROM THIS MADMAN, BEFORE YOU GET HURT", -1, ["StoryProgress", 5, "Done"]]])
     temp_data["EncounterContent"][5]["Dialogue"].append(
         [
-            "'THE FACT YOU HAVE NOT ALREADY FLED IS PROOF ENOUGH FOR ME THAT YOU ARE WORTHY, I WILL JOIN YOU ON THIS QUEST'",
+            "'THE FACT YOU HAVE NOT ALREADY FLED IS PROOF ENOUGH FOR ME THAT YOU ARE WORTHY,\nI WILL JOIN YOU ON THIS QUEST'",
             ["SAY YOU WILL MEET HIM BACK AT THE GUILD HALL", -1, ["StoryProgress", 5, "Done"], ["GuildHall",
                                                                                                 Character("Garik", 1,
                                                                                                           12, 14, 2, 8,
@@ -251,7 +251,7 @@ def new_game():
     temp_data["EncounterContent"][7]["Character"] = "Grungeldelf"
     temp_data["EncounterContent"][7]["Dialogue"] = []
     temp_data["EncounterContent"][7]["Dialogue"].append(
-        ["YOU ARE WALKING ACROSS THE DESERT WHEN YOU FIND A VERY SHORT INDIVIDUAL WITH A VERY LARGE CROSSBOW",
+        ["YOU ARE WALKING ACROSS THE DESERT WHEN YOU FIND A VERY SHORT INDIVIDUAL\nWITH A VERY LARGE CROSSBOW",
          ["GREET HIM", 1], ["THAT CROSSBOW LOOKS INTIMIDATING, RUN AWAY", -1]])
     temp_data["EncounterContent"][7]["Dialogue"].append(
         ["''ELLO STRANGER, YOUR THE FIRST PERSON I HAVE SEEN WHO AIN'T A BLINKIN' GOBLIN OR ORC'",
