@@ -12,3 +12,5 @@ Art and stat/level up code - Josh Bryce (Cjo3141592)
 Ability code - Jacob Elven (jelven261)
 
 Music and making an effort to clean up my attrocious code - (AdamBomb-3141)
+
+Attempted voice acting (didn't finish in time) - Luca Veronase (no Github account)
