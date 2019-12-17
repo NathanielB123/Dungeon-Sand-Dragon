@@ -466,7 +466,12 @@ class SoundManager:
         self.spook_channel = pygame.mixer.Channel(5)
         self.battle_channel = pygame.mixer.Channel(6)
         self.boss_channel = pygame.mixer.Channel(7)
-        self.luca_channel = pygame.mixer.Channel(8)
+        self.luca_channel = pygame.mixer.Channel(2)
+
+    def play_luca(self,number):
+        if self.luca_channel.get_busy():
+            self.luca_channel.stop()
+        self.luca_channel.play(self.Sounds["Luca"+str(number)])
 
     def load_sounds(self):
         for Sound in os.listdir("Sounds"):
@@ -637,6 +642,7 @@ def load():
 def overworld(screen, mixer, save_data, temp_data):
     temp_data["ActiveScreen"] = "Overworld"
     temp_data["EncounterData"] = None
+    screen.place_text("I; INVENTORY\n\nESC; SAVE, LOAD OR QUIT",100,100)
     if save_data["StoryProgress"]["JigsawPieces"] < 4:
         screen.place_image("Map", 0, 0)
     else:
@@ -900,8 +906,6 @@ def init_encounter(save_data, temp_data):
 
 
 def encounter(screen, mixer, save_data, temp_data):
-    magical=False
-    physical=False
     if temp_data["EncounterData"]["Type"] == "Battle":
         screen.place_image("EncounterBack", 0, 0)
         for i in range(len(save_data["Party"]) - 1, -1, -1):
@@ -1694,6 +1698,8 @@ def encounter(screen, mixer, save_data, temp_data):
                         save_data["GuildHall"].append(script[1])
                     elif script[0] == "StoryProgress":
                         save_data["StoryProgress"][script[1]] = script[2]
+                    elif script[0] == "Audio":
+                        mixer.play_luca(script[1])
             while input_keys[pygame.K_1] or input_keys[pygame.K_2] or input_keys[pygame.K_3] or input_keys[pygame.K_4]:
                 input_keys = pygame.key.get_pressed()
                 pygame.event.get()
@@ -2140,6 +2146,9 @@ def settings(screen, mixer, save_data, temp_data):
         while input_keys[pygame.K_ESCAPE]:
             screen.update()
             input_keys = pygame.key.get_pressed()
+    while input_keys[pygame.K_1] or input_keys[pygame.K_2] or  input_keys[pygame.K_3]:
+        screen.update()
+        input_keys = pygame.key.get_pressed()
     return save_data, temp_data
 
 def start(screen, mixer, save_data, temp_data):
@@ -2158,6 +2167,9 @@ def start(screen, mixer, save_data, temp_data):
         while input_keys[pygame.K_ESCAPE]:
             screen.update()
             input_keys = pygame.key.get_pressed()
+    while input_keys[pygame.K_1] or input_keys[pygame.K_2]:
+        screen.update()
+        input_keys=pygame.key.get_pressed()
     return save_data, temp_data
 
 
