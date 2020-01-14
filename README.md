@@ -3,6 +3,16 @@
 A party-based RPG that I, AdamBomb-3141, Cjo3141592 and jelven261 made.
 Made for a week-long school competition thing to make a game in python in a week based on 3 random words, ours being desert, fountain and jigsaw.
 
+Installation:
+
+Simply download, extract and run Dungeon Sand Dragon Compiled.exe to play the game
+
+Notes on launching the game:
+
+The game takes a while to launch - please wait around 10 seconds and don't click on the text window that first comes up.
+The game will crash instantly if there is no available audio device; make sure you have speakers or headphones enabled and working if the game crashes.
+The game may crash or look weird on resolutions other than 1920 by 1080.
+
 Credits:
 
 Most of the code (UI, inventory, dialogue) - Nathaniel Burke (me)
