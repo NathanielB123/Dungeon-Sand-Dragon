@@ -15,11 +15,11 @@ The game may crash or look weird on resolutions other than 1920 by 1080.
 
 Credits:
 
-Most of the code (UI, inventory, dialogue) - Nathaniel Burke (me)
+Most of the code (UI, inventory, battles, dialogue, enemies etc...) and the (terrible) story - Nathaniel Burke (me)
 
 Art and stat/level up code - Josh Bryce (Cjo3141592)
 
-Ability code - Jacob Elven (jelven261)
+Abilities ideas and code - Jacob Elven (jelven261)
 
 Music - (AdamBomb-3141)
 
